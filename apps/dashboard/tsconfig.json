@@ -1,0 +1,20 @@
+{
+  "extends": "@shared/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/lib/datafeed.js",
+    "src/lib/datafeed.js"
+  ],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "@shared/tsconfig/server.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
+    "typeRoots": ["src/types"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
