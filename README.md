@@ -1,6 +1,6 @@
 # WorkOutLoud
 
-Creating simple and efficient software for working out at home.
+Creating simple and efficient software for working out at home. This monorepo requires node >=16.0.0. You can download it from here https://nodejs.org/en/. Or what I recommend is installing nvm (node version manager) from here https://github.com/nvm-sh/nvm.
 
 ## Project
 
