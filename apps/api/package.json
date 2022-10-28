@@ -21,6 +21,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@ef-carbon/tspm": "^2.2.5",
     "@shared/eslint-presets": "*",
     "@shared/tsconfig": "*",
     "@types/body-parser": "^1.19.2",
