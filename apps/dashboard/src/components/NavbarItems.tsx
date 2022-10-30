@@ -7,6 +7,7 @@ import { MdGroups } from 'react-icons/md'
 import { BsFillBellFill } from 'react-icons/bs'
 
 const NavbarItems = () => {
+  const itemStyle = "grid justify-items-center py-1 cursor-pointer hover:rounded-lg hover:bg-gray-200"
   return (
     <div className={`grid grid-cols-4 justify-items-stretch items-center`}>
       <div className={itemStyle}>

@@ -1,9 +1,5 @@
 import React from 'react'
 
-import { AiFillHome } from 'react-icons/ai'
-import { IoBarbell } from 'react-icons/io5'
-import { MdGroups } from 'react-icons/md'
-import { BsFillBellFill } from 'react-icons/bs'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Link from 'next/link'
 import Image from 'next/image'
