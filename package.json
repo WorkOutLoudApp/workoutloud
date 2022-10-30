@@ -18,7 +18,7 @@
     "postcss": "^8.4.18",
     "prettier": "latest",
     "tailwindcss": "^3.2.1",
-    "turbo": "latest"
+    "turbo": "^1.6.2"
   },
   "engines": {
     "node": ">=16.0.0"

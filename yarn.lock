@@ -164,7 +164,7 @@
   "resolved" "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz"
   "version" "1.2.0"
 
-"@shared/eslint-presets@*", "@shared/eslint-presets@file:C:\\TRAMBO\\SCHOOL\\CECS 491\\project\\workoutloud\\packages\\eslint-presets":
+"@shared/eslint-presets@*", "@shared/eslint-presets@file:C:\\TRAMBO\\Github\\workoutloud\\packages\\eslint-presets":
   "resolved" "file:packages/eslint-presets"
   "version" "0.0.0"
   dependencies:
@@ -187,7 +187,7 @@
     "prettier-plugin-tailwindcss" "^0.1.13"
     "typescript" "^4.8.3"
 
-"@shared/tsconfig@*", "@shared/tsconfig@file:C:\\TRAMBO\\SCHOOL\\CECS 491\\project\\workoutloud\\packages\\tsconfig":
+"@shared/tsconfig@*", "@shared/tsconfig@file:C:\\TRAMBO\\Github\\workoutloud\\packages\\tsconfig":
   "resolved" "file:packages/tsconfig"
   "version" "0.0.0"
 
@@ -550,7 +550,7 @@
     "normalize-path" "^3.0.0"
     "picomatch" "^2.0.4"
 
-"api@file:C:\\TRAMBO\\SCHOOL\\CECS 491\\project\\workoutloud\\apps\\api":
+"api@file:C:\\TRAMBO\\Github\\workoutloud\\apps\\api":
   "resolved" "file:apps/api"
   "version" "1.0.0"
   dependencies:
@@ -985,7 +985,7 @@
   "resolved" "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz"
   "version" "1.0.8"
 
-"dashboard@file:C:\\TRAMBO\\SCHOOL\\CECS 491\\project\\workoutloud\\apps\\dashboard":
+"dashboard@file:C:\\TRAMBO\\Github\\workoutloud\\apps\\dashboard":
   "resolved" "file:apps/dashboard"
   "version" "0.0.0"
   dependencies:
@@ -3579,7 +3579,7 @@
   "resolved" "https://registry.npmjs.org/turbo-windows-64/-/turbo-windows-64-1.6.2.tgz"
   "version" "1.6.2"
 
-"turbo@latest":
+"turbo@^1.6.2":
   "integrity" "sha512-a6UM9HaAjM5ai+vxDFI/z0l4Bf6zWjf7wCf9Ip2iyd4XZkZZnhRtM6FpaUWzorjz9Dsqnfwu3nkWY3wPdH02IQ=="
   "resolved" "https://registry.npmjs.org/turbo/-/turbo-1.6.2.tgz"
   "version" "1.6.2"

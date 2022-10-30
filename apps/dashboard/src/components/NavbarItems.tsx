@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import React from 'react'
 
 import { AiFillHome } from 'react-icons/ai'
+import { BsFillBellFill } from 'react-icons/bs'
 import { IoBarbell } from 'react-icons/io5'
 import { MdGroups } from 'react-icons/md'
-import { BsFillBellFill } from 'react-icons/bs'
 
 const NavbarItems = () => {
   const itemStyle = "grid justify-items-center py-1 cursor-pointer hover:rounded-lg hover:bg-gray-200"

@@ -1,12 +1,11 @@
-import React from 'react'
 
-import { GiHamburgerMenu } from 'react-icons/gi'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { GiHamburgerMenu } from 'react-icons/gi'
 import userLogo from '../utils/user.png'
 import NavbarItems from './NavbarItems'
 const Navbar = () => {
-  const user = true
+  const user = false
   return (
     <div className='block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
       <div className='flex justify-between'>
