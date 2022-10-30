@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Home() {
   const [example, setExample] = useState<any>()
@@ -16,14 +16,15 @@ function Home() {
   }, [])
 
   return (
+    
     <div className="main">
       <h1 className="text-3xl font-extrabold underline">Home</h1>
       <div className="nav">
-        <ul>
+        {/* <ul>
           <li>
             <Link href="/login">Login</Link>
           </li>
-        </ul>
+        </ul> */}
       </div>
       <p>API response: {JSON.stringify(example)}</p>
     </div>
