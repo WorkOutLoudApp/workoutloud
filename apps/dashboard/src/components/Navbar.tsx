@@ -12,9 +12,15 @@ import NavbarItems from './NavbarItems'
 const Navbar = () => {
   const user = true
   return (
+<<<<<<< Updated upstream
     <div className='flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl'>
       <div className='flex justify-between'>
         <div className=''>
+=======
+    <div className='block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
+      <div className='flex justify-between'>
+        <div className='flex basis-1/5'>
+>>>>>>> Stashed changes
           <Link href='/'>
             <p className='text-indigo-600 font-bold cursor-pointer'>
               WorkOutLoud
@@ -25,13 +31,24 @@ const Navbar = () => {
 
         {/* Home / Workout / Friends / Noti */}
         {user &&
+<<<<<<< Updated upstream
           <div className='hidden xl:flex'>
             <NavbarItems />
+=======
+          <div className='hidden basis-3/5 justify-between xl:flex'>
+            <div className='basis-full'>
+              <NavbarItems />
+            </div>
+>>>>>>> Stashed changes
           </div>
         }
 
         {/* Menu / User / Login */}
+<<<<<<< Updated upstream
         <div className='flex justify-end gap-[2vw]'>
+=======
+        <div className='flex basis-1/5 justify-end gap-[2vw]'>
+>>>>>>> Stashed changes
           {/* User / Login */}
           <div className='flex items-center gap-[2vw]'>
 
@@ -58,9 +75,15 @@ const Navbar = () => {
           </div>
 
           {/* Menu */}
+<<<<<<< Updated upstream
           <div className='xl:hidden'>
             <Link href='/menu'>
               <GiHamburgerMenu className='cursor-pointer rounded-full px-1 text-4xl bg-gray-200' />
+=======
+          <div className='flex items-center xl:hidden'>
+            <Link href='/menu'>
+              <GiHamburgerMenu className='cursor-pointer rounded-full px-1 text-3xl bg-gray-200' />
+>>>>>>> Stashed changes
             </Link>
           </div>
         </div>
@@ -68,6 +91,7 @@ const Navbar = () => {
 
 
       {user &&
+<<<<<<< Updated upstream
         <div className='flex-wrap xl:hidden'>
           <NavbarItems />
         </div>
@@ -150,6 +174,13 @@ const Navbar = () => {
 
 
     // </div>
+=======
+        <div className='mt-1 xl:hidden'>
+            <NavbarItems />       
+        </div>
+      }
+    </div>
+>>>>>>> Stashed changes
   )
 }
 
