@@ -1,18 +1,18 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { AiFillHome } from 'react-icons/ai'
-import { IoNotifications } from 'react-icons/io5'
-import { IoBarbell } from 'react-icons/io5'
+import { IoNotifications, IoBarbell } from 'react-icons/io5'
 import { MdGroups } from 'react-icons/md'
 import { HiUser } from 'react-icons/hi'
 
+import React from 'react'
 import { useEffect, useState } from 'react'
+
 const Navbar = () => {
   const [width, setWidth] = useState(undefined)
 
   useEffect(() => {
-    //to be called on window resize
+    // to be called on window resize
     const handleWindowResize = () => {
       setWidth(window.innerWidth)
     }
@@ -21,7 +21,7 @@ const Navbar = () => {
 
     handleWindowResize()
 
-    //Remove event listener on clean up
+    // Remove event listener on clean up
     return () => {
       window.removeEventListener('resize', handleWindowResize)
     }
@@ -34,7 +34,7 @@ const Navbar = () => {
   const itemStyle = "grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-gray-200"
 
   return (
-    <>
+    <div>
       {isMobile ? (
         <div className='block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
           <div className='flex justify-between'>
@@ -69,7 +69,7 @@ const Navbar = () => {
           
           {/* Home / Workout / Friends / Noti */}
           {user &&
-            <div className={`grid grid-cols-4 justify-items-stretch items-center mt-1`}>
+            <div className='grid grid-cols-4 justify-items-stretch items-center mt-1'>
               <div className={itemStyle}>
                 <Link href='/'>
                   <AiFillHome />
@@ -109,7 +109,7 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Home / Workout / Friends*/}
+            {/* Home / Workout / Friends */}
             {user &&
               <div className='grid basis-2/4 grid-cols-3 items-center'>
                 <div className={itemStyle}>
@@ -165,7 +165,7 @@ const Navbar = () => {
         </div>
       )
       }
-    </>
+    </div>
   )
 }
 

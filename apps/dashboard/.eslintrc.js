@@ -13,10 +13,13 @@ module.exports = {
       },
     },
   },
-  "react/function-component-definition": [
-    2,
-    {
-      namedComponents: "function-declaration",
-    },
-  ],
+  rules: {
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: ['function-declaration', 'arrow-function'],
+      },
+    ],
+    'react/jsx-props-no-spreading': 'off',
+  },
 }
