@@ -15,7 +15,7 @@ function Home() {
   }, [])
 
   return (
-    
+
     <div className="main">
       <h1 className="text-3xl font-extrabold underline">Home</h1>
       <p>API response: {JSON.stringify(example)}</p>

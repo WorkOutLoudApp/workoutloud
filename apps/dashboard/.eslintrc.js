@@ -21,5 +21,11 @@ module.exports = {
       },
     ],
     'react/jsx-props-no-spreading': 'off',
+    "jsx-a11y/label-has-associated-control": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }],
+    '@typescript-eslint/no-unused-vars': 'off',
   },
 }

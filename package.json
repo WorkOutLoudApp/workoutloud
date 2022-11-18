@@ -23,5 +23,9 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.19",
+  "dependencies": {
+    "@react-oauth/google": "^0.4.0",
+    "jwt-decode": "^3.1.2"
+  }
 }
