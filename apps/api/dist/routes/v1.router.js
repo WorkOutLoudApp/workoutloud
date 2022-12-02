@@ -3,9 +3,9 @@ var __importDefault = this && this.__importDefault || function (mod) {
     return mod && mod.__esModule ? mod : { 'default': mod };
 };
 exports.__esModule = true;
-var web_1 = __importDefault(require('./web/index'));
+var web_1 = __importDefault(require('./web\\index'));
 var body_parser_1 = __importDefault(require('body-parser'));
-var cors_config_1 = require('../utils/config/cors.config');
+var cors_config_1 = require('..\\utils\\config\\cors.config');
 var cors_1 = __importDefault(require('cors'));
 var express_1 = require('express');
 var router = (0, express_1.Router)();
