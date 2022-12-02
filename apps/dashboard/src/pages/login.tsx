@@ -2,7 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useRef, useState, useEffect, useContext } from 'react'
-import { GoogleLogin, googleLogout } from '@react-oauth/google'
+import { GoogleLogin} from '@react-oauth/google'
+import jwt_decode from 'jwt-decode'
 import { useAuth } from '../context/AuthProvider'
 
 const Login = () => {
@@ -74,6 +75,8 @@ const Login = () => {
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
+                  const decodedToken = jwt_decode(credentialResponse.credential)
+                  console.log(decodedToken)
                   setAuth(true)
                   router.push('/')
                 }}

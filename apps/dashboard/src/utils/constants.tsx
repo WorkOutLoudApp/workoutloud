@@ -1,3 +1,4 @@
+import React from 'react'
 import { AiFillHome } from 'react-icons/ai'
 import { IoNotifications, IoBarbell} from 'react-icons/io5'
 import { MdGroups } from 'react-icons/md'
