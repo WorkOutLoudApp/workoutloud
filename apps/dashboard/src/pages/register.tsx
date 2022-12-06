@@ -6,7 +6,7 @@ import { GoogleLogin} from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
 import { useAuth } from '../context/AuthProvider'
 
-const Login = () => {
+const Register = () => {
   const { auth, setAuth } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
   const errRef = useRef()
@@ -24,18 +24,6 @@ const Login = () => {
     setErrMsg('')
   }, [user, pass]) // remove errMsg whenever user or pass changes
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log(user, pass)
-    // for testing
-    
-    if (user === 'admin' && pass === 'admin123') {
-      setAuth(true)
-      router.push('/')
-    } else {
-      setErrMsg('Invalid username or password')
-    }
-  }
 
   console.log(`auth: ${auth}`)
   return (
@@ -44,10 +32,31 @@ const Login = () => {
         {!auth && (
           <div className='bg-blue-800/90 px-3 py-3 rounded text-white'>
             <p ref={errRef} className='text-yellow-300 bold' aria-live='assertive'>{errMsg}</p>
-            <h1 className='text-2xl'>Sign In</h1>
+            <h1 className='text-2xl'>Sign Up</h1>
             <form className='grid grid-row'
-              onSubmit={handleSubmit}
             >
+              <label className='mt-2' htmlFor='First Name'>First Name</label>
+              <input
+                className='text-black rounded-full px-2'
+                type='text'
+                id='firstname'
+                ref={userRef}
+                autoComplete='off'
+                onChange={(e) => setUser(e.target.value)}
+                value={user}
+                required
+              />
+              <label className='mt-2' htmlFor='Last Name'>Last Name</label>
+              <input
+                className='text-black rounded-full px-2'
+                type='text'
+                id='lastname'
+                ref={userRef}
+                autoComplete='off'
+                onChange={(e) => setUser(e.target.value)}
+                value={user}
+                required
+              />                            
               <label className='mt-2' htmlFor='username'>Username</label>
               <input
                 className='text-black rounded-full px-2'
@@ -70,7 +79,7 @@ const Login = () => {
                 required
               />
 
-              <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
+              <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign up</button>
 
               <GoogleLogin
                 onSuccess={credentialResponse => {
@@ -81,17 +90,16 @@ const Login = () => {
                   router.push('/')
                 }}
                 onError={() => {
-                  console.log('Login failed')
+                  console.log('Register failed')
                 }}
                 shape='pill'
               />
 
             </form>
 
-            <p className='mt-2'>Need an Account?</p>
             <p className='underline underline-offset-2'>
-              <Link href='/register'>
-              <button type='submit' className='underline underline-offset-2' > Sign Up </button>
+              <Link href='/login'>
+              <button type='submit' className='underline underline-offset-2' >Go Back</button>
               </Link>
             </p>
           </div>
@@ -102,4 +110,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register
