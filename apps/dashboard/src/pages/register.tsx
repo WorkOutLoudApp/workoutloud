@@ -1,37 +1,27 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef, useState, useEffect, useContext } from 'react'
+import { useRef, useState} from 'react'
 import { GoogleLogin} from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
 import { useAuth } from '../context/AuthProvider'
 
 const Register = () => {
-  const { auth, setAuth } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
-  const errRef = useRef()
   const router = useRouter()
+  const [{firstName, lastName, email, password, repeatPassword}] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
+  })
 
-  const [user, setUser] = useState('')
-  const [pass, setPass] = useState('')
-  const [errMsg, setErrMsg] = useState('')
-
-  useEffect(() => {
-    userRef.current.focus()
-  }, [])
-
-  useEffect(() => {
-    setErrMsg('')
-  }, [user, pass]) // remove errMsg whenever user or pass changes
-
-
-  console.log(`auth: ${auth}`)
   return (
     <div className='flex w-full justify-center'>
       <body className='mt-10'>
-        {!auth && (
+        {(
           <div className='bg-blue-800/90 px-3 py-3 rounded text-white'>
-            <p ref={errRef} className='text-yellow-300 bold' aria-live='assertive'>{errMsg}</p>
             <h1 className='text-2xl'>Sign Up</h1>
             <form className='grid grid-row'
             >
@@ -42,8 +32,6 @@ const Register = () => {
                 id='firstname'
                 ref={userRef}
                 autoComplete='off'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
                 required
               />
               <label className='mt-2' htmlFor='Last Name'>Last Name</label>
@@ -53,8 +41,6 @@ const Register = () => {
                 id='lastname'
                 ref={userRef}
                 autoComplete='off'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
                 required
               />                            
               <label className='mt-2' htmlFor='username'>Username</label>
@@ -62,10 +48,7 @@ const Register = () => {
                 className='text-black rounded-full px-2'
                 type='text'
                 id='username'
-                ref={userRef}
                 autoComplete='off'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
                 required
               />
 
@@ -74,8 +57,13 @@ const Register = () => {
                 className='text-black rounded-full px-2'
                 type='password'
                 id='password'
-                onChange={(e) => setPass(e.target.value)}
-                value={pass}
+                required
+              />
+              <label className='mt-2' htmlFor="repeatPassword">Repeat Password</label>
+              <input
+                className='text-black rounded-full px-2'
+                type='password'
+                id='password'
                 required
               />
 
@@ -86,7 +74,6 @@ const Register = () => {
                   console.log(credentialResponse)
                   const decodedToken = jwt_decode(credentialResponse.credential)
                   console.log(decodedToken)
-                  setAuth(true)
                   router.push('/')
                 }}
                 onError={() => {
