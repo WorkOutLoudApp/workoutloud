@@ -13,7 +13,7 @@ import WindowTypeContext from '../context/WindowTypeProvider'
 
 const Navbar = () => {
   const isMobile = useContext(WindowTypeContext)
-  const { auth, setAuth } = useAuth()
+  const { auth, setAuth, picture, setPicture } = useAuth()
   const [showUserTooltip, setShowUserTooltip] = useState(false)
   const wrapperRef = useRef(null)
   const userButtonRef = useRef(null)
@@ -54,7 +54,7 @@ const Navbar = () => {
             </div>
 
             {/* Login / Menu */}
-            <div className='flex basis-1/5 justify-end gap-[2vw]'>
+            <div className='flex basis-1/5 justify-end'>
               {/* Login */}
               {!auth && (
                 <div className='flex item-center'>
@@ -88,8 +88,8 @@ const Navbar = () => {
         </nav>
       ) : (
         // Desktop
-        <nav className='block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
-          <div className='flex justify-between'>
+        <nav className='block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-14'>
+          <div className='flex items-center h-full justify-between'>
             {/* Logo */}
             <div className='flex basis-1/4'>
               <Link href='/'>
@@ -113,21 +113,29 @@ const Navbar = () => {
             }
 
             {/* Noti / User || Login / Menu */}
-            <div className='flex basis-1/4 justify-end gap-[2vw]'>
+            <div className='flex basis-1/4 justify-end h-full'>
               <div className='flex items-center'>
                 {auth ? (
-                  <div className='flex gap-[2vw]'>
+                  <div className='flex flex-row space-x-4'>
                     <Link href='/notifications'>
-                      <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
+                      <div className='bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer w-8 h-8'>
                         <IoNotifications className='px-0.5' />
                       </div>
                     </Link>
 
-                    <button ref={userButtonRef} type='button' onClick={handleUserOnClick}>
-                      <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
-                        {/* TODO: replace with user's avatar */}
-                        <HiUser className='px-0.5' />
+
+                    <button ref={userButtonRef} type='button' onClick={handleUserOnClick}
+                      className='flex items-center h-full'
+                    >
+                      {/* <div className='flex bg-gray-200 rounded-full items-center cursor-pointer h-full'> */}
+                      {/* TODO: replace with user's avatar */}
+                      {/* <HiUser className='px-0.5' /> */}
+                      {/* </div> */}
+                      <div className='flex h-8 w-8'>
+                        <img src={picture} alt='avatar' className='object-fit rounded-full' />
+
                       </div>
+
                     </button>
 
 
@@ -143,7 +151,7 @@ const Navbar = () => {
           </div>
           <aside className='relative'>
             {showUserTooltip && (
-              <menu ref={wrapperRef} className='absolute flex flex-col top-0 right-0 mt-2 border-2 rounded-md bg-white drop-shadow-md px-2 py-2 gap-1 text-lg'>
+              <menu ref={wrapperRef} className='absolute flex flex-col top-0 right-0 mt-2 border-2 rounded-md bg-white drop-shadow-md px-2 py-2 text-lg'>
                 <Link href='/profile'>
                   <button type='button' onClick={() => setShowUserTooltip(false)}>
                     <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>

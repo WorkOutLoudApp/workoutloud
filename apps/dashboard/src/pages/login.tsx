@@ -1,13 +1,13 @@
-import React from 'react'
+import { GoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
+import jwt_decode, { JwtPayload } from 'jwt-decode'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef, useState, useEffect, useContext } from 'react'
-import { GoogleLogin} from '@react-oauth/google'
-import jwt_decode from 'jwt-decode'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 
 const Login = () => {
-  const { auth, setAuth } = useAuth()
+  const { auth, setAuth, picture, setPicture } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
   const errRef = useRef()
   const router = useRouter()
@@ -71,14 +71,29 @@ const Login = () => {
               />
 
               <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
-
+              
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
-                  const decodedToken = jwt_decode(credentialResponse.credential)
-                  console.log(decodedToken)
-                  setAuth(true)
-                  router.push('/')
+                  const decodedToken = jwt_decode<any>(credentialResponse.credential)
+                  // const decodedToken = jwt_decode<JwtPayload>(credentialResponse.credential)
+                  
+                  axios.post(`http://localhost:4000/v1/web/example/auth`, {
+                    token: decodedToken,
+                  }). then((response) => {
+                    if (response.data.verify) {
+                      setAuth(true)
+                      setPicture(decodedToken?.picture)
+                      router.push('/')
+                    } else {
+                      setErrMsg('Account not registered.')
+                    }
+                    // console.log(JSON.stringify(response.data.message))
+                    // console.log(response.data.verify)
+                  }, (error) => {
+                    console.log(error)
+                  })
+                  
                 }}
                 onError={() => {
                   console.log('Login failed')
