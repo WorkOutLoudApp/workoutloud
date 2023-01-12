@@ -4,12 +4,12 @@ import { FaUserCircle } from 'react-icons/fa'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { HiUser } from 'react-icons/hi'
 import { IoLogOut, IoNotifications } from 'react-icons/io5'
-
 import { navbarItems, navbarItemsMobile } from '@src/utils/constants'
 import { googleLogout } from '@react-oauth/google'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
+
 
 const Navbar = () => {
   const isMobile = useContext(WindowTypeContext)
@@ -17,6 +17,8 @@ const Navbar = () => {
   const [showUserTooltip, setShowUserTooltip] = useState(false)
   const wrapperRef = useRef(null)
   const userButtonRef = useRef(null)
+  const [showNotificationTooltip, setShowNotificationTooltip] = useState(false);
+
 
   const itemStyle = "grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-gray-200"
   const itemStyleActive = "grid justify-items-center cursor-pointer py-1 rounded-lg bg-gray-200"
@@ -25,18 +27,10 @@ const Navbar = () => {
     setShowUserTooltip(!showUserTooltip)
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if ((wrapperRef.current && userButtonRef.current && !wrapperRef.current.contains(event.target) && !userButtonRef.current.contains(event.target)) || (wrapperRef.current && !userButtonRef.current && !wrapperRef.current.contains(event.target))) {
-      setShowUserTooltip(false);
-    }
-  }
+  const handleNotificationOnClick = () => {
+    setShowNotificationTooltip(!showNotificationTooltip);
+  };
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside, false);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, false);
-    };
-  }, [])
 
   return (
     <body>
@@ -117,11 +111,24 @@ const Navbar = () => {
               <div className='flex items-center'>
                 {auth ? (
                   <div className='flex gap-[2vw]'>
-                    <Link href='/notifications'>
-                      <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
+                    {/*Currenly only working for Desktop*/}
+                    <button ref={userButtonRef} type='button' onClick={handleNotificationOnClick}>
+                      <div className='flex bg-gray-00 rounded-full items-center px-1 py-1 cursor-pointer'>
                         <IoNotifications className='px-0.5' />
                       </div>
-                    </Link>
+                    </button>
+                      {showNotificationTooltip && (
+                      <menu ref={wrapperRef} className='absolute flex flex-col top-0 right-0 mt-2 border-2 rounded-md bg-white drop-shadow-md px-2 py-2 gap-1 text-lg'>
+                        <Link href='/notifications'>
+                        <div className='notification-dropdown'>
+                          {/*Testing purposes. Need to add live data in the future*/}
+                          <p className='text-gray-700 font-small'>Notifcation 1</p>
+                          <p className='text-gray-700 font-small'>Notifcation 2</p>
+                          <p className='text-gray-700 font-small'>Notifcation 3</p>
+                        </div>
+                        </Link>
+                      </menu>
+                      )}
 
                     <button ref={userButtonRef} type='button' onClick={handleUserOnClick}>
                       <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
@@ -129,13 +136,10 @@ const Navbar = () => {
                         <HiUser className='px-0.5' />
                       </div>
                     </button>
-
-
                   </div>
-
                 ) : (
                   <Link href='/login'>
-                    <p className='font-["Roboto"] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600  px-2 py-1'>Login</p>
+                    <p className='font-["Roboto"] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600 px-2 py-1'>Login</p>
                   </Link>
                 )}
               </div>
