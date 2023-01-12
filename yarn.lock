@@ -362,6 +362,13 @@
     "@types/mime" "*"
     "@types/node" "*"
 
+"@types/styled-jsx@^3.4.4":
+  "integrity" "sha512-PRRa7gU7ske4Vs7sKWrqfKnuIIS6E/Yj5oKyxuM11AwOKhH9HlbQ7cKGLluXkOXzpEoDJE+6kQMj3AE34/JooQ=="
+  "resolved" "https://registry.npmjs.org/@types/styled-jsx/-/styled-jsx-3.4.4.tgz"
+  "version" "3.4.4"
+  dependencies:
+    "styled-jsx" "*"
+
 "@typescript-eslint/eslint-plugin@^4.0.0 || ^5.0.0", "@typescript-eslint/eslint-plugin@^5.0.0", "@typescript-eslint/eslint-plugin@^5.9.1":
   "integrity" "sha512-FsWboKkWdytGiXT5O1/R9j37YgcjO8MKHSUmWnIEjVaz0krHkplPnYi7mwdb+5+cs0toFNQb0HIrN7zONdIEWg=="
   "resolved" "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.40.1.tgz"
@@ -819,6 +826,11 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
+"client-only@0.0.1":
+  "integrity" "sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA=="
+  "resolved" "https://registry.npmjs.org/client-only/-/client-only-0.0.1.tgz"
+  "version" "0.0.1"
+
 "cliui@^4.0.0":
   "integrity" "sha512-4FG+RSG9DL7uEwRUZXZn3SS34DiDPfzP0VOiEwtUWlE+AR2EIg+hSyvrIgUUfhdgR/UkAeW2QHgeP+hWrXs7jQ=="
   "resolved" "https://registry.npmjs.org/cliui/-/cliui-4.1.0.tgz"
@@ -999,7 +1011,9 @@
   "resolved" "file:apps/dashboard"
   "version" "0.0.0"
   dependencies:
+    "@react-oauth/google" "^0.4.0"
     "axios" "^1.1.3"
+    "jwt-decode" "^3.1.2"
     "next" "^12.3.1"
     "next-auth" "4.10.3"
     "react" "^17.0.2"
@@ -3461,6 +3475,13 @@
   "integrity" "sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig=="
   "resolved" "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz"
   "version" "3.1.1"
+
+"styled-jsx@*", "styled-jsx@^5.1.1":
+  "integrity" "sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw=="
+  "resolved" "https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.1.tgz"
+  "version" "5.1.1"
+  dependencies:
+    "client-only" "0.0.1"
 
 "styled-jsx@5.0.7":
   "integrity" "sha512-b3sUzamS086YLRuvnaDigdAewz1/EFYlHpYBP5mZovKEdQQOIIYq8lApylub3HHZ6xFjV051kkGU7cudJmrXEA=="
