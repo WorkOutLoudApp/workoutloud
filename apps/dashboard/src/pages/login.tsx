@@ -26,21 +26,27 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(user, pass)
-    // for testing
-    
-    if (user === 'admin' && pass === 'admin123') {
-      setAuth(true)
-      router.push('/')
-    } else {
+    axios.post(`http://localhost:4000/v1/web/example/users`, {
+      email: user,
+      password: pass,
+    }).then((response) => {
+      if (response.data.verify) {
+        setAuth(true)
+        // setPicture(decodedToken?.picture)
+        router.push('/')
+      }
+    }, (error) => {
+      console.log("[Login] error: ", error)
+    })
+
+    if (!auth) {
       setErrMsg('Invalid username or password')
     }
   }
 
-  console.log(`auth: ${auth}`)
   return (
     <div className='flex w-full justify-center'>
-      <body className='mt-10'>
+      <div className='mt-10'>
         {!auth && (
           <div className='bg-blue-800/90 px-3 py-3 rounded text-white'>
             <p ref={errRef} className='text-yellow-300 bold' aria-live='assertive'>{errMsg}</p>
@@ -71,16 +77,16 @@ const Login = () => {
               />
 
               <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
-              
+
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
                   const decodedToken = jwt_decode<any>(credentialResponse.credential)
                   // const decodedToken = jwt_decode<JwtPayload>(credentialResponse.credential)
-                  
+
                   axios.post(`http://localhost:4000/v1/web/example/auth`, {
                     token: decodedToken,
-                  }). then((response) => {
+                  }).then((response) => {
                     if (response.data.verify) {
                       setAuth(true)
                       setPicture(decodedToken?.picture)
@@ -93,7 +99,7 @@ const Login = () => {
                   }, (error) => {
                     console.log(error)
                   })
-                  
+
                 }}
                 onError={() => {
                   console.log('Login failed')
@@ -105,14 +111,14 @@ const Login = () => {
 
             <p className='mt-2'>Need an Account ?</p>
             <p className='underline underline-offset-2'>
-              <Link href='/signup'>
-                Sign Up
+              <Link href='/register'>
+                <button type='submit' className='underline underline-offset-2' > Sign Up </button>
               </Link>
             </p>
           </div>
         )}
 
-      </body>
+      </div>
     </div>
   )
 }
