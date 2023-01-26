@@ -9,6 +9,7 @@ import { googleLogout } from '@react-oauth/google'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
+import { MouseEvent} from 'react'
 
 
 const Navbar = () => {
@@ -31,7 +32,11 @@ const Navbar = () => {
     setShowNotificationTooltip(!showNotificationTooltip);
   };
 
-
+  const handleClickOutside = (event: MouseEvent<HTMLDivElement>) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target) && userButtonRef.current && !userButtonRef.current.contains(event.target)) {
+        setShowNotificationTooltip(false);
+    }
+}
   return (
     <body>
       {isMobile ? (
@@ -113,22 +118,24 @@ const Navbar = () => {
                   <div className='flex gap-[2vw]'>
                     {/*Currenly only working for Desktop*/}
                     <button ref={userButtonRef} type='button' onClick={handleNotificationOnClick}>
-                      <div className='flex bg-gray-00 rounded-full items-center px-1 py-1 cursor-pointer'>
+                      <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
                         <IoNotifications className='px-0.5' />
                       </div>
                     </button>
+                    <aside className ='relative'>
                       {showNotificationTooltip && (
-                      <menu ref={wrapperRef} className='absolute flex flex-col top-0 right-0 mt-2 border-2 rounded-md bg-white drop-shadow-md px-2 py-2 gap-1 text-lg'>
+                      <menu ref={wrapperRef} className='absolute flex flex-col top-8 right-7 mt-2 border-2 rounded-md bg-white drop-shadow-md px-2 py-2 gap-1 text-lg'>
                         <Link href='/notifications'>
                         <div className='notification-dropdown'>
                           {/*Testing purposes. Need to add live data in the future*/}
-                          <p className='text-gray-700 font-small'>Notifcation 1</p>
-                          <p className='text-gray-700 font-small'>Notifcation 2</p>
-                          <p className='text-gray-700 font-small'>Notifcation 3</p>
+                          <p className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>Notifcation 1</p>
+                          <p className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>Notifcation 2</p>
+                          <p className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>Notifcation 3</p>
                         </div>
                         </Link>
                       </menu>
                       )}
+                    </aside>
 
                     <button ref={userButtonRef} type='button' onClick={handleUserOnClick}>
                       <div className='flex bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer'>
@@ -177,9 +184,7 @@ const Navbar = () => {
             )}
           </aside>
         </nav>
-
       )}
-
     </body>
   )
 
