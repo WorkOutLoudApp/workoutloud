@@ -26,22 +26,20 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    axios.post(`http://localhost:4000/v1/web/example/users`, {
+    await axios.post(`http://localhost:4000/v1/web/example/users`, {
       email: user,
       password: pass,
     }).then((response) => {
-      if (response.data.verify) {
+      if (response.data.verify===true) {
         setAuth(true)
         // setPicture(decodedToken?.picture)
         router.push('/')
+      } else {
+        setErrMsg('Invalid username or password')
       }
     }, (error) => {
       console.log("[Login] error: ", error)
     })
-
-    if (!auth) {
-      setErrMsg('Invalid username or password')
-    }
   }
 
   return (

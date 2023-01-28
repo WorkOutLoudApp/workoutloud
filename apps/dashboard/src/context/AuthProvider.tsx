@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }: any) => {
     ), [auth, setAuth, picture, setPicture])
 
     return (
+        // return template
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>

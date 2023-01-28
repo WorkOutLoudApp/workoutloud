@@ -1,3 +1,3 @@
-declare const dbClient: any;
-export { dbClient };
+declare const dbPool: any;
+export { dbPool };
 //# sourceMappingURL=database.d.ts.map

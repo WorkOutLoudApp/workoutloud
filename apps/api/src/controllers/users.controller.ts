@@ -16,7 +16,9 @@ export const getUsers: RequestHandler = async (
             } else {
               console.log(result.rows)
               if (result.rows.length > 0) {
-                  res.json({ verify: true })
+                res.json({ verify: true })
+              } else {
+                res.json({ verify: false})
               }
             }
         })

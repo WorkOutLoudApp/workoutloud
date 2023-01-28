@@ -39,7 +39,7 @@ const Navbar = () => {
   }, [])
 
   return (
-    <>
+    <div>
       {isMobile ? (
         // Mobile
         <nav className='block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
@@ -184,7 +184,7 @@ const Navbar = () => {
 
       )}
 
-    </>
+    </div>
   )
 
 }

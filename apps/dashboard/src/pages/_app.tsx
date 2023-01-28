@@ -40,7 +40,7 @@ function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             ) : (
               <div className='flex gap-6'>
-                <div className='flex basis-1/5 h-[92vh] overflow-hidden hover:overflow-auto'>
+                <div className='flex basis-1/5 h-[92vh] border-r-2 border-gray-300 overflow-hidden hover:overflow-auto'>
                   <Sidebar />
                 </div>
                 <div className='flex basis-4/5' >
