@@ -69,9 +69,7 @@ const Login = () => {
                 value={pass}
                 required
               />
-
-              <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
-
+              <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full' >Sign In</button>
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
