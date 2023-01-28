@@ -126,7 +126,7 @@ const Register = () => {
                 required
               />
 
-              <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign up</button>
+              <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full'>Sign up</button>
 
               <GoogleLogin
                 onSuccess={credentialResponse => {

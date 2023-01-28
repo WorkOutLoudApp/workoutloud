@@ -9,8 +9,6 @@ import { googleLogout } from '@react-oauth/google'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
-import { MouseEvent} from 'react'
-
 
 const Navbar = () => {
   const isMobile = useContext(WindowTypeContext)
@@ -32,11 +30,6 @@ const Navbar = () => {
     setShowNotificationTooltip(!showNotificationTooltip);
   };
 
-  const handleClickOutside = (event: MouseEvent<HTMLDivElement>) => {
-    if (wrapperRef.current && !wrapperRef.current.contains(event.target) && userButtonRef.current && !userButtonRef.current.contains(event.target)) {
-        setShowNotificationTooltip(false);
-    }
-}
   return (
     <body>
       {isMobile ? (
@@ -45,7 +38,7 @@ const Navbar = () => {
           <div className='flex justify-between'>
             {/* Logo */}
             <div className='flex basis-1/5'>
-              <Link href='/'>
+              <Link href='/homepage'>
                 <p className='text-indigo-600 font-bold cursor-pointer'>
                   WorkOutLoud
                 </p>
