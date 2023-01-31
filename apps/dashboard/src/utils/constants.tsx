@@ -6,7 +6,7 @@ import { MdGroups } from 'react-icons/md'
 const activeStyle = 'fill-indigo-600'
 export const navbarItemsMobile = [
     {
-        path: '/',
+        path: '/homepage',
         icon: <AiFillHome />,
         iconActive: <AiFillHome className={activeStyle}/>
     },
@@ -29,7 +29,7 @@ export const navbarItemsMobile = [
 
 export const navbarItems = [
     {
-        path: '/',
+        path: '/homepage',
         icon: <AiFillHome />,
         iconActive: <AiFillHome className={activeStyle}/>
     },
