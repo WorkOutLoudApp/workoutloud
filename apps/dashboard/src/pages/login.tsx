@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useRef, useState, useEffect, useContext } from 'react'
-import { GoogleLogin} from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
 import { useAuth } from '../context/AuthProvider'
 
@@ -31,11 +31,12 @@ const Login = () => {
     
     if (user === 'admin' && pass === 'admin123') {
       setAuth(true)
-      router.push('/')
+      router.push('/homepage')
     } else {
       setErrMsg('Invalid username or password')
     }
   }
+  
 
   console.log(`auth: ${auth}`)
   return (
@@ -59,7 +60,6 @@ const Login = () => {
                 value={user}
                 required
               />
-
               <label className='mt-2' htmlFor="password">Password</label>
               <input
                 className='text-black rounded-full px-2'
@@ -69,14 +69,14 @@ const Login = () => {
                 value={pass}
                 required
               />
-              <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full' >Sign In</button>
+                  <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full' >Sign In</button> 
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
                   const decodedToken = jwt_decode(credentialResponse.credential)
                   console.log(decodedToken)
                   setAuth(true)
-                  router.push('/')
+                  router.push('/homepage') 
                 }}
                 onError={() => {
                   console.log('Login failed')
