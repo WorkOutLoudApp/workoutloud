@@ -39,7 +39,7 @@ function App({ Component, pageProps }: AppProps) {
             {isMobile ? (
               <Component {...pageProps} />
             ) : (
-              <div className='flex gap-6'>
+              <div className='flex gap-0'>
                 <div className='flex basis-1/5 h-[92vh] overflow-hidden hover:overflow-auto'>
                   <Sidebar />
                 </div>

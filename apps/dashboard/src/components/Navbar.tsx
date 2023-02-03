@@ -51,7 +51,7 @@ const Navbar = () => {
               {!auth && (
                 <div className='flex item-center'>
                   <Link href='/login'>
-                    <p className='font-["Roboto"] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600  px-2 py-1'>Login</p>
+                    <p className='font-["Poppins", San-serif] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600  px-2 py-1'>Login</p>
                   </Link>
                 </div>
               )}
@@ -80,12 +80,12 @@ const Navbar = () => {
         </nav>
       ) : (
         // Desktop
-        <nav className='block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl '>
+        <nav className='block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl'>
           <div className='flex justify-between'>
             {/* Logo */}
             <div className='flex basis-1/4'>
               <Link href='/'>
-                <p className='text-indigo-600 font-bold cursor-pointer'>
+                <p className='font-["Poppins", San-serif] text-indigo-600 font-bold cursor-pointer'>
                   WorkOutLoud
                 </p>
               </Link>
@@ -139,7 +139,7 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <Link href='/login'>
-                    <p className='font-["Roboto"] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600 px-2 py-1'>Login</p>
+                    <p className='font-["Poppins", San-serif] font-san text-white text-lg rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600 px-2 py-1'>Login</p>
                   </Link>
                 )}
               </div>
