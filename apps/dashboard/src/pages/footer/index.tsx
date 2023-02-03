@@ -1,11 +1,9 @@
-import Homepage from '@src/assets/Homepage.png'
 import FooterImg from '@src/assets/FooterImg.png'
-
 
 const Footer = () => {
   return (
     <footer className="bg-primary-100 py-16">
-      <div className="justify-left mx-auto w-5/6 gap-16 md:flex">
+      <div className="mx-auto w-5/6 gap-16 md:flex">
         <div className="mt-16 basis-1/4 md:mt-0">
           <h4 className="font-bold">Links</h4>
           <p className="my-5">Link 1</p>
