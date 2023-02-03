@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Homepage from '../assets/Homepage.png';
+import backgroundworkout from '../assets/backgroundworkout.png';
+import homeworkout from '../assets/homeworkout.png';
 import Navbar from '@src/components/Navbar';
 import Footer from '@src/pages/footer/index';
 
@@ -13,9 +15,14 @@ const Home = () => {
     }}>
       <section id="home" className="flex flex-col gap-16 py-10 md:h-full md:pb-0">
         {/* IMAGE AND MAIN HEADER */}
-        <div className="mx-auto w-5/6 items-left justify-left md:flex md:h-5/6">
+        <div className="mx-auto w-5/6 flex items-left justify-left md:flex md:h-5/6">
           {/* MAIN HEADER */}
           <div className="z-10 mt-32 md:basis-3/5">
+            <div className='relative'>
+              <div className='before:absolute before:-top-20 before:-left-20 before:z-[-1] md:before:content-workoutloudtext'>
+                <img src={backgroundworkout.src} alt='backgroundworkout'/>
+              </div>
+            </div>
             {/* HEADINGS */}
             <div className="relative md:-mt-20">
               <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1] md:before:content-evolvetext">
@@ -33,11 +40,15 @@ const Home = () => {
               </Link>
             </div>
           </div>
+          {/* IMAGE */}
+          {/*<div className="md:basis-2/5 h-full relative">
+            <img src={homeworkout.src} alt='Homepage' style={{ width: `100%`, height: `90%` }} />
+            </div>*/}
         </div>
-        <Footer/>
+        <Footer />
       </section>
     </div>
   );
 };
 
-export default Home
+export default Home;
