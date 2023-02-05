@@ -76,8 +76,8 @@ const Navbar = () => {
           {/* Home / Workout / Friends / Noti */}
           {auth &&
             <div className='grid grid-cols-4 justify-items-stretch items-center mt-1'>
-              {navbarItemsMobile.map((item) => (
-                <Link href={item.path}>
+              {navbarItemsMobile.map((item,index) => (
+                <Link key={index} href={item.path}>
                   <div className={`${item.path === window.location.pathname ? itemStyleActive : itemStyle}`}>
                     {item.path === window.location.pathname ? item.iconActive : item.icon}
                   </div>
@@ -102,8 +102,8 @@ const Navbar = () => {
             {/* Home / Workout / Friends */}
             {auth &&
               <div className='grid basis-2/4 grid-cols-3 items-center'>
-                {navbarItems.map((item) => (
-                  <Link href={item.path}>
+                {navbarItems.map((item, index) => (
+                  <Link key={index} href={item.path}>
                     <div className={`${item.path === window.location.pathname ? itemStyleActive : itemStyle}`}>
                       {item.path === window.location.pathname ? item.iconActive : item.icon}
                     </div>

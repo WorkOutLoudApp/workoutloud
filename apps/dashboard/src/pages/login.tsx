@@ -26,7 +26,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await axios.post(`http://localhost:4000/v1/web/example/users`, {
+    await axios.post(`http://localhost:4000/v1/user/login`, {
       email: user,
       password: pass,
     }).then((response) => {
@@ -78,14 +78,14 @@ const Login = () => {
 
               <GoogleLogin
                 onSuccess={credentialResponse => {
-                  console.log(credentialResponse)
                   const decodedToken = jwt_decode<any>(credentialResponse.credential)
+                  console.log(decodedToken)
                   // const decodedToken = jwt_decode<JwtPayload>(credentialResponse.credential)
 
-                  axios.post(`http://localhost:4000/v1/web/example/auth`, {
+                  axios.post(`http://localhost:4000/v1/user/googlelogin`, {
                     token: decodedToken,
                   }).then((response) => {
-                    if (response.data.verify) {
+                    if (response.data.verify === true) {
                       setAuth(true)
                       setPicture(decodedToken?.picture)
                       router.push('/')

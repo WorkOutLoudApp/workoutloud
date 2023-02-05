@@ -1,2 +1,0 @@
-const PUBLIC_GOOGLE_API_TOKEN='773793174033-mva0e49hdl20f7aqbcpc7h5pe6fipaej.apps.googleusercontent.com'
-export default PUBLIC_GOOGLE_API_TOKEN

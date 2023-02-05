@@ -1,13 +1,22 @@
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import axios from 'axios'
 import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react'
 import '../styles/index.css'
-import { GoogleOAuthProvider } from '@react-oauth/google'
+
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { AuthProvider } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 
-import PUBLIC_GOOGLE_API_TOKEN from '../utils/keys'
+// import PUBLIC_GOOGLE_API_TOKEN from '@src/utils/keys'
+
+let PUBLIC_GOOGLE_API_TOKEN=''
+axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
+  PUBLIC_GOOGLE_API_TOKEN=response.data.key
+}).catch((error) => {
+  console.log(error)
+})
 
 function App({ Component, pageProps }: AppProps) {
   const [width, setWidth] = useState(undefined)

@@ -36,14 +36,88 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.registerUser = exports.loginUser = void 0;
+exports.registerUser = exports.loginGoogle = exports.loginUser = void 0;
+var client_1 = require("@prisma/client");
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ msg: 'login user' });
-        return [2 /*return*/];
+    var prisma, _a, email, password, account, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                prisma = new client_1.PrismaClient();
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, 4, 6]);
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, prisma.account.findFirst({
+                        where: {
+                            email: email,
+                            password: password
+                        }
+                    })];
+            case 2:
+                account = _b.sent();
+                if (account) {
+                    res.json({ verify: true });
+                }
+                else {
+                    res.json({ verify: false });
+                }
+                return [3 /*break*/, 6];
+            case 3:
+                error_1 = _b.sent();
+                console.error(error_1);
+                res.status(500).json({ error: 'An error occurred while retrieving the user' });
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, prisma.$disconnect()];
+            case 5:
+                _b.sent();
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
+        }
     });
 }); };
 exports.loginUser = loginUser;
+var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var prisma, token, email, password, account, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                prisma = new client_1.PrismaClient();
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 6]);
+                token = req.body.token;
+                email = token.email;
+                password = token.sub;
+                return [4 /*yield*/, prisma.account.findFirst({
+                        where: {
+                            email: email,
+                            password: password
+                        }
+                    })];
+            case 2:
+                account = _a.sent();
+                if (account) {
+                    res.json({ verify: true });
+                }
+                else {
+                    res.json({ verify: false });
+                }
+                return [3 /*break*/, 6];
+            case 3:
+                error_2 = _a.sent();
+                console.error(error_2);
+                res.status(500).json({ error: 'An error occurred while retrieving the user' });
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, prisma.$disconnect()];
+            case 5:
+                _a.sent();
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+exports.loginGoogle = loginGoogle;
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         res.json({ msg: 'register user' });
