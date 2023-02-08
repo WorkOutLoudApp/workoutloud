@@ -5,7 +5,7 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { HiUser } from 'react-icons/hi'
 import { IoLogOut, IoNotifications } from 'react-icons/io5'
 
-import { navbarItems, navbarItemsMobile } from '@src/utils/constants'
+import { navbarItems, navbarItemsMobile } from '@src/utils/constants/navbar'
 import { googleLogout } from '@react-oauth/google'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
@@ -13,7 +13,7 @@ import WindowTypeContext from '../context/WindowTypeProvider'
 
 const Navbar = () => {
   const isMobile = useContext(WindowTypeContext)
-  const { auth, setAuth, picture, setPicture } = useAuth()
+  const { auth, setAuth, user, setUser } = useAuth()
   const [showUserTooltip, setShowUserTooltip] = useState(false)
   const wrapperRef = useRef(null)
   const userButtonRef = useRef(null)
@@ -56,30 +56,30 @@ const Navbar = () => {
             {/* Login / Menu */}
             <div className='flex basis-1/5 justify-end'>
               {/* Login */}
-              {!auth && (
-                <div className='flex item-center'>
-                  <Link href='/login'>
+              {!user && (
+                <Link href='/login'>
+                  <div className='flex item-center'>
                     <p className='font-["Roboto"] font-san text-white text-xl font-bold rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600  px-2 py-1'>Login</p>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               )}
 
               {/* Menu */}
-              <div className='flex items-center'>
-                <Link href='/menu'>
+              <Link href='/menu'>
+                <div className='flex items-center'>
                   <GiHamburgerMenu className='cursor-pointer rounded-full px-1 text-3xl bg-gray-200' />
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
 
           {/* Home / Workout / Friends / Noti */}
-          {auth &&
+          {user &&
             <div className='grid grid-cols-4 justify-items-stretch items-center mt-1'>
-              {navbarItemsMobile.map((item,index) => (
-                <Link key={index} href={item.path}>
-                  <div className={`${item.path === window.location.pathname ? itemStyleActive : itemStyle}`}>
-                    {item.path === window.location.pathname ? item.iconActive : item.icon}
+              {navbarItemsMobile.map((item) => (
+                <Link key={item.name} href={item.path}>
+                  <div className={`${(item.path === window.location.pathname) || (window.location.pathname.match(item.name)) ? itemStyleActive : itemStyle}`}>
+                    {(item.path === window.location.pathname) || (window.location.pathname.match(item.name)) ? item.iconActive : item.icon}
                   </div>
                 </Link>
               ))}
@@ -100,12 +100,12 @@ const Navbar = () => {
             </div>
 
             {/* Home / Workout / Friends */}
-            {auth &&
+            {user &&
               <div className='grid basis-2/4 grid-cols-3 items-center'>
-                {navbarItems.map((item, index) => (
-                  <Link key={index} href={item.path}>
-                    <div className={`${item.path === window.location.pathname ? itemStyleActive : itemStyle}`}>
-                      {item.path === window.location.pathname ? item.iconActive : item.icon}
+                {navbarItems.map((item) => (
+                  <Link key={item.name} href={item.path}>
+                    <div className={`${(item.path === window.location.pathname) || (window.location.pathname.match(item.name)) ? itemStyleActive : itemStyle}`}>
+                      {(item.path === window.location.pathname) || (window.location.pathname.match(item.name)) ? item.iconActive : item.icon}
                     </div>
                   </Link>
                 ))}
@@ -114,31 +114,26 @@ const Navbar = () => {
 
             {/* Noti / User || Login / Menu */}
             <div className='flex basis-1/4 justify-end h-full'>
-              <div className='flex items-center'>
-                {auth ? (
-                  <div className='flex flex-row space-x-4'>
+              <div className='flex justify-end items-center h-full'>
+                {user ? (
+                  <div className='flex flex-row items-center space-x-4 h-full py-0.5'>
                     <Link href='/notifications'>
-                      <div className='bg-gray-200 rounded-full items-center px-1 py-1 cursor-pointer w-8 h-8'>
-                        <IoNotifications className='px-0.5' />
+                      <div className='flex aspect-square items-center place-content-center h-full rounded-full bg-gray-200 cursor-pointer'>
+                        <IoNotifications className='p-0.5' />
                       </div>
                     </Link>
 
-
-                    <button ref={userButtonRef} type='button' onClick={handleUserOnClick}
-                      className='flex items-center h-full'
-                    >
-                      {/* <div className='flex bg-gray-200 rounded-full items-center cursor-pointer h-full'> */}
-                      {/* TODO: replace with user's avatar */}
-                      {/* <HiUser className='px-0.5' /> */}
-                      {/* </div> */}
-                      <div className='flex h-8 w-8'>
-                        <img src={picture} alt='avatar' className='object-fit rounded-full' />
-
-                      </div>
-
-                    </button>
-
-
+                    <div className='flex aspect-square items-center place-content-center h-full rounded-full bg-gray-200'>
+                      <button ref={userButtonRef} type='button' onClick={handleUserOnClick}
+                        className='cursor-pointer'
+                      >
+                        {user.avatar ? (
+                          <img src={user.avatar} alt='avatar' className='rounded-full h-auto align-middle' />
+                        ) : (
+                          <HiUser className='p-0.5' />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                 ) : (
@@ -167,6 +162,7 @@ const Navbar = () => {
                   <button type='button' onClick={() => {
                     setShowUserTooltip(false)
                     googleLogout()
+                    setUser(null)
                     setAuth(false)
                   }}>
                     <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>

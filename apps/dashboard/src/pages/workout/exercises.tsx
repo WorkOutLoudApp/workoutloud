@@ -1,15 +1,16 @@
 import React from 'react'
-import { useAuth } from '@src/context/AuthProvider'
-import Login from './login'
 
-const Workout = () => {
+import { useAuth } from '@src/context/AuthProvider'
+import Login from '../login'
+
+const Exercises = () => {
     const { user } = useAuth()
     
     return (
         <div className='w-full'>
             { user ? (
                 <div>
-                    <h1>Workout</h1>
+                    <h1>Workout Exercises</h1>
                 </div>
             ) : (
                 <div className=''>
@@ -21,4 +22,4 @@ const Workout = () => {
     )
 }
 
-export default Workout
+export default Exercises

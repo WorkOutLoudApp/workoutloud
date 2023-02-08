@@ -36,17 +36,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.registerUser = exports.loginGoogle = exports.loginUser = void 0;
+exports.registerGoogle = exports.registerUser = exports.loginGoogle = exports.loginUser = void 0;
 var client_1 = require("@prisma/client");
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, _a, email, password, account, error_1;
+    var prisma, success, user, message, _a, email, password, account, dbUser, error_1, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 prisma = new client_1.PrismaClient();
+                success = false;
+                user = {};
+                message = '';
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 3, 4, 6]);
+                _b.trys.push([1, 9, 10, 12]);
                 _a = req.body, email = _a.email, password = _a.password;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
@@ -56,36 +59,66 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     })];
             case 2:
                 account = _b.sent();
-                if (account) {
-                    res.json({ verify: true });
+                if (!account) return [3 /*break*/, 7];
+                _b.label = 3;
+            case 3:
+                _b.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, prisma.user.findFirst({
+                        where: {
+                            accountId: account.id
+                        }
+                    })];
+            case 4:
+                dbUser = _b.sent();
+                if (dbUser) {
+                    success = true;
+                    user = {
+                        email: account.email,
+                        username: dbUser.username,
+                        firstName: dbUser.firstName,
+                        lastName: dbUser.lastName,
+                        avatar: dbUser.avatar
+                    };
                 }
                 else {
-                    res.json({ verify: false });
+                    message = 'User not found';
                 }
                 return [3 /*break*/, 6];
-            case 3:
-                error_1 = _b.sent();
-                console.error(error_1);
-                res.status(500).json({ error: 'An error occurred while retrieving the user' });
-                return [3 /*break*/, 6];
-            case 4: return [4 /*yield*/, prisma.$disconnect()];
             case 5:
+                error_1 = _b.sent();
+                message = 'Error occured white verifyng user' + error_1;
+                return [3 /*break*/, 6];
+            case 6: return [3 /*break*/, 8];
+            case 7:
+                res.json({ verify: false, user: {} });
+                _b.label = 8;
+            case 8: return [3 /*break*/, 12];
+            case 9:
+                error_2 = _b.sent();
+                message = 'Error occured white verifyng account' + error_2;
+                return [3 /*break*/, 12];
+            case 10: return [4 /*yield*/, prisma.$disconnect()];
+            case 11:
                 _b.sent();
+                res.json({ success: success, user: user, message: message });
                 return [7 /*endfinally*/];
-            case 6: return [2 /*return*/];
+            case 12: return [2 /*return*/];
         }
     });
 }); };
 exports.loginUser = loginUser;
 var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, token, email, password, account, error_2;
+    var prisma, success, user, message, token, email, password, account, dbUser, error_3, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 prisma = new client_1.PrismaClient();
+                success = false;
+                user = {};
+                message = '';
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 3, 4, 6]);
+                _a.trys.push([1, 7, 8, 10]);
                 token = req.body.token;
                 email = token.email;
                 password = token.sub;
@@ -97,31 +130,220 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     })];
             case 2:
                 account = _a.sent();
-                if (account) {
-                    res.json({ verify: true });
+                if (!account) return [3 /*break*/, 6];
+                _a.label = 3;
+            case 3:
+                _a.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, prisma.user.findFirst({
+                        where: {
+                            accountId: account.id
+                        }
+                    })];
+            case 4:
+                dbUser = _a.sent();
+                if (dbUser) {
+                    success = true;
+                    user = {
+                        email: account.email,
+                        username: dbUser.username,
+                        firstName: dbUser.firstName,
+                        lastName: dbUser.lastName,
+                        avatar: dbUser.avatar
+                    };
                 }
                 else {
-                    res.json({ verify: false });
+                    message = 'User not found';
                 }
                 return [3 /*break*/, 6];
-            case 3:
-                error_2 = _a.sent();
-                console.error(error_2);
-                res.status(500).json({ error: 'An error occurred while retrieving the user' });
-                return [3 /*break*/, 6];
-            case 4: return [4 /*yield*/, prisma.$disconnect()];
             case 5:
+                error_3 = _a.sent();
+                message = 'Error occured white verifyng user' + error_3;
+                return [3 /*break*/, 6];
+            case 6: return [3 /*break*/, 10];
+            case 7:
+                error_4 = _a.sent();
+                message = 'Error occured white verifyng account' + error_4;
+                return [3 /*break*/, 10];
+            case 8: return [4 /*yield*/, prisma.$disconnect()];
+            case 9:
                 _a.sent();
+                res.json({ success: success, user: user, message: message });
                 return [7 /*endfinally*/];
-            case 6: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };
 exports.loginGoogle = loginGoogle;
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ msg: 'register user' });
-        return [2 /*return*/];
+    var prisma, success, user, message, _a, firstName_1, lastName_1, username_1, email_1, password, account, error_5;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                prisma = new client_1.PrismaClient();
+                success = false;
+                user = {};
+                message = '';
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 6, 7, 9]);
+                _a = req.body, firstName_1 = _a.firstName, lastName_1 = _a.lastName, username_1 = _a.username, email_1 = _a.email, password = _a.password;
+                return [4 /*yield*/, prisma.account.findFirst({
+                        where: {
+                            email: email_1
+                        }
+                    })];
+            case 2:
+                account = _b.sent();
+                if (!account) return [3 /*break*/, 3];
+                message = 'Email already registered';
+                return [3 /*break*/, 5];
+            case 3: return [4 /*yield*/, prisma.account.create({
+                    data: {
+                        email: email_1,
+                        password: password
+                    }
+                }).then(function (newAccount) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, prisma.user.create({
+                                    data: {
+                                        username: username_1,
+                                        firstName: firstName_1,
+                                        lastName: lastName_1,
+                                        avatar: '',
+                                        accountId: newAccount.id
+                                    }
+                                }).then(function () {
+                                    success = true;
+                                    user = {
+                                        email: email_1,
+                                        username: username_1,
+                                        firstName: firstName_1,
+                                        lastName: lastName_1,
+                                        avatar: ''
+                                    };
+                                    message = 'Registration successful';
+                                })["catch"](function (error) {
+                                    prisma.account["delete"]({
+                                        where: {
+                                            email: email_1
+                                        }
+                                    });
+                                    message = 'Registration failed: ' + error;
+                                })];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); })["catch"](function (error) {
+                    message = 'Registration failed: ' + error;
+                })];
+            case 4:
+                _b.sent();
+                _b.label = 5;
+            case 5: return [3 /*break*/, 9];
+            case 6:
+                error_5 = _b.sent();
+                message = 'Registration failed: ' + error_5;
+                return [3 /*break*/, 9];
+            case 7: return [4 /*yield*/, prisma.$disconnect()];
+            case 8:
+                _b.sent();
+                res.json({ success: success, user: user, message: message });
+                return [7 /*endfinally*/];
+            case 9: return [2 /*return*/];
+        }
     });
 }); };
 exports.registerUser = registerUser;
+var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var prisma, success, user, message, token, account, firstName_2, lastName_2, username_2, email_2, password, avatar_1, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                prisma = new client_1.PrismaClient();
+                success = false;
+                user = {};
+                message = '';
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 6, 7, 9]);
+                token = req.body.token;
+                return [4 /*yield*/, prisma.account.findFirst({
+                        where: {
+                            email: token.email
+                        }
+                    })];
+            case 2:
+                account = _a.sent();
+                if (!account) return [3 /*break*/, 3];
+                message = 'Email already registered';
+                return [3 /*break*/, 5];
+            case 3:
+                firstName_2 = token.given_name || '';
+                lastName_2 = token.family_name || '';
+                username_2 = token.email;
+                email_2 = token.email;
+                password = token.sub;
+                avatar_1 = token.picture;
+                return [4 /*yield*/, prisma.account.create({
+                        data: {
+                            email: email_2,
+                            password: password
+                        }
+                    }).then(function (newAccount) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, prisma.user.create({
+                                        data: {
+                                            username: username_2,
+                                            firstName: firstName_2,
+                                            lastName: lastName_2,
+                                            avatar: avatar_1,
+                                            accountId: newAccount.id
+                                        }
+                                    }).then(function () {
+                                        success = true;
+                                        user = {
+                                            email: email_2,
+                                            username: username_2,
+                                            firstName: firstName_2,
+                                            lastName: lastName_2,
+                                            avatar: avatar_1
+                                        };
+                                        message = 'Registration successful';
+                                    })["catch"](function (error) {
+                                        prisma.account["delete"]({
+                                            where: {
+                                                email: email_2
+                                            }
+                                        });
+                                        message = 'Registration failed: ' + error;
+                                    })];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })["catch"](function (error) {
+                        message = 'Registration failed: ' + error;
+                    })];
+            case 4:
+                _a.sent();
+                _a.label = 5;
+            case 5: return [3 /*break*/, 9];
+            case 6:
+                error_6 = _a.sent();
+                message = 'Registration failed: ' + error_6;
+                return [3 /*break*/, 9];
+            case 7: return [4 /*yield*/, prisma.$disconnect()];
+            case 8:
+                _a.sent();
+                res.json({ success: success, user: user, message: message });
+                return [7 /*endfinally*/];
+            case 9: return [2 /*return*/];
+        }
+    });
+}); };
+exports.registerGoogle = registerGoogle;

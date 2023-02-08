@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { loginUser, registerUser, loginGoogle} from '@src/controllers/userController'
+import { loginUser, registerUser, loginGoogle, registerGoogle} from '@src/controllers/userController'
 
 require('dotenv').config()
 
@@ -9,5 +9,5 @@ router.post('/login', loginUser)
 router.post('/googlelogin', loginGoogle)
 
 router.post('/register', registerUser)
-
+router.post('/googleregister', registerGoogle)
 export default router

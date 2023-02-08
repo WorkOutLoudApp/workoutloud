@@ -7,12 +7,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 
 const Login = () => {
-  const { auth, setAuth, picture, setPicture } = useAuth()
+  const { auth, setAuth, user, setUser } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
   const errRef = useRef()
   const router = useRouter()
 
-  const [user, setUser] = useState('')
+  const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [errMsg, setErrMsg] = useState('')
 
@@ -22,17 +22,17 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg('')
-  }, [user, pass]) // remove errMsg whenever user or pass changes
+  }, [email, pass]) // remove errMsg whenever user or pass changes
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     await axios.post(`http://localhost:4000/v1/user/login`, {
-      email: user,
+      email,
       password: pass,
     }).then((response) => {
-      if (response.data.verify===true) {
+      if (response.data.success===true) {
         setAuth(true)
-        // setPicture(decodedToken?.picture)
+        setUser(response.data.user)
         router.push('/')
       } else {
         setErrMsg('Invalid username or password')
@@ -45,22 +45,22 @@ const Login = () => {
   return (
     <div className='flex w-full justify-center'>
       <div className='mt-10'>
-        {!auth && (
+        {!user && (
           <div className='bg-blue-800/90 px-3 py-3 rounded text-white'>
             <p ref={errRef} className='text-yellow-300 bold' aria-live='assertive'>{errMsg}</p>
             <h1 className='text-2xl'>Sign In</h1>
             <form className='grid grid-row'
               onSubmit={handleSubmit}
             >
-              <label className='mt-2' htmlFor='username'>Username</label>
+              <label className='mt-2' htmlFor='email'>Email</label>
               <input
                 className='text-black rounded-full px-2'
                 type='text'
-                id='username'
+                id='email'
                 ref={userRef}
                 autoComplete='off'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
               />
 
@@ -74,26 +74,23 @@ const Login = () => {
                 required
               />
 
-              <button type='submit' className='mt-2 mb-2 py-1.5 rounded bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
+              <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
 
               <GoogleLogin
-                onSuccess={credentialResponse => {
+                onSuccess={async credentialResponse => {
                   const decodedToken = jwt_decode<any>(credentialResponse.credential)
                   console.log(decodedToken)
-                  // const decodedToken = jwt_decode<JwtPayload>(credentialResponse.credential)
-
-                  axios.post(`http://localhost:4000/v1/user/googlelogin`, {
+                  
+                  await axios.post(`http://localhost:4000/v1/user/googlelogin`, {
                     token: decodedToken,
                   }).then((response) => {
-                    if (response.data.verify === true) {
+                    if (response.data.success === true) {
                       setAuth(true)
-                      setPicture(decodedToken?.picture)
+                      setUser(response.data.user)
                       router.push('/')
                     } else {
                       setErrMsg('Account not registered.')
                     }
-                    // console.log(JSON.stringify(response.data.message))
-                    // console.log(response.data.verify)
                   }, (error) => {
                     console.log(error)
                   })

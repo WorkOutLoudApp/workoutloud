@@ -22,6 +22,7 @@ model User {
   username String @unique
   firstName String
   lastName String
+  avatar String
   accountId Int @unique
   account Account @relation(fields: [accountId], references: [id])
 }

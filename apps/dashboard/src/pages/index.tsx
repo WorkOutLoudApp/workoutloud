@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 function Home() {
   const [example, setExample] = useState<any>()
-  useEffect(() => {
+  useEffect( () => {
     axios
       .get(`http://localhost:4000/v1/web/example/hello`, {
         withCredentials: true,
@@ -12,6 +12,10 @@ function Home() {
         setExample(resp.data)
       })
       .catch(() => console.error('error'))
+
+      return () => {
+        setExample({})
+      }
   }, [])
 
   return (
