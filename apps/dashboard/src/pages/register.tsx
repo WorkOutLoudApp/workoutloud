@@ -57,6 +57,7 @@ const Register = () => {
         if (response.data.success === true) {
           setAuth(true)
           setUser(response.data.user)
+          localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
           router.push('/')
         } else {
           setErrMsg(response.data.message)
@@ -154,6 +155,7 @@ return (
                 if (response.data.success === true) {
                   setAuth(true)
                   setUser(response.data.user)
+                  localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
                   router.push('/')
                 } else {
                   setErrMsg(response.data.message)

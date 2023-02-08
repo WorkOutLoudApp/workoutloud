@@ -35,9 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 exports.registerGoogle = exports.registerUser = exports.loginGoogle = exports.loginUser = void 0;
 var client_1 = require("@prisma/client");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var prisma, success, user, message, _a, email, password, account, dbUser, error_1, error_2;
     return __generator(this, function (_b) {
@@ -49,17 +53,16 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 message = '';
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 9, 10, 12]);
+                _b.trys.push([1, 7, 8, 10]);
                 _a = req.body, email = _a.email, password = _a.password;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
-                            email: email,
-                            password: password
+                            email: email
                         }
                     })];
             case 2:
                 account = _b.sent();
-                if (!account) return [3 /*break*/, 7];
+                if (!(account && bcrypt_1["default"].compareSync(password, account.password))) return [3 /*break*/, 6];
                 _b.label = 3;
             case 3:
                 _b.trys.push([3, 5, , 6]);
@@ -88,21 +91,17 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 error_1 = _b.sent();
                 message = 'Error occured white verifyng user' + error_1;
                 return [3 /*break*/, 6];
-            case 6: return [3 /*break*/, 8];
+            case 6: return [3 /*break*/, 10];
             case 7:
-                res.json({ verify: false, user: {} });
-                _b.label = 8;
-            case 8: return [3 /*break*/, 12];
-            case 9:
                 error_2 = _b.sent();
                 message = 'Error occured white verifyng account' + error_2;
-                return [3 /*break*/, 12];
-            case 10: return [4 /*yield*/, prisma.$disconnect()];
-            case 11:
+                return [3 /*break*/, 10];
+            case 8: return [4 /*yield*/, prisma.$disconnect()];
+            case 9:
                 _b.sent();
                 res.json({ success: success, user: user, message: message });
                 return [7 /*endfinally*/];
-            case 12: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };
@@ -124,13 +123,12 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 password = token.sub;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
-                            email: email,
-                            password: password
+                            email: email
                         }
                     })];
             case 2:
                 account = _a.sent();
-                if (!account) return [3 /*break*/, 6];
+                if (!(account && bcrypt_1["default"].compareSync(password, account.password))) return [3 /*break*/, 6];
                 _a.label = 3;
             case 3:
                 _a.trys.push([3, 5, , 6]);
@@ -175,7 +173,7 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 exports.loginGoogle = loginGoogle;
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, _a, firstName_1, lastName_1, username_1, email_1, password, account, error_5;
+    var prisma, success, user, message, _a, firstName_1, lastName_1, username_1, email_1, password, account, hashedPassword, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -185,7 +183,7 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 message = '';
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 6, 7, 9]);
+                _b.trys.push([1, 7, 8, 10]);
                 _a = req.body, firstName_1 = _a.firstName, lastName_1 = _a.lastName, username_1 = _a.username, email_1 = _a.email, password = _a.password;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
@@ -196,69 +194,72 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 account = _b.sent();
                 if (!account) return [3 /*break*/, 3];
                 message = 'Email already registered';
-                return [3 /*break*/, 5];
-            case 3: return [4 /*yield*/, prisma.account.create({
-                    data: {
-                        email: email_1,
-                        password: password
-                    }
-                }).then(function (newAccount) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, prisma.user.create({
-                                    data: {
-                                        username: username_1,
-                                        firstName: firstName_1,
-                                        lastName: lastName_1,
-                                        avatar: '',
-                                        accountId: newAccount.id
-                                    }
-                                }).then(function () {
-                                    success = true;
-                                    user = {
-                                        email: email_1,
-                                        username: username_1,
-                                        firstName: firstName_1,
-                                        lastName: lastName_1,
-                                        avatar: ''
-                                    };
-                                    message = 'Registration successful';
-                                })["catch"](function (error) {
-                                    prisma.account["delete"]({
-                                        where: {
-                                            email: email_1
-                                        }
-                                    });
-                                    message = 'Registration failed: ' + error;
-                                })];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); })["catch"](function (error) {
-                    message = 'Registration failed: ' + error;
-                })];
+                return [3 /*break*/, 6];
+            case 3: return [4 /*yield*/, bcrypt_1["default"].hash(password, 10)];
             case 4:
+                hashedPassword = _b.sent();
+                return [4 /*yield*/, prisma.account.create({
+                        data: {
+                            email: email_1,
+                            password: hashedPassword
+                        }
+                    }).then(function (newAccount) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, prisma.user.create({
+                                        data: {
+                                            username: username_1,
+                                            firstName: firstName_1,
+                                            lastName: lastName_1,
+                                            avatar: '',
+                                            accountId: newAccount.id
+                                        }
+                                    }).then(function () {
+                                        success = true;
+                                        user = {
+                                            email: email_1,
+                                            username: username_1,
+                                            firstName: firstName_1,
+                                            lastName: lastName_1,
+                                            avatar: ''
+                                        };
+                                        message = 'Registration successful';
+                                    })["catch"](function (error) {
+                                        prisma.account["delete"]({
+                                            where: {
+                                                email: email_1
+                                            }
+                                        });
+                                        message = 'Registration failed: ' + error;
+                                    })];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })["catch"](function (error) {
+                        message = 'Registration failed: ' + error;
+                    })];
+            case 5:
                 _b.sent();
-                _b.label = 5;
-            case 5: return [3 /*break*/, 9];
-            case 6:
+                _b.label = 6;
+            case 6: return [3 /*break*/, 10];
+            case 7:
                 error_5 = _b.sent();
                 message = 'Registration failed: ' + error_5;
-                return [3 /*break*/, 9];
-            case 7: return [4 /*yield*/, prisma.$disconnect()];
-            case 8:
+                return [3 /*break*/, 10];
+            case 8: return [4 /*yield*/, prisma.$disconnect()];
+            case 9:
                 _b.sent();
                 res.json({ success: success, user: user, message: message });
                 return [7 /*endfinally*/];
-            case 9: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };
 exports.registerUser = registerUser;
 var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, token, account, firstName_2, lastName_2, username_2, email_2, password, avatar_1, error_6;
+    var prisma, success, user, message, token, account, firstName_2, lastName_2, username_2, email_2, password, avatar_1, hashedPassword, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -268,7 +269,7 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                 message = '';
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 6, 7, 9]);
+                _a.trys.push([1, 7, 8, 10]);
                 token = req.body.token;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
@@ -279,7 +280,7 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                 account = _a.sent();
                 if (!account) return [3 /*break*/, 3];
                 message = 'Email already registered';
-                return [3 /*break*/, 5];
+                return [3 /*break*/, 6];
             case 3:
                 firstName_2 = token.given_name || '';
                 lastName_2 = token.family_name || '';
@@ -287,10 +288,13 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                 email_2 = token.email;
                 password = token.sub;
                 avatar_1 = token.picture;
+                return [4 /*yield*/, bcrypt_1["default"].hash(password, 10)];
+            case 4:
+                hashedPassword = _a.sent();
                 return [4 /*yield*/, prisma.account.create({
                         data: {
                             email: email_2,
-                            password: password
+                            password: hashedPassword
                         }
                     }).then(function (newAccount) { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -329,20 +333,20 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                     }); })["catch"](function (error) {
                         message = 'Registration failed: ' + error;
                     })];
-            case 4:
+            case 5:
                 _a.sent();
-                _a.label = 5;
-            case 5: return [3 /*break*/, 9];
-            case 6:
+                _a.label = 6;
+            case 6: return [3 /*break*/, 10];
+            case 7:
                 error_6 = _a.sent();
                 message = 'Registration failed: ' + error_6;
-                return [3 /*break*/, 9];
-            case 7: return [4 /*yield*/, prisma.$disconnect()];
-            case 8:
+                return [3 /*break*/, 10];
+            case 8: return [4 /*yield*/, prisma.$disconnect()];
+            case 9:
                 _a.sent();
                 res.json({ success: success, user: user, message: message });
                 return [7 /*endfinally*/];
-            case 9: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };

@@ -33,6 +33,7 @@ const Login = () => {
       if (response.data.success===true) {
         setAuth(true)
         setUser(response.data.user)
+        localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
         router.push('/')
       } else {
         setErrMsg('Invalid username or password')
@@ -87,6 +88,7 @@ const Login = () => {
                     if (response.data.success === true) {
                       setAuth(true)
                       setUser(response.data.user)
+                      localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
                       router.push('/')
                     } else {
                       setErrMsg('Account not registered.')

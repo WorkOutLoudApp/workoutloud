@@ -1,24 +1,28 @@
 import { NextFunction, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
-import { userInfo } from 'os'
-import { stringify } from 'querystring'
-import { json } from 'body-parser'
+import bcrypt from 'bcrypt'
+import jwt, { Secret } from 'jsonwebtoken'
+require('dotenv').config()
+
+const createToken = (id : any) => {
+    return jwt.sign({id}, process.env.SECRET as Secret, { expiresIn: '3d'})
+}
 
 export const loginUser = async (req: Request, res: Response) => {
     const prisma = new PrismaClient()
     let success = false
     let user = {}
     let message = ''
+    let authToken = ''
 
     try {
         const { email, password } = req.body
         const account = await prisma.account.findFirst({
             where: {
                 email,
-                password
             }
         })
-        if (account) {
+        if (account && bcrypt.compareSync(password, account.password)) {
             try {
                 const dbUser = await prisma.user.findFirst({
                     where: {
@@ -34,20 +38,20 @@ export const loginUser = async (req: Request, res: Response) => {
                         lastName: dbUser.lastName,
                         avatar: dbUser.avatar
                     }
+                    message = 'Login successful'
+                    authToken = createToken(account.id)
                 } else {
                     message = 'User not found'
                 }
             } catch (error) {
                 message = 'Error occured white verifyng user' + error
             }
-        } else {
-            res.json({ verify: false, user: {} })
         }
     } catch (error) {
         message = 'Error occured white verifyng account' + error
     } finally {
         await prisma.$disconnect()
-        res.json({ success, user, message })
+        res.json({ success, user, message, authToken })
     }
 }
 
@@ -56,6 +60,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
     let success = false
     let user = {}
     let message = ''
+    let authToken = ''
 
     try {
         const token = req.body.token
@@ -64,10 +69,9 @@ export const loginGoogle = async (req: Request, res: Response) => {
         const account = await prisma.account.findFirst({
             where: {
                 email,
-                password
             }
         })
-        if (account) {
+        if (account && bcrypt.compareSync(password, account.password)) {
             try {
                 const dbUser = await prisma.user.findFirst({
                     where: {
@@ -83,6 +87,8 @@ export const loginGoogle = async (req: Request, res: Response) => {
                         lastName: dbUser.lastName,
                         avatar: dbUser.avatar
                     }
+                    message = 'Login successful'
+                    authToken = createToken(account.id)
                 } else {
                     message = 'User not found'
                 }
@@ -94,7 +100,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
         message = 'Error occured white verifyng account' + error
     } finally {
         await prisma.$disconnect()
-        res.json({ success, user, message })
+        res.json({ success, user, message, authToken })
     }
 }
 
@@ -105,6 +111,7 @@ export const registerUser = async (req: Request, res: Response) => {
     let success = false
     let user = {}
     let message = ''
+    let authToken = ''
 
     try {
         const { firstName, lastName, username, email, password } = req.body
@@ -116,10 +123,11 @@ export const registerUser = async (req: Request, res: Response) => {
         if (account) {
             message = 'Email already registered'
         } else {
+            let hashedPassword = await bcrypt.hash(password,10)
             await prisma.account.create({
                 data: {
                     email,
-                    password
+                    password: hashedPassword
                 }
             }).then(async (newAccount) => {
                 await prisma.user.create({
@@ -140,6 +148,7 @@ export const registerUser = async (req: Request, res: Response) => {
                         avatar: ''
                     }
                     message = 'Registration successful'
+                    authToken = createToken(newAccount.id)
                 }).catch((error) => {
                     prisma.account.delete({
                         where: {
@@ -157,7 +166,7 @@ export const registerUser = async (req: Request, res: Response) => {
         message = 'Registration failed: ' + error
     } finally {
         await prisma.$disconnect()
-        res.json({ success, user, message })
+        res.json({ success, user, message, authToken })
     }
 }
 
@@ -166,6 +175,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
     let success = false
     let user = {}
     let message = ''
+    let authToken = ''
 
     try {
         const token = req.body.token
@@ -185,10 +195,12 @@ export const registerGoogle = async (req: Request, res: Response) => {
             const password = token.sub
             const avatar = token.picture
 
+            let hashedPassword = await bcrypt.hash(password,10)
+
             await prisma.account.create({
                 data: {
                     email,
-                    password
+                    password: hashedPassword
                 }
             }).then(async (newAccount) => {
                 await prisma.user.create({
@@ -209,6 +221,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
                         avatar
                     }
                     message = 'Registration successful'
+                    authToken = createToken(newAccount.id)
                 }).catch((error) => {
                     prisma.account.delete({
                         where: {
@@ -226,6 +239,6 @@ export const registerGoogle = async (req: Request, res: Response) => {
         message = 'Registration failed: ' + error
     } finally {
         await prisma.$disconnect()
-        res.json({ success, user, message })
+        res.json({ success, user, message, authToken })
     }
 }

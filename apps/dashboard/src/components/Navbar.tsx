@@ -160,6 +160,7 @@ const Navbar = () => {
 
                 <Link href='/'>
                   <button type='button' onClick={() => {
+                    localStorage.removeItem('user')
                     setShowUserTooltip(false)
                     googleLogout()
                     setUser(null)

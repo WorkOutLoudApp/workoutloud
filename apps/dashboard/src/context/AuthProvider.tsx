@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 interface AuthInterface {
     auth: boolean
@@ -18,6 +18,16 @@ const AuthContext = createContext({} as AuthInterface)
 export const AuthProvider = ({ children }: any) => {
     const [auth, setAuth] = useState(undefined)
     const [user, setUser] = useState(undefined)
+
+    //check if user logged in
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'))
+
+        if (storedUser) {
+            setAuth(true)
+            setUser(storedUser.user)
+        }
+    },[])
 
     const value = useMemo(() => (
         { auth, setAuth, user, setUser }
