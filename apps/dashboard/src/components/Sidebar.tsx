@@ -11,8 +11,8 @@ import { useAuth } from '../context/AuthProvider'
 export const HomeSidebar = (props: any) => {
   const { avatar, user } = props
   return (
-    <div className='w-full flex flex-col items-center space-y-2 px-2 text-md'>
-      <div className='flex mt-2 items-center space-x-2 h-10 '>
+    <div className='w-full flex flex-col justify-start items-center space-y-2 px-2 text-md'>
+      <div className='w-full flex justify-start mt-2 items-center space-x-2 h-10 '>
         {avatar ? (
           <div className='flex aspect-square items-center place-content-center h-full rounded-full'>
             <img src={avatar} alt='avatar' className='rounded-full' />

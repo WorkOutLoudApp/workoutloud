@@ -19,7 +19,7 @@ model Account {
 
 model User {
   id Int @id @default(autoincrement())
-  username String @unique
+  username String
   firstName String
   lastName String
   avatar String
