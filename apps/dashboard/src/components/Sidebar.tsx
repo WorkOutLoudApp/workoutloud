@@ -11,8 +11,8 @@ import { useAuth } from '../context/AuthProvider'
 export const HomeSidebar = (props: any) => {
   const { avatar, user } = props
   return (
-    <div>
-      <div className='flex mt-2 ml-2 items-center space-x-2 h-10'>
+    <div className='w-full flex flex-col items-center space-y-2 px-2 text-md'>
+      <div className='flex mt-2 items-center space-x-2 h-10 '>
         {avatar ? (
           <div className='flex aspect-square items-center place-content-center h-full rounded-full'>
             <img src={avatar} alt='avatar' className='rounded-full' />
@@ -22,7 +22,7 @@ export const HomeSidebar = (props: any) => {
             <HiUser className='' />
           </div>
         )}
-        <h1 className='text-xl'>{user.firstName} {user.lastName}</h1>
+        <h1 className='font-poppins text-md'>{user.firstName} {user.lastName}</h1>
       </div>
     </div>
   )
@@ -33,7 +33,7 @@ export const WorkoutSidebar = (props: any) => {
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl'>
-      <h1 className='w-full font-bold  rounded'>Workouts</h1>
+      <h1 className='w-full font-bold'>Workouts</h1>
       <div className='w-full flex flex-col space-y-2'>
         {sidebarWorkoutItems.map((item) => (
           <Link key={item.name} href={item.path} >
@@ -41,7 +41,7 @@ export const WorkoutSidebar = (props: any) => {
               <div className={styleWorkoutLogo}>
                 {item.path === window.location.pathname ? item.iconActive : item.icon}
               </div>
-              <span className=''>{item.name}</span>
+              <span className='font-poppins text-md'>{item.name}</span>
               {item.name !== 'Home' && (
                 <span className='flex w-full justify-end'>
                   <GrNext/>
@@ -57,9 +57,11 @@ export const WorkoutSidebar = (props: any) => {
 }
 
 export const FriendsSidebar = (props: any) => {
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl'>
-      <h1 className='w-full font-bold  rounded'>Friends</h1>
+      <h1 className='w-full font-bold'>Friends</h1>
     </div>
   )
 }
@@ -73,12 +75,12 @@ const Sidebar = () => {
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   if (!user) {
     return (
-      <div className='p-2'>Hi there!<br />Please login to start workout</div>
+      <div className='font-poppins p-2'>Hi there!<br />Please login to continue</div>
     )
   }
   return (
     <div className='w-full mt-2 text-[1.5vw]'>
-      {window.location.pathname === '/' && (
+      {window.location.pathname === '/homepage' && (
         <HomeSidebar avatar={user.avatar} user={user} />
       )}
 

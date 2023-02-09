@@ -43,12 +43,12 @@ function App({ Component, pageProps }: AppProps) {
     <WindowTypeContext.Provider value={isMobile}>
       <AuthProvider>
         <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
-          <div className="font-inter">
+          <div className="font-poppins">
             <Navbar/>
             {isMobile ? (
               <Component {...pageProps} />
             ) : (
-              <div className='flex gap-6'>
+              <div className='flex'>
                 <div className='flex basis-1/5 h-[92vh] border-r-2 border-gray-300 overflow-hidden hover:overflow-auto'>
                   <Sidebar />
                 </div>

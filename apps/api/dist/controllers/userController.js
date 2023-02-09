@@ -42,8 +42,13 @@ exports.__esModule = true;
 exports.registerGoogle = exports.registerUser = exports.loginGoogle = exports.loginUser = void 0;
 var client_1 = require("@prisma/client");
 var bcrypt_1 = __importDefault(require("bcrypt"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+require('dotenv').config();
+var createToken = function (id) {
+    return jsonwebtoken_1["default"].sign({ id: id }, process.env.SECRET, { expiresIn: '3d' });
+};
 var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, _a, email, password, account, dbUser, error_1, error_2;
+    var prisma, success, user, message, authToken, _a, email, password, account, dbUser, error_1, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -51,6 +56,7 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 success = false;
                 user = {};
                 message = '';
+                authToken = '';
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 7, 8, 10]);
@@ -82,6 +88,8 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                         lastName: dbUser.lastName,
                         avatar: dbUser.avatar
                     };
+                    message = 'Login successful';
+                    authToken = createToken(account.id);
                 }
                 else {
                     message = 'User not found';
@@ -99,7 +107,7 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 8: return [4 /*yield*/, prisma.$disconnect()];
             case 9:
                 _b.sent();
-                res.json({ success: success, user: user, message: message });
+                res.json({ success: success, user: user, message: message, authToken: authToken });
                 return [7 /*endfinally*/];
             case 10: return [2 /*return*/];
         }
@@ -107,7 +115,7 @@ var loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.loginUser = loginUser;
 var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, token, email, password, account, dbUser, error_3, error_4;
+    var prisma, success, user, message, authToken, token, email, password, account, dbUser, error_3, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -115,6 +123,7 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 success = false;
                 user = {};
                 message = '';
+                authToken = '';
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 7, 8, 10]);
@@ -148,6 +157,8 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         lastName: dbUser.lastName,
                         avatar: dbUser.avatar
                     };
+                    message = 'Login successful';
+                    authToken = createToken(account.id);
                 }
                 else {
                     message = 'User not found';
@@ -165,7 +176,7 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 8: return [4 /*yield*/, prisma.$disconnect()];
             case 9:
                 _a.sent();
-                res.json({ success: success, user: user, message: message });
+                res.json({ success: success, user: user, message: message, authToken: authToken });
                 return [7 /*endfinally*/];
             case 10: return [2 /*return*/];
         }
@@ -173,7 +184,7 @@ var loginGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 exports.loginGoogle = loginGoogle;
 var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, _a, firstName_1, lastName_1, username_1, email_1, password, account, hashedPassword, error_5;
+    var prisma, success, user, message, authToken, _a, firstName_1, lastName_1, username_1, email_1, password, account, hashedPassword, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -181,6 +192,7 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 success = false;
                 user = {};
                 message = '';
+                authToken = '';
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 7, 8, 10]);
@@ -224,6 +236,7 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                                             avatar: ''
                                         };
                                         message = 'Registration successful';
+                                        authToken = createToken(newAccount.id);
                                     })["catch"](function (error) {
                                         prisma.account["delete"]({
                                             where: {
@@ -251,7 +264,7 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 8: return [4 /*yield*/, prisma.$disconnect()];
             case 9:
                 _b.sent();
-                res.json({ success: success, user: user, message: message });
+                res.json({ success: success, user: user, message: message, authToken: authToken });
                 return [7 /*endfinally*/];
             case 10: return [2 /*return*/];
         }
@@ -259,7 +272,7 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
 }); };
 exports.registerUser = registerUser;
 var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var prisma, success, user, message, token, account, firstName_2, lastName_2, username_2, email_2, password, avatar_1, hashedPassword, error_6;
+    var prisma, success, user, message, authToken, token, account, firstName_2, lastName_2, username_2, email_2, password, avatar_1, hashedPassword, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -267,6 +280,7 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                 success = false;
                 user = {};
                 message = '';
+                authToken = '';
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 7, 8, 10]);
@@ -317,6 +331,7 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
                                             avatar: avatar_1
                                         };
                                         message = 'Registration successful';
+                                        authToken = createToken(newAccount.id);
                                     })["catch"](function (error) {
                                         prisma.account["delete"]({
                                             where: {
@@ -344,7 +359,7 @@ var registerGoogle = function (req, res) { return __awaiter(void 0, void 0, void
             case 8: return [4 /*yield*/, prisma.$disconnect()];
             case 9:
                 _a.sent();
-                res.json({ success: success, user: user, message: message });
+                res.json({ success: success, user: user, message: message, authToken: authToken });
                 return [7 /*endfinally*/];
             case 10: return [2 /*return*/];
         }

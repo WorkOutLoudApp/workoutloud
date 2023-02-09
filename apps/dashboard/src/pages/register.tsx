@@ -175,7 +175,7 @@ return (
 
         <p className='underline underline-offset-2'>
           <Link href='/login'>
-            <button type='submit' className='underline underline-offset-2' >Go Back</button>
+            <button type='submit' className='underline underline-offset-2' >Sign In</button>
           </Link>
         </p>
       </div>
