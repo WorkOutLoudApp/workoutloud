@@ -61,7 +61,7 @@ const Index = () => {
           >
             <button type="button" onClick={() => setIsOpen(true)}>
               <p>
-                <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Workout
+                <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Routine
               </p>
             </button>
           </button>
