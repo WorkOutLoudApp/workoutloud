@@ -15,6 +15,17 @@ interface AuthInterface {
 
 const AuthContext = createContext({} as AuthInterface)
 
+// FOR TESTING ONLY
+const TEST_USER = {
+    email: 'test@wol.com',
+    username: 'testuser',
+    firstName: 'Test',
+    lastName: 'User',
+    avatar: ''
+}
+
+////
+
 export const AuthProvider = ({ children }: any) => {
     const [auth, setAuth] = useState(undefined)
     const [user, setUser] = useState(undefined)
@@ -27,7 +38,8 @@ export const AuthProvider = ({ children }: any) => {
             setAuth(true)
             setUser(storedUser.user)
         }
-    },[])
+
+    }, [])
 
     const value = useMemo(() => (
         { auth, setAuth, user, setUser }
@@ -35,9 +47,15 @@ export const AuthProvider = ({ children }: any) => {
 
     return (
         // return template
-        <AuthContext.Provider value={value}>
+        // <AuthContext.Provider value={value}>
+        //     {children}
+        // </AuthContext.Provider>
+
+        // FOR TESTING ONLY (so we don't have to login and don't need database)
+        <AuthContext.Provider value={{auth:true, setAuth, user: TEST_USER, setUser}}>
             {children}
         </AuthContext.Provider>
+        ////////
     )
 }
 

@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt'
 import jwt, { Secret } from 'jsonwebtoken'
 require('dotenv').config()
 
-const createToken = (id : any) => {
-    return jwt.sign({id}, process.env.SECRET as Secret, { expiresIn: '3d'})
+const createToken = (id: any) => {
+    return jwt.sign({ id }, process.env.SECRET as Secret, { expiresIn: '3d' })
 }
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -123,7 +123,7 @@ export const registerUser = async (req: Request, res: Response) => {
         if (account) {
             message = 'Email already registered'
         } else {
-            let hashedPassword = await bcrypt.hash(password,10)
+            let hashedPassword = await bcrypt.hash(password, 10)
             await prisma.account.create({
                 data: {
                     email,
@@ -195,7 +195,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
             const password = token.sub
             const avatar = token.picture
 
-            let hashedPassword = await bcrypt.hash(password,10)
+            let hashedPassword = await bcrypt.hash(password, 10)
 
             await prisma.account.create({
                 data: {
