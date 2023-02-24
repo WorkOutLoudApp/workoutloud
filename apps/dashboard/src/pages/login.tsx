@@ -1,18 +1,18 @@
-import React from 'react'
+import { GoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
+import jwt_decode, { JwtPayload } from 'jwt-decode'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef, useState, useEffect, useContext } from 'react'
-import { GoogleLogin } from '@react-oauth/google'
-import jwt_decode from 'jwt-decode'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 
 const Login = () => {
-  const { auth, setAuth } = useAuth()
+  const { auth, setAuth, user, setUser } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
   const errRef = useRef()
   const router = useRouter()
 
-  const [user, setUser] = useState('')
+  const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [errMsg, setErrMsg] = useState('')
 
@@ -22,44 +22,49 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg('')
-  }, [user, pass]) // remove errMsg whenever user or pass changes
+  }, [email, pass]) // remove errMsg whenever user or pass changes
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(user, pass)
-    // for testing
-    
-    if (user === 'admin' && pass === 'admin123') {
-      setAuth(true)
-      router.push('/homepage')
-    } else {
-      setErrMsg('Invalid username or password')
-    }
+    await axios.post(`http://localhost:4000/v1/user/login`, {
+      email,
+      password: pass,
+    }).then((response) => {
+      if (response.data.success===true) {
+        setAuth(true)
+        setUser(response.data.user)
+        localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
+        router.push('/homepage')
+      } else {
+        setErrMsg('Invalid username or password')
+      }
+    }, (error) => {
+      console.log("[Login] error: ", error)
+    })
   }
-  
 
-  console.log(`auth: ${auth}`)
   return (
     <div className='flex w-full justify-center'>
-      <body className='mt-10'>
-        {!auth && (
+      <div className='mt-10'>
+        {!user && (
           <div className='bg-blue-800/90 px-3 py-3 rounded text-white'>
             <p ref={errRef} className='text-yellow-300 bold' aria-live='assertive'>{errMsg}</p>
             <h1 className='text-2xl'>Sign In</h1>
             <form className='grid grid-row'
               onSubmit={handleSubmit}
             >
-              <label className='mt-2' htmlFor='username'>Username</label>
+              <label className='mt-2' htmlFor='email'>Email</label>
               <input
                 className='text-black rounded-full px-2'
                 type='text'
-                id='username'
+                id='email'
                 ref={userRef}
                 autoComplete='off'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
               />
+
               <label className='mt-2' htmlFor="password">Password</label>
               <input
                 className='text-black rounded-full px-2'
@@ -69,14 +74,29 @@ const Login = () => {
                 value={pass}
                 required
               />
-                  <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full' >Sign In</button> 
+
+              <button type='submit' className='mt-2 mb-2 py-1.5 bg-white font-semibold text-gray-800 rounded-full'>Sign In</button>
+
               <GoogleLogin
-                onSuccess={credentialResponse => {
-                  console.log(credentialResponse)
-                  const decodedToken = jwt_decode(credentialResponse.credential)
+                onSuccess={async credentialResponse => {
+                  const decodedToken = jwt_decode<any>(credentialResponse.credential)
                   console.log(decodedToken)
-                  setAuth(true)
-                  router.push('/homepage') 
+                  
+                  await axios.post(`http://localhost:4000/v1/user/googlelogin`, {
+                    token: decodedToken,
+                  }).then((response) => {
+                    if (response.data.success === true) {
+                      setAuth(true)
+                      setUser(response.data.user)
+                      localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
+                      router.push('/homepage')
+                    } else {
+                      setErrMsg('Account not registered.')
+                    }
+                  }, (error) => {
+                    console.log(error)
+                  })
+
                 }}
                 onError={() => {
                   console.log('Login failed')
@@ -86,16 +106,16 @@ const Login = () => {
 
             </form>
 
-            <p className='mt-2'>Need an Account?</p>
+            <p className='mt-2'>Need an Account ?</p>
             <p className='underline underline-offset-2'>
               <Link href='/register'>
-              <button type='submit' className='underline underline-offset-2' > Sign Up </button>
+                <button type='submit' className='underline underline-offset-2' > Sign Up </button>
               </Link>
             </p>
           </div>
         )}
 
-      </body>
+      </div>
     </div>
   )
 }
