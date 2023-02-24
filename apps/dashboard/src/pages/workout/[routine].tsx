@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
 import { Exercise } from '@src/types/Workout'
+import axios from 'axios'
 
 const routines = [
   {
@@ -26,6 +27,10 @@ const RoutinePage = () => {
 
   const onAddExercise = (exercise: Exercise) => {
     setExercises([...exercises, exercise])
+    axios.post('http://localhost:4000/v1/routine/add', {
+        name: 'Routine Name',
+        description: 'Description',
+    })
   }
 
   return (

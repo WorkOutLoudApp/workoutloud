@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import { loginUser, registerUser, loginGoogle, registerGoogle} from '@src/controllers/userController'
-import {addRoutine} from "@src/controllers/routine.controller";
-
-require('dotenv').config()
+import {addRoutine, getRoutines} from "@src/controllers/routine.controller";
 
 const router = Router({ mergeParams: true })
 
+router.get('/getRoutines', getRoutines)
 router.post('/add', addRoutine)
 
 export default router
