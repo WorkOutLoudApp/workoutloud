@@ -3,8 +3,8 @@ var __importDefault = this && this.__importDefault || function (mod) {
     return mod && mod.__esModule ? mod : { 'default': mod };
 };
 exports.__esModule = true;
-var middlewares_1 = require('./middlewares\\index');
-var v1_router_1 = __importDefault(require('./routes\\v1.router'));
+var middlewares_1 = require('./middlewares/index');
+var v1_router_1 = __importDefault(require('./routes/v1.router'));
 var express_1 = __importDefault(require('express'));
 var helmet_1 = __importDefault(require('helmet'));
 var morgan_1 = __importDefault(require('morgan'));
