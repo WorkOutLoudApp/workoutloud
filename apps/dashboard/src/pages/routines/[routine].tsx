@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import { useAuth } from '@src/context/AuthProvider'
 import RoutineHeader from '@src/components/Workout/Header'
-import Login from '../login'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
 import { IExercise } from '@src/types/Workout'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
+import Login from '../login'
+import Exercise from "@src/components/Workout/Exercises/Exercise";
 
 const routines = [
   {
@@ -59,7 +60,7 @@ const RoutinePage = ({
               setTab={setCurrentTab}
           /> : null}
           {currentTab === 'Exercises' ? (
-            <div>
+            <div className="px-3">
               <AddExerciseModal
                 open={exerciseModalOpen}
                 setOpen={setExerciseModalOpen}
@@ -73,9 +74,11 @@ const RoutinePage = ({
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>
               <div>{JSON.stringify(exercises)}</div>
+              <div className="grid gap-3">
+                {exercises.map((exercise: any) => <Exercise key={exercise.id} {...exercise} />)}
+              </div>
             </div>
           ) : null}
-          <p>{currentTab} goes here</p>
         </div>
       ) : (
         <Login />

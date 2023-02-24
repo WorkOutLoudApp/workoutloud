@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { useAuth } from '@src/context/AuthProvider'
-import Routine from '@src/components/Workout/Routine'
+import Routine from '@src/components/Workout/Routines/Routine'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import axios from 'axios'
