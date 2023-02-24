@@ -51,8 +51,44 @@ const addRoutine = async (name: string, description: string) => {
     }
 }
 
+const getExercises = async (routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const routines = await prisma.exercise.findMany({
+            where: {
+                routineId
+            }
+        })
+        return routines
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+const addExercise = async (userId: number, routineId: number, name: string, description: string) => {
+    const prisma = new PrismaClient()
+    try {
+        const exercise = await prisma.exercise.create({
+            data: {
+                name,
+                description,
+                routineId
+            }
+        })
+        return exercise
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 export default {
     getRoutines,
     getRoutine,
-    addRoutine
+    addRoutine,
+    getExercises,
+    addExercise
 }

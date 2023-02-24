@@ -5,7 +5,7 @@ import Login from '../login'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 
@@ -27,26 +27,25 @@ interface RoutinePageProps {
 const RoutinePage = ({
                        routine
                      }: RoutinePageProps) => {
-  console.log(routine)
   const { auth } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
-  const [addExerciseModalOpen, setAddExerciseModalOpen] = useState(false)
+  const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
 
   const [data, setData] = useState<any>(null)
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/get/${routine}`).then((res) => setData(res.data))
+    axios.get(`http://localhost:4000/v1/routine/${routine}/get`).then((res) => setData(res.data))
   }, [])
 
   const [exercises, setExercises] = useState([])
-
-  const onAddExercise = (exercise: Exercise) => {
-    setExercises([...exercises, exercise])
-    axios.post('http://localhost:4000/v1/routine/add', {
-        name: 'Routine Name',
-        description: 'Description',
+  useEffect(() => {
+    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`).then((res) => setExercises(res.data))
+  }, [])
+  const onAddExercise = async (exercise: IExercise) => {
+    setExerciseModalOpen(false)
+    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise).then((res) => {
+      setExercises([...exercises, res.data])
     })
   }
-  console.log(data)
 
   return (
     <div className="w-full">
@@ -62,14 +61,14 @@ const RoutinePage = ({
           {currentTab === 'Exercises' ? (
             <div>
               <AddExerciseModal
-                open={addExerciseModalOpen}
-                setOpen={setAddExerciseModalOpen}
+                open={exerciseModalOpen}
+                setOpen={setExerciseModalOpen}
                 onAdd={onAddExercise}
               />
               <button
                 type="button"
                 className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
-                onClick={() => setAddExerciseModalOpen(true)}
+                onClick={() => setExerciseModalOpen(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>

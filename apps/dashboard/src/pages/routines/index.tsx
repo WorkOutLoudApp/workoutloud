@@ -4,68 +4,35 @@ import Routine from '@src/components/Workout/Routine'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import axios from 'axios'
+import AddRoutineModal from "@src/components/Workout/Routines/AddRoutineModal";
+import {IRoutine} from "@src/types/Workout"
 import Login from '../login'
 
-// const routines = [
-//   {
-//     name: 'Routine Name',
-//     description: 'Description',
-//   },
-//   {
-//     name: 'Routine Name',
-//     description: 'Description',
-//   },
-// ]
 const Index = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [routineModalOpen, setRoutineModalOpen] = useState(false)
   const { auth } = useAuth()
 
   const [routines, setRoutines] = useState([])
   useEffect(() => {
-    axios.get('http://localhost:4000/v1/routine/getRoutines').then((res) => setRoutines(res.data))
+    axios.get(`http://localhost:4000/v1/routine/getRoutines`).then((res) => setRoutines(res.data))
   }, [])
+  const onAddExercise = async (routine: IRoutine) => {
+    axios.post(`http://localhost:4000/v1/routine/add`, routine).then((res) => {
+      setRoutineModalOpen(false)
+      setRoutines([...routines, res.data])
+    })
+  }
 
   return (
     <div className="w-full">
       {auth ? (
         <div className="space-y-3 p-3">
-          {isOpen && (
-            <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center bg-black bg-opacity-60">
-              <div className="mx-auto max-w-lg rounded-md bg-white p-4 shadow-xl">
-                <div className="flex justify-between">
-                  <h3 className="text-xl font-medium">Add Routine</h3>
-                  <button
-                    type="button"
-                    className="font-medium text-gray-800"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    X
-                  </button>
-                </div>
-                <form className="mt-6 space-y-3">
-                  <input
-                    className="w-full rounded-md border border-gray-400 p-2"
-                    placeholder="Routine Name"
-                  />
-                  <input
-                    className="w-full rounded-md border border-gray-400 p-2"
-                    placeholder="Description"
-                  />
-                  <button
-                    type="submit"
-                    className="rounded bg-blue-400/20 py-2 px-2 font-semibold text-gray-800"
-                  >
-                    Add
-                  </button>
-                </form>
-              </div>
-            </div>
-          )}
+          <AddRoutineModal open={routineModalOpen} setOpen={setRoutineModalOpen} onAdd={onAddExercise} />
           <button
             type="button"
             className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
           >
-            <button type="button" onClick={() => setIsOpen(true)}>
+            <button type="button" onClick={() => setRoutineModalOpen(true)}>
               <p>
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Routine
               </p>
