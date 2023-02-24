@@ -79,7 +79,7 @@
   resolved "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-6.3.0.tgz"
   integrity sha512-qVtd5i1Cc7cdrqnTWqTObKQHjPWAiRwjUPaXObaeNPcy7+WKxJumGBx66rfSFgK6LNpIasVKkEgW8oyf0tmPLA==
 
-"@fortawesome/fontawesome-svg-core@^6.3.0":
+"@fortawesome/fontawesome-svg-core@^6.3.0", "@fortawesome/fontawesome-svg-core@~1 || ~6":
   version "6.3.0"
   resolved "https://registry.npmjs.org/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.3.0.tgz"
   integrity sha512-uz9YifyKlixV6AcKlOX8WNdtF7l6nakGyLYxYaCa823bEBqyj/U2ssqtctO38itNEwXb8/lMzjdoJ+aaJuOdrw==
@@ -1345,7 +1345,7 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dotenv@*:
+dotenv@^16.0.3:
   version "16.0.3"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz"
   integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
@@ -3500,6 +3500,11 @@ raw-body@2.5.1:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
+react-hook-form@*, react-hook-form@^7.43.2:
+  version "7.43.2"
+  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.43.2.tgz"
+  integrity sha512-NvD3Oe2Y9hhqo2R4I4iJigDzSLpdMnzUpNMxlnzTbdiT7NT3BW0GxWCzEtwPudZMUPbZhNcSy1EcGAygyhDORg==
+
 react-icons@^4.3.1:
   version "4.6.0"
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.6.0.tgz"
@@ -3510,7 +3515,7 @@ react-is@^16.13.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react@*, "react@^16 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^17.0.2, "react@^17.0.2 || ^18", "react@^17.0.2 || ^18.0.0-0", "react@>= 16.0.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", react@>=16.3, react@>=16.8.0, react@>=16.9.0, react@17.0.2:
+react@*, "react@^16 || ^17 || ^18", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^17.0.2, "react@^17.0.2 || ^18", "react@^17.0.2 || ^18.0.0-0", "react@>= 16.0.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", react@>=16.3, react@>=16.8.0, react@>=16.9.0, react@17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==

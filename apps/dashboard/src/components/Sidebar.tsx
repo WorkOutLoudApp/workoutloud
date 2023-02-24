@@ -1,12 +1,48 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
 
-import { HiUser} from 'react-icons/hi'
+import { HiUser } from 'react-icons/hi'
 import { GrNext } from 'react-icons/gr'
+import { BiArrowBack } from 'react-icons/bi'
 
 import sidebarWorkoutItems from '@src/utils/constants/sidebar'
+import SidebarRoutines from './Workout/SidebarRoutines'
+import SidebarExercises from './Workout/SidebarExercises'
+import SidebarHistory from './Workout/SidebarHistory'
+
 import { useAuth } from '../context/AuthProvider'
 
+const routines = [
+  {
+    name: 'Routine Name',
+    description: 'Description',
+  },
+  {
+    name: 'Routine Name',
+    description: 'Description',
+  },
+]
+
+const exercises = [
+  {
+    name: 'Exercise Name',
+    description: 'Description',
+  },
+  {
+    name: 'Exercise Name',
+    description: 'Description',
+  },
+]
+
+const history = [
+  {
+    name: 'Timestamp',
+  },
+  {
+    name: 'Timestamp',
+  },
+
+]
 
 export const HomeSidebar = (props: any) => {
   const { avatar, user } = props
@@ -44,13 +80,143 @@ export const WorkoutSidebar = (props: any) => {
               <span className='font-poppins text-md'>{item.name}</span>
               {item.name !== 'Home' && (
                 <span className='flex w-full justify-end'>
-                  <GrNext/>
+                  <GrNext />
                 </span>
               )}
             </div>
           </Link>
 
         ))}
+      </div>
+    </div>
+  )
+}
+
+const RoutinesSidebar = (props: any) => {
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
+  return (
+    <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
+      <div className='flex items-center w-full space-x-2'>
+        <Link href={'/workout'}>
+          <div className='cursor-pointer'>
+            <BiArrowBack />
+          </div>
+        </Link>
+        <div className='flex flex-col'>
+          <div className='text-sm'>Workouts</div>
+          <div className='font-bold'>Routines</div>
+        </div>
+
+      </div>
+      <div className='flex flex-col h-full w-full'>
+        <div className='w-full font-bold'>Your Routines</div>
+        <div className='flex flex-col'>
+          {routines.map((routine: any, i: number) => (
+            <SidebarRoutines
+            key={i}
+            name={routine.name}
+            description={routine.description}
+          />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const FavoritesSidebar = (props: any) => {
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
+  return (
+    <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
+      <div className='flex items-center w-full space-x-2'>
+        <Link href={'/workout'}>
+          <div className='cursor-pointer'>
+            <BiArrowBack />
+          </div>
+        </Link>
+        <div className='flex flex-col'>
+          <div className='text-sm'>Workouts</div>
+          <div className='font-bold'>Favorites</div>
+        </div>
+
+      </div>
+      <div className='flex flex-col h-full w-full'>
+        <div className='w-full font-bold'>Your Favorites</div>
+        <div className='flex flex-col'>
+          {routines.map((routine: any, i: number) => (
+            <SidebarRoutines
+            key={i}
+            name={routine.name}
+            description={routine.description}
+          />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ExercisesSidebar = (props: any) => {
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
+  return (
+    <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
+      <div className='flex items-center w-full space-x-2'>
+        <Link href={'/workout'}>
+          <div className='cursor-pointer'>
+            <BiArrowBack />
+          </div>
+        </Link>
+        <div className='flex flex-col'>
+          <div className='text-sm'>Workouts</div>
+          <div className='font-bold'>Exercises</div>
+        </div>
+
+      </div>
+      <div className='flex flex-col h-full w-full'>
+        <div className='w-full font-bold'>Exercises</div>
+        <div className='flex flex-col'>
+          {exercises.map((exercise: any, i: number) => (
+            <SidebarExercises
+            key={i}
+            name={exercise.name}
+            description={exercise.description}
+          />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const HistorySidebar = (props: any) => {
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
+  return (
+    <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
+      <div className='flex items-center w-full space-x-2'>
+        <Link href={'/workout'}>
+          <div className='cursor-pointer'>
+            <BiArrowBack />
+          </div>
+        </Link>
+        <div className='flex flex-col'>
+          <div className='text-sm'>Workouts</div>
+          <div className='font-bold'>History</div>
+        </div>
+
+      </div>
+      <div className='flex flex-col h-full w-full'>
+        {/* <div className='w-full font-bold'>Routines</div> */}
+        <div className='flex flex-col'>
+          {history.map((history: any, i: number) => (
+            <SidebarHistory
+              name = {history.name}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -89,7 +255,23 @@ const Sidebar = () => {
       )}
 
       {window.location.pathname === '/friends' && (
-        <FriendsSidebar/>
+        <FriendsSidebar />
+      )}
+
+      {window.location.pathname === '/workout/routines' && (
+        <RoutinesSidebar />
+      )}
+      
+      {window.location.pathname === '/workout/favorites' && (
+        <FavoritesSidebar />
+      )}
+      
+      {window.location.pathname === '/workout/exercises' && (
+        <ExercisesSidebar />
+      )}
+      
+      {window.location.pathname === '/workout/history' && (
+        <HistorySidebar />
       )}
     </div>
   )

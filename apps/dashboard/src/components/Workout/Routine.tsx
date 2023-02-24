@@ -1,7 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage } from '@fortawesome/free-solid-svg-icons'
-import { router } from 'next/client'
+import { useRouter } from 'next/router'
 
 interface RoutineProps {
   name: string
@@ -10,6 +10,7 @@ interface RoutineProps {
 }
 
 export default function Routine({ name, description, image }: RoutineProps) {
+  const router = useRouter()
   return (
     <button
       type="button"

@@ -5,8 +5,11 @@ import backgroundworkout from '../assets/backgroundworkout.png';
 import homeworkout from '../assets/homeworkout.png';
 import Navbar from '@src/components/Navbar';
 import Footer from '@src/pages/footer/index';
+import { useAuth } from '@src/context/AuthProvider';
 
 const Home = () => {
+  const { auth, setAuth, user, setUser } = useAuth()
+  
   return (
     <div style={{
       background: `linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)`,
@@ -34,11 +37,13 @@ const Home = () => {
               </p>
             </div>
             {/* ACTIONS */}
+            {!auth && (
             <div className='mt-8 flex items-center gap-8'>
               <Link href='/register'>
                 <button type='submit' className='font-["Poppins", San-serif] font-san text-white text-lg rounded cursor-pointer bg-indigo-500 hover:bg-indigo-600 px-2 py-1'>Join Today</button>
               </Link>
             </div>
+            )}
           </div>
           {/* IMAGE */}
           {/*<div className="md:basis-2/5 h-full relative">
