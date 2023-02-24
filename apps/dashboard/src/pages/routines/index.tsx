@@ -14,12 +14,18 @@ const Index = () => {
 
   const [routines, setRoutines] = useState([])
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/getRoutines`).then((res) => setRoutines(res.data))
+    axios.get(`http://localhost:4000/v1/routine/getRoutines`).then((res) => {
+      setRoutines(res.data)
+    }).catch((err) => {
+        console.log(err)
+    })
   }, [])
   const onAddExercise = async (routine: IRoutine) => {
     axios.post(`http://localhost:4000/v1/routine/add`, routine).then((res) => {
       setRoutineModalOpen(false)
       setRoutines([...routines, res.data])
+    }).catch((err) => {
+        console.log(err)
     })
   }
 

@@ -23,17 +23,27 @@ const RoutinePage = ({
 
   const [data, setData] = useState<any>(null)
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/${routine}/get`).then((res) => setData(res.data))
+    axios.get(`http://localhost:4000/v1/routine/${routine}/get`).then((res) => {
+      setData(res.data)
+    }).catch((err) => {
+        console.log(err)
+    })
   }, [])
 
   const [exercises, setExercises] = useState([])
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`).then((res) => setExercises(res.data))
+    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`).then((res) => {
+      setExercises(res.data)
+    }).catch((err) => {
+        console.log(err)
+    })
   }, [])
   const onAddExercise = async (exercise: IExercise) => {
     setExerciseModalOpen(false)
     axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise).then((res) => {
       setExercises([...exercises, res.data])
+    }).catch((err) => {
+        console.log(err)
     })
   }
 
