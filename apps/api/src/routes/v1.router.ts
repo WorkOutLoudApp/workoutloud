@@ -4,6 +4,7 @@ import { devOrigins } from '@src/utils/config/cors.config'
 import cors from 'cors'
 import { Router, Request, Response } from 'express'
 import userRouter from '@src/routes/user'
+import routineRouter from '@src/routes/routine'
 
 require('dotenv').config()
 
@@ -23,6 +24,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // Routes
 router.use('/web', webRouter)
 router.use('/user', userRouter)
+router.use('/routine', routineRouter)
 
 router.get('/key/google', (req: Request, res: Response) => {
   res.send({key: process.env.PUBLIC_GOOGLE_API_TOKEN})
