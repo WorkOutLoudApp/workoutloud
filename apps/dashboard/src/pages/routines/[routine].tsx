@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import { useAuth } from '@src/context/AuthProvider'
 import RoutineHeader from '@src/components/Workout/Header'
 import Login from '../login'
@@ -7,6 +7,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
 import { Exercise } from '@src/types/Workout'
 import axios from 'axios'
+import { GetServerSideProps } from 'next'
 
 const routines = [
   {
@@ -19,10 +20,23 @@ const routines = [
   },
 ]
 const headerTabs = ['Exercises', 'History', 'Settings']
-const RoutinePage = () => {
+
+interface RoutinePageProps {
+  routine: string
+}
+const RoutinePage = ({
+                       routine
+                     }: RoutinePageProps) => {
+  console.log(routine)
   const { auth } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
   const [addExerciseModalOpen, setAddExerciseModalOpen] = useState(false)
+
+  const [data, setData] = useState<any>(null)
+  useEffect(() => {
+    axios.get(`http://localhost:4000/v1/routine/get/${routine}`).then((res) => setData(res.data))
+  }, [])
+
   const [exercises, setExercises] = useState([])
 
   const onAddExercise = (exercise: Exercise) => {
@@ -32,18 +46,19 @@ const RoutinePage = () => {
         description: 'Description',
     })
   }
+  console.log(data)
 
   return (
     <div className="w-full">
       {auth ? (
         <div className="space-y-3">
-          <RoutineHeader
-            name="Routine Name"
-            description="Description"
-            tabs={headerTabs}
-            currentTab={currentTab}
-            setTab={setCurrentTab}
-          />
+          {data ? <RoutineHeader
+              name={data.name}
+              description={data.description}
+              tabs={headerTabs}
+              currentTab={currentTab}
+              setTab={setCurrentTab}
+          /> : null}
           {currentTab === 'Exercises' ? (
             <div>
               <AddExerciseModal
@@ -68,6 +83,16 @@ const RoutinePage = () => {
       )}
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { routine } = context.params
+  console.log(context.params)
+  return {
+    props: {
+      routine,
+    },
+  }
 }
 
 export default RoutinePage

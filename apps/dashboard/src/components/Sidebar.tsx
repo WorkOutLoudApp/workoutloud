@@ -84,7 +84,7 @@ const Sidebar = () => {
         <HomeSidebar avatar={user.avatar} user={user} />
       )}
 
-      {window.location.pathname === '/workout' && (
+      {window.location.pathname === '/routines' && (
         <WorkoutSidebar />
       )}
 

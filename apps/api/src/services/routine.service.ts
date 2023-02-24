@@ -16,6 +16,23 @@ const getRoutines = async (userId: number) => {
     }
 }
 
+const getRoutine = async (userId: number, routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const routine = await prisma.routine.findFirst({
+            where: {
+                userId,
+                id: routineId
+            }
+        })
+        return routine
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 const addRoutine = async (name: string, description: string) => {
     const prisma = new PrismaClient()
     try {
@@ -36,5 +53,6 @@ const addRoutine = async (name: string, description: string) => {
 
 export default {
     getRoutines,
+    getRoutine,
     addRoutine
 }

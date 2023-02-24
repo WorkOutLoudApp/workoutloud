@@ -4,17 +4,18 @@ import { faImage } from '@fortawesome/free-solid-svg-icons'
 import { router } from 'next/client'
 
 interface RoutineProps {
+  id: number
   name: string
   description: string
   image?: string
 }
 
-export default function Routine({ name, description, image }: RoutineProps) {
+export default function Routine({ id, name, description, image }: RoutineProps) {
   return (
     <button
       type="button"
       className="flex w-full space-x-3 border border-black bg-[#d9d9d9] p-3"
-      onClick={() => router.push(`/workout/${name}`)}
+      onClick={() => router.push(`/routines/${id}`)}
     >
       {image ? (
         <img src={image} alt={name} />

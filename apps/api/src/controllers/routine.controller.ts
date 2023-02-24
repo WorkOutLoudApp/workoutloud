@@ -8,7 +8,23 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const routines = await routineService.getRoutines(1)
+        if (!routines) return res.status(400).json({ message: 'Error getting routines' })
         return res.json(routines)
+    } catch (err) {
+        return next(err)
+    }
+}
+
+export const getRoutine: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { id } = req.params
+        const routine = await routineService.getRoutine(1, parseInt(id, 10))
+        if (!routine) return res.status(400).json({ message: 'Error getting routine' })
+        return res.json(routine)
     } catch (err) {
         return next(err)
     }
