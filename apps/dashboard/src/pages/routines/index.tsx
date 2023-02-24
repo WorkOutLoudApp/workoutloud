@@ -33,9 +33,7 @@ const Index = () => {
             className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
           >
             <button type="button" onClick={() => setRoutineModalOpen(true)}>
-              <p>
-                <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Routine
-              </p>
+              <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Routine
             </button>
           </button>
           <div className="border-b border-black pb-5">
@@ -44,11 +42,8 @@ const Index = () => {
             <div className="grid grid-cols-2 gap-3">
               {routines.map((routine: any, i: number) => (
                 <Routine
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={i}
-                  id={routine.id}
-                  name={routine.name}
-                  description={routine.description}
+                  key={routine.id}
+                  {...routine}
                 />
               ))}
             </div>

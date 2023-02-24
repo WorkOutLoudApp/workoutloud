@@ -7,21 +7,10 @@ import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal
 import { IExercise } from '@src/types/Workout'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
-import Login from '../login'
 import Exercise from "@src/components/Workout/Exercises/Exercise";
+import Login from '../login'
 
-const routines = [
-  {
-    name: 'Routine Name',
-    description: 'Description',
-  },
-  {
-    name: 'Routine Name',
-    description: 'Description',
-  },
-]
 const headerTabs = ['Exercises', 'History', 'Settings']
-
 interface RoutinePageProps {
   routine: string
 }
@@ -89,7 +78,6 @@ const RoutinePage = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { routine } = context.params
-  console.log(context.params)
   return {
     props: {
       routine,
