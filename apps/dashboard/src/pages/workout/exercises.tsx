@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import SearchBar from '@src/components/Searchbar'
 import { useAuth } from '@src/context/AuthProvider'
 import Login from '../login'
-import { searchExercises } from './exerciseAPI';
+import { searchExercises } from './exerciseAPI'
 
 interface Exercise {
   name: string
@@ -19,17 +19,22 @@ const Exercise: React.FC = () => {
   const [resultsPerPage, setResultsPerPage] = useState<number>(15)
   const { auth } = useAuth()
 
-
-  const handleSearch = async (searchTerm: string) => {
+  const handleSearch = async (searchTerm: string, filters: string[]) => {
     try {
-
       const data = await searchExercises(searchTerm)
       const filteredData = data.filter((exercise: Exercise) => {
         const { name, target, equipment, bodyPart } = exercise
         const searchTerms = searchTerm.toLowerCase().split(' ')
-        return searchTerms.every((term) =>
-          [name, target, equipment, bodyPart].some((field) =>
-            field.toLowerCase().includes(term)
+        return (
+          searchTerms.every((term) =>
+            [name, target, equipment, bodyPart].some((field) =>
+              field.toLowerCase().includes(term)
+            )
+          ) &&
+          filters.every((filter) =>
+            [target, equipment, bodyPart].some((field) =>
+              field.toLowerCase().includes(filter.toLowerCase())
+            )
           )
         )
       })
@@ -60,11 +65,16 @@ const Exercise: React.FC = () => {
     <div className="container mx-auto">
       {auth ? (
         <>
-          <h1 className="mb-8 text-center text-4xl font-bold">Exercise Search</h1>
+          <h1 className="mb-8 text-center text-4xl font-bold">
+            Exercise Search
+          </h1>
           <SearchBar onSearch={handleSearch} />
           <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {currentResults.map((result) => (
-              <li key={result.name} className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:shadow-lg">
+              <li
+                key={result.name}
+                className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:shadow-lg"
+              >
                 <h3 className="mb-2 text-lg font-bold">{result.name}</h3>
                 <img
                   src={result.gifUrl}
@@ -78,11 +88,15 @@ const Exercise: React.FC = () => {
                   <p className="mb-2">{result.target}</p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-600">Equipment:</span>
+                  <span className="font-semibold text-gray-600">
+                    Equipment:
+                  </span>
                   <p className="mb-2">{result.equipment}</p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-600">Body Part:</span>
+                  <span className="font-semibold text-gray-600">
+                    Body Part:
+                  </span>
                   <p className="mb-2">{result.bodyPart}</p>
                 </div>
                 <button className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow">
@@ -100,7 +114,9 @@ const Exercise: React.FC = () => {
               >
                 Prev
               </button>
-              <div className="mx-4 font-semibold text-gray-700">{currentPage}</div>
+              <div className="mx-4 font-semibold text-gray-700">
+                {currentPage}
+              </div>
               <button
                 onClick={handlePageChange(currentPage + 1)}
                 disabled={indexOfLastResult >= searchResults.length}
@@ -115,8 +131,7 @@ const Exercise: React.FC = () => {
         <Login />
       )}
     </div>
-  );
-  
+  )
 }
 
 export default Exercise
