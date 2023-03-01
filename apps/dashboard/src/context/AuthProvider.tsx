@@ -29,18 +29,14 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))
 
-    /*    if (storedUser) {
-            setAuth(true)
-            setUser(storedUser.user)
-        } */
-    setAuth(true)
-    setUser({
-      email: 'test@wol.com',
-      username: 'test',
-      firstName: 'first',
-      lastName: 'last',
-      avatar: '',
-    })
+    if (storedUser) {
+      setAuth(true)
+      setUser(storedUser.user)
+    }
+
+    // // For testing purpose (to bypass the login)
+    // setAuth(true)
+    // setUser({email:'test@wol.com', username:'test', firstName:'first', lastName:'last', avatar:''})
   }, [])
 
   const value = useMemo(
