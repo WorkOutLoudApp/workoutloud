@@ -3,8 +3,11 @@ import SearchBar from '@src/components/Searchbar'
 import { useAuth } from '@src/context/AuthProvider'
 import Login from '../login'
 import { searchExercises } from './exerciseAPI'
+import { Exercise } from '@src/types/Workout'
+import { useForm } from 'react-hook-form'
+import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
 
-interface Exercise {
+interface ExerciseSearch {
   name: string
   description: string
   target: string
@@ -13,8 +16,12 @@ interface Exercise {
   gifUrl: string
 }
 
-const Exercise: React.FC = () => {
-  const [searchResults, setSearchResults] = useState<Exercise[]>([])
+interface Props {
+  onAdd?: (exercise: Exercise) => void
+}
+
+const Exercises: React.FC<Props> = () => {
+  const [searchResults, setSearchResults] = useState<ExerciseSearch[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [resultsPerPage, setResultsPerPage] = useState<number>(15)
   const { auth } = useAuth()
@@ -22,7 +29,7 @@ const Exercise: React.FC = () => {
   const handleSearch = async (searchTerm: string, filters: string[]) => {
     try {
       const data = await searchExercises(searchTerm)
-      const filteredData = data.filter((exercise: Exercise) => {
+      const filteredData = data.filter((exercise: ExerciseSearch) => {
         const { name, target, equipment, bodyPart } = exercise
         const searchTerms = searchTerm.toLowerCase().split(' ')
         return (
@@ -99,7 +106,11 @@ const Exercise: React.FC = () => {
                   </span>
                   <p className="mb-2">{result.bodyPart}</p>
                 </div>
-                <button className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow">
+                <button
+                  type="submit"
+                  className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
+                  onClick={() => {}}
+                >
                   Add to routine
                 </button>
               </li>
@@ -134,4 +145,4 @@ const Exercise: React.FC = () => {
   )
 }
 
-export default Exercise
+export default Exercises

@@ -5,6 +5,7 @@ import Login from '../login'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
+import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
 import { Exercise } from '@src/types/Workout'
 
 const routines = [
@@ -22,9 +23,14 @@ const RoutinePage = () => {
   const { auth } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
   const [addExerciseModalOpen, setAddExerciseModalOpen] = useState(false)
+  const [searchExerciseModalOpen, setSearchExerciseModalOpen] = useState(false)
   const [exercises, setExercises] = useState([])
 
   const onAddExercise = (exercise: Exercise) => {
+    setExercises([...exercises, exercise])
+  }
+
+  const onAddSearchExercise = (exercise: Exercise) => {
     setExercises([...exercises, exercise])
   }
 
@@ -40,7 +46,7 @@ const RoutinePage = () => {
             setTab={setCurrentTab}
           />
           {currentTab === 'Exercises' ? (
-            <div>
+            <div className="flex">
               <AddExerciseModal
                 open={addExerciseModalOpen}
                 setOpen={setAddExerciseModalOpen}
@@ -48,11 +54,26 @@ const RoutinePage = () => {
               />
               <button
                 type="button"
-                className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
+                className="mr-2 rounded border border-black bg-[#d9d9d9] px-2 py-1"
                 onClick={() => setAddExerciseModalOpen(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>
+              <div>
+                <SearchExercisesModal
+                  open={searchExerciseModalOpen}
+                  setOpen={setSearchExerciseModalOpen}
+                  onAdd={onAddSearchExercise}
+                />
+                <button
+                  type="button"
+                  className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
+                  onClick={() => setSearchExerciseModalOpen(true)}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="fa-md" /> Search
+                  Exercises
+                </button>
+              </div>
               <div>{JSON.stringify(exercises)}</div>
             </div>
           ) : null}
