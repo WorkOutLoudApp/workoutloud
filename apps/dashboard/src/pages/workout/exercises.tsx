@@ -20,7 +20,7 @@ interface Props {
   onAdd?: (exercise: Exercise) => void
 }
 
-const Exercises: React.FC<Props> = () => {
+const Exercises: React.FC<Props> = ({ onAdd }) => {
   const [searchResults, setSearchResults] = useState<ExerciseSearch[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [resultsPerPage, setResultsPerPage] = useState<number>(15)
@@ -100,19 +100,19 @@ const Exercises: React.FC<Props> = () => {
                   </span>
                   <p className="mb-2">{result.equipment}</p>
                 </div>
-                <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-600">
-                    Body Part:
-                  </span>
-                  <p className="mb-2">{result.bodyPart}</p>
-                </div>
-                <button
-                  type="submit"
-                  className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
-                  onClick={() => {}}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    onAdd(result)
+                  }}
                 >
-                  Add to routine
-                </button>
+                  <button
+                    type="submit"
+                    className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
+                  >
+                    Add to routine
+                  </button>
+                </form>
               </li>
             ))}
           </ul>
