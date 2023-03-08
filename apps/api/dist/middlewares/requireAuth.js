@@ -43,11 +43,8 @@ exports.requireAuth = void 0;
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var client_1 = require("@prisma/client");
 require('dotenv').config();
-// interface RequestWithAuthorization extends Request {
-//     accountId: Number
-// }
 var requireAuth = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var authorization, token, id, prisma, account, error_1;
+    var authorization, token, prisma, id, account, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -56,29 +53,32 @@ var requireAuth = function (req, res, next) { return __awaiter(void 0, void 0, v
                     return [2 /*return*/, res.status(401).json({ error: 'Authorization token is required' })];
                 }
                 token = authorization.split(' ')[1];
+                prisma = new client_1.PrismaClient();
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                id = jsonwebtoken_1["default"].verify(token, process.env.SECRET);
-                prisma = new client_1.PrismaClient();
+                _a.trys.push([1, 3, 4, 6]);
+                id = jsonwebtoken_1["default"].verify(token, process.env.SECRET).id;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
-                            id: Number(id)
+                            id: id
                         }
                     })];
             case 2:
                 account = _a.sent();
                 if (account) {
-                    req.accountId = account.id;
                     next();
                 }
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 6];
             case 3:
                 error_1 = _a.sent();
                 console.log(error_1);
                 res.status(401).json({ error: 'Request is not authorized' });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, prisma.$disconnect()];
+            case 5:
+                _a.sent();
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

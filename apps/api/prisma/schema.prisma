@@ -25,4 +25,35 @@ model User {
   avatar String
   accountId Int @unique
   account Account @relation(fields: [accountId], references: [id])
+  routine Routine[]
+}
+
+model Routine {
+  id Int @id @default(autoincrement())
+  userId Int
+  name String
+  description String?
+  isFavorite Boolean
+  @@unique([userId, name])
+  user User @relation(fields: [userId], references: [id])
+  exerciseSet ExerciseSet[]
+}
+
+model Exercise {
+  id Int @id @default(autoincrement())
+  name String @unique
+  target String
+  equipment String
+  exerciseSet ExerciseSet[]
+}
+
+model ExerciseSet {
+  id Int @id @default(autoincrement())
+  routineId Int
+  exerciseId Int
+  reps Int
+  duration Int
+  position Int @unique
+  routine Routine @relation(fields: [routineId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
 }
