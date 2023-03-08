@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-const PostPopup: React.FC = () => {
+const PostPopup = () => {
   const [showModal, setShowModal] = useState(false)
   const [postContent, setPostContent] = useState('')
-  const [posts, setPosts] = useState<string[]>([])
+  const [posts, setPosts] = useState([])
 
   const handleOpenModal = () => {
     setShowModal(true)
@@ -21,7 +21,7 @@ const PostPopup: React.FC = () => {
   }
 
   return (
-    <div className="flex-grow">
+    <div className="flex-grow items-center justify-center">
       <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
         <img
           className="mr-4 h-10 w-10 rounded-full"
@@ -65,9 +65,9 @@ const PostPopup: React.FC = () => {
         </div>
       )}
 
-      <div className="mt-4">
+      <div className="mt-2 max-w-md">
         {posts.reverse().map((post) => (
-          <div className="flex items-start rounded-md bg-gray-200 p-2">
+          <div key={post} className="mb-2 flex rounded-md bg-gray-200 p-2">
             <img
               className="mr-4 h-10 w-10 rounded-full"
               src="https://randomuser.me/api/portraits/lego/1.jpg"

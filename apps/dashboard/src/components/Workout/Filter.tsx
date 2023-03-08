@@ -41,7 +41,7 @@ const Filters: React.FC<FiltersProps> = ({
         'adductors',
         'biceps',
         'calves',
-        'cardiovascular',
+        'cardio vascular',
         'delts',
         'forearms',
         'glutes',
