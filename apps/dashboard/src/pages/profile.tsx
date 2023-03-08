@@ -54,7 +54,9 @@ const Profile = ({
   return (
     <div className="flex">
       <div className="mx-auto max-w-3xl py-12 px-4">
-        <h1 className="mb-8 text-center text-3xl font-bold">Edit Profile</h1>
+        <h1 className="mb-8 text-center text-3xl font-bold">
+          Profile Settings
+        </h1>
         <form
           className="mb-4 grid grid-cols-2 gap-6 rounded bg-white px-8 pt-6 pb-8 shadow-md"
           onSubmit={handleFormSubmit}
