@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { HiUser } from 'react-icons/hi'
 import { GrNext } from 'react-icons/gr'
 import { BiArrowBack } from 'react-icons/bi'
+import heartIcon from '../assets/heart.svg'
+import routineIcon from '../assets/task-clock.svg'
+import dumbellIcon from '../assets/dumbell.svg'
 
 import sidebarWorkoutItems from '@src/utils/constants/sidebar'
 import SidebarRoutines from './Workout/SidebarRoutines'
@@ -11,6 +15,7 @@ import SidebarExercises from './Workout/SidebarExercises'
 import SidebarHistory from './Workout/SidebarHistory'
 
 import { useAuth } from '../context/AuthProvider'
+import axios from 'axios'
 
 const routines = [
   {
@@ -93,6 +98,24 @@ export const WorkoutSidebar = (props: any) => {
 }
 
 const RoutinesSidebar = (props: any) => {
+  const { token } = useAuth()
+  const [routines, setRoutines] = useState([])
+
+  useEffect(() => {
+    const fetchRoutines = async () => {
+      const response = await axios.get(`http://localhost:4000/v1/workout/routine`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setRoutines(response.data)
+      console.log('useEffect - response.data: ', response.data)
+
+      console.log('useEffect - routines: ', routines)
+    }
+    fetchRoutines()
+  }, [])
+
   const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
@@ -112,13 +135,18 @@ const RoutinesSidebar = (props: any) => {
       <div className='flex flex-col h-full w-full'>
         <div className='w-full font-bold'>Your Routines</div>
         <div className='flex flex-col'>
-          {routines.map((routine: any, i: number) => (
-            <SidebarRoutines
-            key={i}
-            name={routine.name}
-            description={routine.description}
-          />
-          ))}
+          {routines.length ? (
+            routines.map((routine: any, i: number) => (
+              <SidebarRoutines
+                key={i}
+                name={routine.name}
+                description={routine.description}
+                image={routineIcon}
+              />
+            ))
+          ) : (
+            ``
+          )}
         </div>
       </div>
     </div>
@@ -147,10 +175,10 @@ const FavoritesSidebar = (props: any) => {
         <div className='flex flex-col'>
           {routines.map((routine: any, i: number) => (
             <SidebarRoutines
-            key={i}
-            name={routine.name}
-            description={routine.description}
-          />
+              key={i}
+              name={routine.name}
+              description={routine.description}
+            />
           ))}
         </div>
       </div>
@@ -180,10 +208,10 @@ const ExercisesSidebar = (props: any) => {
         <div className='flex flex-col'>
           {exercises.map((exercise: any, i: number) => (
             <SidebarExercises
-            key={i}
-            name={exercise.name}
-            description={exercise.description}
-          />
+              key={i}
+              name={exercise.name}
+              description={exercise.description}
+            />
           ))}
         </div>
       </div>
@@ -213,7 +241,7 @@ const HistorySidebar = (props: any) => {
         <div className='flex flex-col'>
           {history.map((history: any, i: number) => (
             <SidebarHistory
-              name = {history.name}
+              name={history.name}
             />
           ))}
         </div>
@@ -261,15 +289,15 @@ const Sidebar = () => {
       {window.location.pathname === '/workout/routines' && (
         <RoutinesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/favorites' && (
         <FavoritesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/exercises' && (
         <ExercisesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/history' && (
         <HistorySidebar />
       )}

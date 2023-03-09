@@ -17,6 +17,8 @@ interface AuthInterface {
     avatar: string
   }
   setUser: React.Dispatch<React.SetStateAction<boolean>>
+  token: String
+  setToken: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AuthContext = createContext({} as AuthInterface)
@@ -24,7 +26,7 @@ const AuthContext = createContext({} as AuthInterface)
 export const AuthProvider = ({ children }: any) => {
   const [auth, setAuth] = useState(undefined)
   const [user, setUser] = useState(undefined)
-
+  const [token, setToken] = useState(undefined)
   // check if user logged in
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))
@@ -32,6 +34,7 @@ export const AuthProvider = ({ children }: any) => {
     if (storedUser) {
       setAuth(true)
       setUser(storedUser.user)
+      setToken(storedUser.token)
     }
 
     // // For testing purpose (to bypass the login)
@@ -40,8 +43,8 @@ export const AuthProvider = ({ children }: any) => {
   }, [])
 
   const value = useMemo(
-    () => ({ auth, setAuth, user, setUser }),
-    [auth, setAuth, user, setUser]
+    () => ({ auth, setAuth, user, setUser, token, setToken }),
+    [auth, setAuth, user, setUser, token, setToken]
   )
 
   return (
