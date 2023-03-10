@@ -129,7 +129,7 @@ export const registerUser = async (req: Request, res: Response) => {
                     email,
                     password: hashedPassword
                 }
-            }).then(async (newAccount) => {
+            }).then(async (newAccount: any) => {
                 await prisma.user.create({
                     data: {
                         username,
@@ -149,7 +149,7 @@ export const registerUser = async (req: Request, res: Response) => {
                     }
                     message = 'Registration successful'
                     authToken = createToken(newAccount.id)
-                }).catch((error) => {
+                }).catch((error: any) => {
                     prisma.account.delete({
                         where: {
                             email
@@ -157,7 +157,7 @@ export const registerUser = async (req: Request, res: Response) => {
                     })
                     message = 'Registration failed: ' + error
                 })
-            }).catch((error) => {
+            }).catch((error: any) => {
                 message = 'Registration failed: ' + error
             })
 
@@ -202,7 +202,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
                     email,
                     password: hashedPassword
                 }
-            }).then(async (newAccount) => {
+            }).then(async (newAccount: any) => {
                 await prisma.user.create({
                     data: {
                         username,
@@ -222,7 +222,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
                     }
                     message = 'Registration successful'
                     authToken = createToken(newAccount.id)
-                }).catch((error) => {
+                }).catch((error: any) => {
                     prisma.account.delete({
                         where: {
                             email
@@ -230,7 +230,7 @@ export const registerGoogle = async (req: Request, res: Response) => {
                     })
                     message = 'Registration failed: ' + error
                 })
-            }).catch((error) => {
+            }).catch((error: any) => {
                 message = 'Registration failed: ' + error
             })
 

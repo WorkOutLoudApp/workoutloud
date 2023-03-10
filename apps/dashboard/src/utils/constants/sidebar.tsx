@@ -9,31 +9,31 @@ const activeStyle = ''
 const sidebarWorkoutItems = [
     {
         name: 'Home',
-        path: '/workout',
+        path: '/routines',
         icon: <HiClipboardList/>,
         iconActive: <HiClipboardList className={activeStyle} />
     },
     {
         name: 'Routines',
-        path: '/workout/routines',
+        path: '/routines/routines',
         icon: <GrPowerCycle/>,
         iconActive: <GrPowerCycle className={activeStyle} />
     },
     {
         name: 'Favorites',
-        path: '/workout/favorites',
+        path: '/routines/favorites',
         icon: <FaStar/>,
         iconActive: <FaStar className={activeStyle} />
     },
     {
         name: 'Exercises',
-        path: '/workout/exercises',
+        path: '/routines/exercises',
         icon: <GrYoga/>,
         iconActive: <GrYoga className={activeStyle} />
     },
     {
         name: 'History',
-        path: '/workout/history',
+        path: '/routines/history',
         icon: <RiHistoryFill/>,
         iconActive: <RiHistoryFill className={activeStyle} />
     },

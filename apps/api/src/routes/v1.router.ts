@@ -5,7 +5,7 @@ import cors from 'cors'
 import { Router, Request, Response } from 'express'
 import userRouter from '@src/routes/user'
 import requireAuthRouter from '@src/routes/auth'
-import workoutRouter from '@src/routes/workout'
+import routineRouter from '@src/routes/routine.router'
 
 require('dotenv').config()
 
@@ -25,11 +25,12 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // Routes
 router.use('/web', webRouter)
 router.use('/user', userRouter)
+router.use('/routine', routineRouter)
 router.use('/auth', requireAuthRouter)
 router.use('/workout', workoutRouter)
 
 router.get('/key/google', (req: Request, res: Response) => {
-  res.send({key: process.env.PUBLIC_GOOGLE_API_TOKEN})
+  res.send({ key: process.env.PUBLIC_GOOGLE_API_TOKEN })
 })
 
 export default router
