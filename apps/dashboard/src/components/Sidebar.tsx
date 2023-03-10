@@ -298,7 +298,6 @@ export const FriendsSidebar = (props: any) => {
 }
 
 const Sidebar = () => {
-  const regex = /^\/routines\/\d+/
   const style = 'flex flex-col'
   const { auth, user } = useAuth()
   const [currentSidebar, setCurrentSidebar] = useState('Homepage')
@@ -341,35 +340,6 @@ const Sidebar = () => {
       {currentSidebar === 'History' && (
         <HistorySidebar function={setCurrentSidebar} />
       )}
-
-      {/* {window.location.pathname === '/homepage' && (
-        <HomeSidebar avatar={user.avatar} user={user} />
-      )}
-
-      {window.location.pathname === '/routines' && (
-        <WorkoutSidebar function={setCurrentSidebar}/>
-      )}
-
-
-      {window.location.pathname === '/friends' && (
-        <FriendsSidebar />
-      )}
-
-      {(window.location.pathname === '/routines/routines' || regex.test(window.location.pathname)) && (
-        <RoutinesSidebar />
-      )}
-
-      {window.location.pathname === '/routines/favorites' && (
-        <FavoritesSidebar />
-      )}
-
-      {window.location.pathname === '/routines/exercises' && (
-        <ExercisesSidebar />
-      )}
-
-      {window.location.pathname === '/routines/history' && (
-        <HistorySidebar />
-      )} */}
     </div>
   )
 
