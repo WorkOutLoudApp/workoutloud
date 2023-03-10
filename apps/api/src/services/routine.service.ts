@@ -119,13 +119,14 @@ const getExercises = async (routineId: number) => {
     }
 }
 
-const addExercise = async (userId: number, routineId: number, name: string, description: string) => {
+const addExercise = async (userId: number, routineId: number, name: string, description: string, image?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.create({
             data: {
                 name,
                 description,
+                image,
                 routineId
             }
         })

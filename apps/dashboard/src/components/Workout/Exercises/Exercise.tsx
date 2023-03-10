@@ -17,7 +17,7 @@ export default function Exercise({ id, name, description, image, onDelete }: Exe
             className="flex w-full space-x-3 border border-black bg-[#d9d9d9] p-3"
         >
           {image ? (
-              <img src={image} alt={name} />
+              <img src={image} alt={name} className="w-12 h-12" />
           ) : (
               <div className="flex h-12 w-12 items-center justify-center rounded-full border border-black">
                 <FontAwesomeIcon icon={faImage} className="fa-xl" />

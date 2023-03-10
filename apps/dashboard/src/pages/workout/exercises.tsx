@@ -77,6 +77,7 @@ const Exercises: React.FC<Props> = ({ routine }) => {
     axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, {
       name: result.name,
         description: result.target,
+      image: result.gifUrl ? result.gifUrl : ''
     }, {
       headers: {
         Authorization: `Bearer ${token}`
