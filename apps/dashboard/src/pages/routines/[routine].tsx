@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react'
 import { useAuth } from '@src/context/AuthProvider'
 import RoutineHeader from '@src/components/Workout/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
+import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
 import { IExercise } from '@src/types/Workout'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import Exercise from "@src/components/Workout/Exercises/Exercise";
 import Login from '../login'
+import router from 'next/router'
 
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
@@ -116,6 +117,13 @@ const RoutinePage = ({
                 onClick={() => setExerciseModalOpen(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
+              </button>
+              <button
+                  type="button"
+                  className="rounded border border-black bg-[#d9d9d9] px-2 py-1 ml-2"
+                  onClick={() => router.push(`/workout/exercises?routine=${routine}`)}
+              >
+                <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search Exercises
               </button>
               <div>{JSON.stringify(exercises)}</div>
               <div className="grid gap-3">
