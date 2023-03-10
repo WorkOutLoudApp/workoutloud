@@ -15,16 +15,21 @@ const Index = () => {
   const [routines, setRoutines] = useState([])
   useEffect(() => {
     if (!token) return
+    getRoutines()
+  }, [token])
+
+  const getRoutines = () => {
     axios.get(`http://localhost:4000/v1/routine/getRoutines`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     }).then((res) => {
       setRoutines(res.data)
     }).catch((err) => {
-        console.log(err)
+      console.log(err)
     })
-  }, [token])
+  }
+
   const onAddExercise = async (routine: IRoutine) => {
     axios.post(`http://localhost:4000/v1/routine/add`, routine, {
       headers: {
@@ -35,6 +40,18 @@ const Index = () => {
       setRoutines([...routines, res.data])
     }).catch((err) => {
         console.log(err)
+    })
+  }
+
+  const onDelete = async (id: number) => {
+    axios.get(`http://localhost:4000/v1/routine/${id}/delete`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      getRoutines()
+    }).catch((err) => {
+      console.log(err)
     })
   }
 
@@ -59,6 +76,7 @@ const Index = () => {
                 <Routine
                   key={routine.id}
                   {...routine}
+                  onDelete={() => onDelete(routine.id)}
                 />
               ))}
             </div>

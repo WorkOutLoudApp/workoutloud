@@ -51,6 +51,34 @@ const addRoutine = async (userId: number, name: string, description: string) => 
     }
 }
 
+const deleteRoutine = async (userId: number, routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        console.log(routineId)
+        const routine = await getRoutine(userId, routineId)
+        if (!routine) return null
+        const exercises = await getExercises(routineId)
+        if (exercises && exercises.length > 0) {
+            await prisma.exercise.deleteMany({
+                where: {
+                    routineId
+                }
+            })
+        }
+        await prisma.routine.delete({
+            where: {
+                id: routineId
+            }
+        })
+        return true
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 const favoriteRoutine = async (routineId: number) => {
     const prisma = new PrismaClient()
     try {
@@ -113,6 +141,7 @@ export default {
     getRoutines,
     getRoutine,
     addRoutine,
+    deleteRoutine,
     favoriteRoutine,
     getExercises,
     addExercise

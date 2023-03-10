@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {getRoutines, getRoutine, addRoutine, favoriteRoutine, addExercise, getExercises} from "@src/controllers/routine.controller"
+import {getRoutines, getRoutine, addRoutine, favoriteRoutine, deleteRoutine, addExercise, getExercises} from "@src/controllers/routine.controller"
 import { requireAuth } from '@src/middlewares/requireAuth'
 
 const router = Router({ mergeParams: true })
@@ -8,6 +8,7 @@ router.get('/getRoutines', getRoutines)
 router.post('/add', addRoutine)
 router.get('/:id/get', getRoutine)
 router.patch('/:id/favorite', favoriteRoutine)
+router.get('/:id/delete', deleteRoutine)
 router.get('/:id/getExercises', getExercises)
 router.post('/:id/addExercise', addExercise)
 

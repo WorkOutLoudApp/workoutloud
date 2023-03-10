@@ -48,6 +48,21 @@ export const getRoutines: RequestHandler = async (
     } catch (err) {
         return next(err)
     }
+}, deleteRoutine: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const {id} = req.params
+        const deleted = await routineService.deleteRoutine(userId, parseInt(id, 10))
+        if (!deleted) return res.status(400).json({message: 'Error deleting routine'})
+        return res.json(deleted)
+    } catch (err) {
+        return next(err)
+    }
 }, favoriteRoutine: RequestHandler = async (
     req: Request,
     res: Response,
