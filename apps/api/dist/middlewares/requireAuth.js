@@ -54,12 +54,14 @@ var requireAuth = function (req, res, next) { return __awaiter(void 0, void 0, v
                 }
                 token = authorization.split(' ')[1];
                 prisma = new client_1.PrismaClient();
+                prisma = new client_1.PrismaClient();
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 5, 6, 8]);
                 id = jsonwebtoken_1["default"].verify(token, process.env.SECRET).id;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
+                            id: id
                             id: id
                         }
                     })];
