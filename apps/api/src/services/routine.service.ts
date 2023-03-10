@@ -45,6 +45,7 @@ const addRoutine = async (name: string, description: string) => {
         })
         return routine
     } catch (error) {
+        console.log(error)
         return null
     } finally {
         await prisma.$disconnect()
