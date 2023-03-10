@@ -7,19 +7,20 @@ import { useRouter } from 'next/router'
 import { StaticImageData } from 'next/image'
 
 interface RoutineProps {
+  id: number
   name: string
   description?: string
   image?: string | StaticImageData
 }
 
-export default function SidebarRoutines({ name, description, image }: RoutineProps) {
+export default function SidebarRoutines({ id, name, description, image }: RoutineProps) {
   const router = useRouter()
   return (
     <div className='flex items-center text-md h-14 w-full'>
       <button
         type="button"
         className="flex flex-row w-full space-x-2 p-3 items-center h-full"
-        onClick={() => router.push(`/workout/${name}`)}
+        onClick={() => router.push(`/routines/${id}`)}
       >
         {image ? (
           <div className="flex aspect-square items-center place-content-center rounded-full h-full">

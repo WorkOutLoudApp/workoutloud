@@ -47,22 +47,23 @@ function App({ Component, pageProps }: AppProps) {
     <WindowTypeContext.Provider value={isMobile}>
       <AuthProvider>
         <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
-          <div className="font-poppins">
-            <Navbar />
-            <Playbar />
-            {isMobile ? (
-              <Component {...pageProps} />
-            ) : (
-              <div className="flex">
-                <div className="flex h-[92vh] basis-1/5 overflow-hidden border-r-2 border-gray-300 hover:overflow-auto">
-                  <Sidebar />
+          <div className="font-poppins h-screen">
+              <Navbar/>
+              {isMobile ? (
+                <div className='flex pt-20 w-full' >
+                <Component {...pageProps} />
                 </div>
-                <div className="flex basis-4/5">
-                  <Component {...pageProps} />
+              ) : (
+                <div className='flex flex-row h-full pt-14'>
+                  <div className='flex fixed w-52 border-r-2 border-gray-300 h-full overflow-hidden hover:overflow-auto'>
+                    <Sidebar />
+                  </div>
+                  <div className='flex pl-52 w-full' >
+                    <Component {...pageProps} />
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
         </GoogleOAuthProvider>
       </AuthProvider>
     </WindowTypeContext.Provider>

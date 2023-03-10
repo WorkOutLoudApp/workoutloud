@@ -40,7 +40,8 @@ const addRoutine = async (userId: number, name: string, description: string) => 
             data: {
                 name,
                 description,
-                userId
+                userId: 1,
+                isFavorite: false
             }
         })
         return routine

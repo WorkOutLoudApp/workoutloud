@@ -6,6 +6,7 @@ import { Router, Request, Response } from 'express'
 import userRouter from '@src/routes/user'
 import requireAuthRouter from '@src/routes/auth'
 import routineRouter from '@src/routes/routine.router'
+import workoutRouter from '@src/routes/workout'
 
 require('dotenv').config()
 

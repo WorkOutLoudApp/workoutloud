@@ -30,7 +30,7 @@ export const getFavorites = async (req: Request, res: Response) => {
     let message = ''
     try {
         let userId = res.locals.userId
-        const routines = await prisma.routine.findMany({
+        const favorites = await prisma.routine.findMany({
             where: {
                 userId,
                 isFavorite: true
@@ -39,7 +39,31 @@ export const getFavorites = async (req: Request, res: Response) => {
                 name: 'asc'
             }
         })
-        res.send(routines)
+        res.send(favorites)
+    } catch (error) {
+        message = 'Error occured while query routines: ' + error
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+export const getExercises = async (req: Request, res: Response) => {
+    const prisma = new PrismaClient()
+
+    let message = ''
+    try {
+        let userId = res.locals.userId
+        const exercises = await prisma.exercise.findMany({
+            where: {
+                routine: {
+                    userId
+                }
+            },
+            orderBy: {
+                name: 'asc'
+            }
+        })
+        res.send(exercises)
     } catch (error) {
         message = 'Error occured while query routines: ' + error
     } finally {

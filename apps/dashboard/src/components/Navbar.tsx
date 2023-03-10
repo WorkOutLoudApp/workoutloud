@@ -76,8 +76,8 @@ const Navbar = () => {
     <div className="z-50">
       {isMobile ? (
         // Mobile
-        <nav className="block w-full flex-wrap items-center justify-between border-b-2 border-gray-300 py-2 px-2 text-2xl ">
-          <div className="flex justify-between">
+        <nav className='fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 bg-white'>
+          <div className='flex justify-between'>
             {/* Logo */}
             <div className="flex basis-1/5">
               <Link href="/">
@@ -135,8 +135,8 @@ const Navbar = () => {
         </nav>
       ) : (
         // Desktop
-        <nav className="block h-14 w-full items-center justify-between border-b-2 border-gray-300 py-2 px-2 text-2xl">
-          <div className="flex h-full items-center justify-between">
+        <nav className='fixed block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-14 bg-white'>
+          <div className='flex items-center h-full justify-between'>
             {/* Logo */}
             <div className="flex basis-1/4">
               <Link href="/">
