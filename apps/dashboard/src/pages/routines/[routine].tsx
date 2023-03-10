@@ -61,6 +61,18 @@ const RoutinePage = ({
     })
   }
 
+  const onFavorite = async () => {
+    axios.patch(`http://localhost:4000/v1/routine/${routine}/favorite`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      setData(res.data)
+    }).catch((err) => {
+        console.log(err)
+    })
+  }
+
   return (
     <div className="w-full">
       {auth ? (
@@ -68,9 +80,11 @@ const RoutinePage = ({
           {data ? <RoutineHeader
               name={data.name}
               description={data.description}
+              isFavorite={data.isFavorite}
               tabs={headerTabs}
               currentTab={currentTab}
               setTab={setCurrentTab}
+              onFavorite={onFavorite}
           /> : null}
           {currentTab === 'Exercises' ? (
             <div className="px-3">

@@ -1,10 +1,7 @@
-"use strict";
+'use strict';
 exports.__esModule = true;
-var express_1 = require("express");
-var example_controller_1 = require("@src/controllers/example.controller");
-var requireAuth_1 = require("@src/middlewares/requireAuth");
+var express_1 = require('express');
+var example_controller_1 = require('../../../controllers/example.controller');
 var router = (0, express_1.Router)({ mergeParams: true });
-router.use(requireAuth_1.requireAuth);
 router.use('/hello', example_controller_1.getExample);
-router.get('/requireAuth', example_controller_1.getExample);
-exports["default"] = router;
+exports['default'] = router;

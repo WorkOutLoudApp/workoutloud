@@ -7,78 +7,93 @@ export const getRoutines: RequestHandler = async (
     next: NextFunction
 ) => {
     try {
-        const { userId } = req.locals
-        const routines = await routineService.getRoutines(1)
-        if (!routines) return res.status(400).json({ message: 'Error getting routines' })
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const routines = await routineService.getRoutines(userId)
+        if (!routines) return res.status(400).json({message: 'Error getting routines'})
         return res.json(routines)
     } catch (err) {
         return next(err)
     }
-}
-
-export const getRoutine: RequestHandler = async (
+}, getRoutine: RequestHandler = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const { id } = req.params
-        const routine = await routineService.getRoutine(1, parseInt(id, 10))
-        if (!routine) return res.status(400).json({ message: 'Error getting routine' })
+        const {id} = req.params
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const routine = await routineService.getRoutine(userId, parseInt(id, 10))
+        if (!routine) return res.status(400).json({message: 'Error getting routine'})
         return res.json(routine)
     } catch (err) {
         return next(err)
     }
-}
-
-export const addRoutine: RequestHandler = async (
+}, addRoutine: RequestHandler = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const { name, description } = req.body
-        if (!name) return res.status(400).json({ message: 'Missing "name"' })
-        if (!description) return res.status(400).json({ message: 'Missing "description"' })
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const {name, description} = req.body
+        if (!name) return res.status(400).json({message: 'Missing "name"'})
+        if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const routine = await routineService.addRoutine(name, description)
-        if (!routine) return res.status(400).json({ message: 'Error creating routine' })
+        const routine = await routineService.addRoutine(userId, name, description)
+        if (!routine) return res.status(400).json({message: 'Error creating routine'})
         return res.json(routine)
     } catch (err) {
         return next(err)
     }
-}
-
-export const getExercises: RequestHandler = async (
+}, favoriteRoutine: RequestHandler = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const { id } = req.params
+        const {id} = req.params
+
+        const routine = await routineService.favoriteRoutine(parseInt(id, 10))
+        if (!routine) return res.status(400).json({message: 'Error favoriting routine'})
+        return res.json(routine)
+    } catch (err) {
+        return next(err)
+    }
+}, getExercises: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {id} = req.params
         const routines = await routineService.getExercises(parseInt(id, 10))
-        if (!routines) return res.status(400).json({ message: 'Error getting routines' })
+        if (!routines) return res.status(400).json({message: 'Error getting routines'})
         return res.json(routines)
     } catch (err) {
         return next(err)
     }
-}
-
-export const addExercise: RequestHandler = async (
+}, addExercise: RequestHandler = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const { id } = req.params
-        const { name, description } = req.body
-        if (!name) return res.status(400).json({ message: 'Missing "name"' })
-        if (!description) return res.status(400).json({ message: 'Missing "description"' })
+        const {id} = req.params
+        const {name, description} = req.body
+        if (!name) return res.status(400).json({message: 'Missing "name"'})
+        if (!description) return res.status(400).json({message: 'Missing "description"'})
 
         const exercise = await routineService.addExercise(1, parseInt(id, 10), name, description)
-        if (!exercise) return res.status(400).json({ message: 'Error creating exercise' })
+        if (!exercise) return res.status(400).json({message: 'Error creating exercise'})
         return res.json(exercise)
     } catch (err) {
         return next(err)
     }
-}
+};
+
+
+
+

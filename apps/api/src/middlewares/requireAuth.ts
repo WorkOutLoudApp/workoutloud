@@ -34,6 +34,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
                 }
             })
             if (user) {
+                console.log('yoo')
                 res.locals.userId = user?.id
                 next()
             }

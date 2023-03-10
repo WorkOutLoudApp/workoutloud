@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {getRoutines, getRoutine, addRoutine, addExercise, getExercises} from "@src/controllers/routine.controller"
+import {getRoutines, getRoutine, addRoutine, favoriteRoutine, addExercise, getExercises} from "@src/controllers/routine.controller"
 import { requireAuth } from '@src/middlewares/requireAuth'
 
 const router = Router({ mergeParams: true })

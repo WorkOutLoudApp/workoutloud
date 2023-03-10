@@ -33,19 +33,42 @@ const getRoutine = async (userId: number, routineId: number) => {
     }
 }
 
-const addRoutine = async (name: string, description: string) => {
+const addRoutine = async (userId: number, name: string, description: string) => {
     const prisma = new PrismaClient()
     try {
         const routine = await prisma.routine.create({
             data: {
                 name,
                 description,
-                userId: 1
+                userId
             }
         })
         return routine
     } catch (error) {
-        console.log(error)
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+const favoriteRoutine = async (routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const routine = await prisma.routine.findFirst({
+            where: {
+                id: routineId
+            }
+        })
+        if (!routine) return null
+        const updatedRoutine = await prisma.routine.update({
+            where: {
+                id: routineId
+            },
+            data: {
+                isFavorite: !routine.isFavorite
+            }
+        })
+        return updatedRoutine
         return null
     } finally {
         await prisma.$disconnect()
@@ -90,6 +113,7 @@ export default {
     getRoutines,
     getRoutine,
     addRoutine,
+    favoriteRoutine,
     getExercises,
     addExercise
 }
