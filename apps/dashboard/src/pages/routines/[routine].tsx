@@ -15,32 +15,46 @@ interface RoutinePageProps {
   routine: string
 }
 const RoutinePage = ({
-                       routine
-                     }: RoutinePageProps) => {
-  const { auth } = useAuth()
+ routine
+}: RoutinePageProps) => {
+  const { auth, token } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
 
   const [data, setData] = useState<any>(null)
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/${routine}/get`).then((res) => {
+    if (!token) return
+    axios.get(`http://localhost:4000/v1/routine/${routine}/get`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
       setData(res.data)
     }).catch((err) => {
         console.log(err)
     })
-  }, [])
+  }, [token])
 
   const [exercises, setExercises] = useState([])
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`).then((res) => {
+    if (!token) return
+    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
       setExercises(res.data)
     }).catch((err) => {
         console.log(err)
     })
-  }, [])
+  }, [token])
   const onAddExercise = async (exercise: IExercise) => {
     setExerciseModalOpen(false)
-    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise).then((res) => {
+    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
       setExercises([...exercises, res.data])
     }).catch((err) => {
         console.log(err)

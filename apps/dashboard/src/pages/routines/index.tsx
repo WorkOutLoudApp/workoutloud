@@ -10,18 +10,27 @@ import Login from '../login'
 
 const Index = () => {
   const [routineModalOpen, setRoutineModalOpen] = useState(false)
-  const { auth } = useAuth()
+  const { auth, token } = useAuth()
 
   const [routines, setRoutines] = useState([])
   useEffect(() => {
-    axios.get(`http://localhost:4000/v1/routine/getRoutines`).then((res) => {
+    if (!token) return
+    axios.get(`http://localhost:4000/v1/routine/getRoutines`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then((res) => {
       setRoutines(res.data)
     }).catch((err) => {
         console.log(err)
     })
-  }, [])
+  }, [token])
   const onAddExercise = async (routine: IRoutine) => {
-    axios.post(`http://localhost:4000/v1/routine/add`, routine).then((res) => {
+    axios.post(`http://localhost:4000/v1/routine/add`, routine, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
       setRoutineModalOpen(false)
       setRoutines([...routines, res.data])
     }).catch((err) => {
