@@ -5,6 +5,10 @@ import { PrismaClient } from '@prisma/client'
 
 require('dotenv').config()
 
+interface RequestWithAuth extends Request {
+    accountId: number
+}
+
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers
     
@@ -17,6 +21,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     const prisma = new PrismaClient()
     try {
         const {id}  = jwt.verify(token, process.env.SECRET as Secret) as JwtPayload
+        console.log({id: id})
         const account = await prisma.account.findFirst({
             where: {
                 id
