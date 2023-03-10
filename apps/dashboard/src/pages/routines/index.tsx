@@ -4,7 +4,7 @@ import Routine from '@src/components/Workout/Routines/Routine'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import axios from 'axios'
-import AddRoutineModal from "@src/components/Workout/Routines/AddRoutineModal";
+import AddRoutineModal from "@src/components/Workout/Routines/AddRoutineModal"
 import {IRoutine} from "@src/types/Workout"
 import Login from '../login'
 

@@ -7,6 +7,7 @@ export const getRoutines: RequestHandler = async (
     next: NextFunction
 ) => {
     try {
+        const { userId } = req.locals
         const routines = await routineService.getRoutines(1)
         if (!routines) return res.status(400).json({ message: 'Error getting routines' })
         return res.json(routines)

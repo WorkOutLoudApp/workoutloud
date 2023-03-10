@@ -7,6 +7,7 @@ router.use(requireAuth)
 router.get('/getRoutines', getRoutines)
 router.post('/add', addRoutine)
 router.get('/:id/get', getRoutine)
+router.patch('/:id/favorite', favoriteRoutine)
 router.get('/:id/getExercises', getExercises)
 router.post('/:id/addExercise', addExercise)
 
