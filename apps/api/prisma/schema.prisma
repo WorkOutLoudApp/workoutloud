@@ -11,18 +11,36 @@ datasource db {
 }
 
 model Account {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String 
-  user User?
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  user     User?
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  username String
+  id        Int       @id @default(autoincrement())
+  username  String
   firstName String
-  lastName String
-  avatar String
-  accountId Int @unique
-  account Account @relation(fields: [accountId], references: [id])
+  lastName  String
+  avatar    String
+  accountId Int       @unique
+  account   Account   @relation(fields: [accountId], references: [id])
+  Routine   Routine[]
+}
+
+model Routine {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  exercises   Exercise[]
+}
+
+model Exercise {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  routineId   Int
+  routine     Routine @relation(fields: [routineId], references: [id])
 }

@@ -8,7 +8,7 @@ interface Props {
   onAdd: (exercise: Exercise) => void
 }
 
-export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
+export default function AddRoutineModal({ open, setOpen, onAdd }: Props) {
   const {
     register,
     handleSubmit,
@@ -21,7 +21,7 @@ export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
         <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center bg-black bg-opacity-60">
           <div className="mx-auto max-w-lg rounded-md bg-white p-4 shadow-xl">
             <div className="flex justify-between">
-              <h3 className="text-xl font-medium">Add Exercise</h3>
+              <h3 className="text-xl font-medium">Add Routine</h3>
               <button
                 type="button"
                 className="font-medium text-gray-800"

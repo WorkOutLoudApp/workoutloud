@@ -13,7 +13,7 @@ export const navbarItemsMobile = [
     },
     {
         name: 'workout',
-        path: '/workout',
+        path: '/routines',
         icon: <IoBarbell />,
         iconActive: <IoBarbell className={activeStyle}/>
     },
@@ -40,7 +40,7 @@ export const navbarItems = [
     },
     {
         name: 'workout',
-        path: '/workout',
+        path: '/routines',
         icon: <IoBarbell />,
         iconActive: <IoBarbell className={activeStyle}/>
     },

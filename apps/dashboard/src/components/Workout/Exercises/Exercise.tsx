@@ -1,21 +1,18 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage } from '@fortawesome/free-solid-svg-icons'
-import { useRouter } from 'next/router'
 
-interface RoutineProps {
+interface ExerciseProps {
+  id: number
   name: string
   description: string
   image?: string
 }
 
-export default function Routine({ name, description, image }: RoutineProps) {
-  const router = useRouter()
+export default function Exercise({ id, name, description, image }: ExerciseProps) {
   return (
-    <button
-      type="button"
+    <div
       className="flex w-full space-x-3 border border-black bg-[#d9d9d9] p-3"
-      onClick={() => router.push(`/workout/${name}`)}
     >
       {image ? (
         <img src={image} alt={name} />
@@ -28,9 +25,9 @@ export default function Routine({ name, description, image }: RoutineProps) {
         <p className="font-bold">{name}</p>
         <p>{description}</p>
       </div>
-    </button>
+    </div>
   )
 }
-Routine.defaultProps = {
+Exercise.defaultProps = {
   image: null,
 }
