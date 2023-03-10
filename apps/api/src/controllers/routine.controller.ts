@@ -107,6 +107,20 @@ export const getRoutines: RequestHandler = async (
     } catch (err) {
         return next(err)
     }
+}, deleteExercise: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {id} = req.params
+
+        const deleted = await routineService.deleteExercise(parseInt(id, 10))
+        if (!deleted) return res.status(400).json({message: 'Error deleting exercise'})
+        return res.json(deleted)
+    } catch (err) {
+        return next(err)
+    }
 };
 
 

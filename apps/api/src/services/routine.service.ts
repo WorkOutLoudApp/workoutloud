@@ -137,6 +137,22 @@ const addExercise = async (userId: number, routineId: number, name: string, desc
     }
 }
 
+const deleteExercise = async (exerciseId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        await prisma.exercise.delete({
+            where: {
+                id: exerciseId
+            }
+        })
+        return true
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 export default {
     getRoutines,
     getRoutine,
@@ -144,5 +160,6 @@ export default {
     deleteRoutine,
     favoriteRoutine,
     getExercises,
-    addExercise
+    addExercise,
+    deleteExercise
 }
