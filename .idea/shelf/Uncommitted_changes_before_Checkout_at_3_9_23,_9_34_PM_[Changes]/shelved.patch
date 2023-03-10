@@ -1,0 +1,314 @@
+Index: apps/api/src/routes/v1.router.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/apps/api/src/routes/v1.router.ts b/apps/api/src/routes/v1.router.ts
+--- a/apps/api/src/routes/v1.router.ts	
++++ b/apps/api/src/routes/v1.router.ts	
+@@ -27,7 +27,7 @@
+ router.use('/web', webRouter)
+ router.use('/user', userRouter)
+ router.use('/auth', requireAuthRouter)
+-router.use('/workout', workoutRouter)
++// router.use('/workout', workoutRouter)
+ router.use('/routine', routineRouter)
+ 
+ router.get('/key/google', (req: Request, res: Response) => {
+Index: apps/api/prisma/schema.prisma
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/apps/api/prisma/schema.prisma b/apps/api/prisma/schema.prisma
+--- a/apps/api/prisma/schema.prisma	
++++ b/apps/api/prisma/schema.prisma	
+@@ -11,50 +11,36 @@
+ }
+ 
+ model Account {
+-  id Int @id @default(autoincrement())
+-  email String @unique
+-  password String 
+-  user User?
++  id       Int    @id @default(autoincrement())
++  email    String @unique
++  password String
++  user     User?
+ }
+ 
+ model User {
+-  id Int @id @default(autoincrement())
+-  username String
++  id        Int       @id @default(autoincrement())
++  username  String
+   firstName String
+-  lastName String
+-  avatar String
+-  accountId Int @unique
+-  account Account @relation(fields: [accountId], references: [id])
+-  routine Routine[]
++  lastName  String
++  avatar    String
++  accountId Int       @unique
++  account   Account   @relation(fields: [accountId], references: [id])
++  Routine   Routine[]
+ }
+ 
+ model Routine {
+-  id Int @id @default(autoincrement())
+-  userId Int
+-  name String
+-  description String?
+-  isFavorite Boolean
+-  @@unique([userId, name])
+-  user User @relation(fields: [userId], references: [id])
+-  exercises ExerciseSet[]
++  id          Int        @id @default(autoincrement())
++  name        String
++  description String
++  userId      Int
++  user        User       @relation(fields: [userId], references: [id])
++  exercises   Exercise[]
+ }
+ 
+ model Exercise {
+-  id Int @id @default(autoincrement())
+-  name String @unique
+-  target String
+-  equipment String
+-  routines ExerciseSet[]
+-}
+-
+-model ExerciseSet {
+-  id Int @id @default(autoincrement())
+-  routineId Int
+-  exerciseId Int
+-  reps Int
+-  duration Int
+-  position Int
+-  routine Routine @relation(fields: [routineId], references: [id])
+-  exercise Exercise @relation(fields: [exerciseId], references: [id])
+-  @@unique([routineId, position])
++  id          Int     @id @default(autoincrement())
++  name        String
++  description String
++  routineId   Int
++  routine     Routine @relation(fields: [routineId], references: [id])
+ }
+\ No newline at end of file
+Index: apps/dashboard/src/components/Workout/Routines/Routine.tsx
+===================================================================
+diff --git a/apps/dashboard/src/components/Workout/Routines/Routine.tsx b/apps/dashboard/src/components/Workout/Routines/Routine.tsx
+--- a/apps/dashboard/src/components/Workout/Routines/Routine.tsx	
++++ b/apps/dashboard/src/components/Workout/Routines/Routine.tsx	
+@@ -1,7 +1,7 @@
+ import React from 'react'
+ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+ import { faImage } from '@fortawesome/free-solid-svg-icons'
+-import { router } from 'next/client'
++import { useRouter } from 'next/router'
+ 
+ interface RoutineProps {
+   id: number
+Index: apps/dashboard/src/pages/routines/index.tsx
+===================================================================
+diff --git a/apps/dashboard/src/pages/routines/index.tsx b/apps/dashboard/src/pages/routines/index.tsx
+--- a/apps/dashboard/src/pages/routines/index.tsx	
++++ b/apps/dashboard/src/pages/routines/index.tsx	
+@@ -10,18 +10,30 @@
+ 
+ const Index = () => {
+   const [routineModalOpen, setRoutineModalOpen] = useState(false)
+-  const { auth } = useAuth()
++  const { auth, token } = useAuth()
++
++  console.log(auth)
++  console.log(token)
+ 
+   const [routines, setRoutines] = useState([])
+   useEffect(() => {
+-    axios.get(`http://localhost:4000/v1/routine/getRoutines`).then((res) => {
++    if (!token) return
++    axios.get(`http://localhost:4000/v1/routine/getRoutines`, {
++      headers: {
++        Authorization: `Bearer ${token}`
++      }
++    }).then((res) => {
+       setRoutines(res.data)
+     }).catch((err) => {
+         console.log(err)
+     })
+-  }, [])
++  }, [token])
+   const onAddExercise = async (routine: IRoutine) => {
+-    axios.post(`http://localhost:4000/v1/routine/add`, routine).then((res) => {
++    axios.post(`http://localhost:4000/v1/routine/add`, routine, {
++      headers: {
++        Authorization: `Bearer ${token}`
++      }
++    }).then((res) => {
+       setRoutineModalOpen(false)
+       setRoutines([...routines, res.data])
+     }).catch((err) => {
+Index: apps/dashboard/src/pages/routines/[routine].tsx
+===================================================================
+diff --git a/apps/dashboard/src/pages/routines/[routine].tsx b/apps/dashboard/src/pages/routines/[routine].tsx
+--- a/apps/dashboard/src/pages/routines/[routine].tsx	
++++ b/apps/dashboard/src/pages/routines/[routine].tsx	
+@@ -17,13 +17,17 @@
+ const RoutinePage = ({
+                        routine
+                      }: RoutinePageProps) => {
+-  const { auth } = useAuth()
++  const { auth, token } = useAuth()
+   const [currentTab, setCurrentTab] = useState(headerTabs[0])
+   const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
+ 
+   const [data, setData] = useState<any>(null)
+   useEffect(() => {
+-    axios.get(`http://localhost:4000/v1/routine/${routine}/get`).then((res) => {
++    axios.get(`http://localhost:4000/v1/routine/${routine}/get`, {
++      headers: {
++        Authorization: `Bearer ${token}`
++      }
++    }).then((res) => {
+       setData(res.data)
+     }).catch((err) => {
+         console.log(err)
+@@ -32,7 +36,11 @@
+ 
+   const [exercises, setExercises] = useState([])
+   useEffect(() => {
+-    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`).then((res) => {
++    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`, {
++      headers: {
++        Authorization: `Bearer ${token}`
++      }
++    }).then((res) => {
+       setExercises(res.data)
+     }).catch((err) => {
+         console.log(err)
+@@ -40,7 +48,11 @@
+   }, [])
+   const onAddExercise = async (exercise: IExercise) => {
+     setExerciseModalOpen(false)
+-    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise).then((res) => {
++    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise, {
++      headers: {
++        Authorization: `Bearer ${token}`
++      }
++    }).then((res) => {
+       setExercises([...exercises, res.data])
+     }).catch((err) => {
+         console.log(err)
+Index: apps/api/src/services/routine.service.ts
+===================================================================
+diff --git a/apps/api/src/services/routine.service.ts b/apps/api/src/services/routine.service.ts
+--- a/apps/api/src/services/routine.service.ts	
++++ b/apps/api/src/services/routine.service.ts	
+@@ -33,7 +33,7 @@
+     }
+ }
+ 
+-const addRoutine = async (name: string, description: string) => {
++const addRoutine = async (userId: number, name: string, description: string) => {
+     const prisma = new PrismaClient()
+     try {
+         const routine = await prisma.routine.create({
+Index: apps/api/src/controllers/workoutController.ts
+===================================================================
+diff --git a/apps/api/src/controllers/workoutController.ts b/apps/api/src/controllers/workoutController.ts
+--- a/apps/api/src/controllers/workoutController.ts	
++++ b/apps/api/src/controllers/workoutController.ts	
+@@ -1,6 +1,5 @@
+-import { NextFunction, Request, Response } from 'express'
++import { Request, Response } from 'express'
+ import { PrismaClient } from '@prisma/client'
+-require('dotenv').config()
+ 
+ export const getRoutines = async (req: Request, res: Response) => {
+     const prisma = new PrismaClient()
+Index: apps/api/src/routes/routine.router.ts
+===================================================================
+diff --git a/apps/api/src/routes/routine.router.ts b/apps/api/src/routes/routine.router.ts
+--- a/apps/api/src/routes/routine.router.ts	
++++ b/apps/api/src/routes/routine.router.ts	
+@@ -1,8 +1,9 @@
+ import { Router } from 'express'
+ import {getRoutines, getRoutine, addRoutine, addExercise, getExercises} from "@src/controllers/routine.controller";
++import {requireAuth} from "@src/middlewares/requireAuth";
+ 
+ const router = Router({ mergeParams: true })
+-
++router.use(requireAuth)
+ router.get('/getRoutines', getRoutines)
+ router.post('/add', addRoutine)
+ router.get('/:id/get', getRoutine)
+Index: apps/api/src/controllers/routine.controller.ts
+===================================================================
+diff --git a/apps/api/src/controllers/routine.controller.ts b/apps/api/src/controllers/routine.controller.ts
+--- a/apps/api/src/controllers/routine.controller.ts	
++++ b/apps/api/src/controllers/routine.controller.ts	
+@@ -7,7 +7,10 @@
+     next: NextFunction
+ ) => {
+     try {
+-        const routines = await routineService.getRoutines(1)
++        console.log(res.locals)
++        const {userId} = res.locals
++        if (!userId) return res.status(400).json({ message: 'Missing "userId"' })
++        const routines = await routineService.getRoutines(userId)
+         if (!routines) return res.status(400).json({ message: 'Error getting routines' })
+         return res.json(routines)
+     } catch (err) {
+@@ -22,7 +25,11 @@
+ ) => {
+     try {
+         const { id } = req.params
+-        const routine = await routineService.getRoutine(1, parseInt(id, 10))
++
++        const {userId} = res.locals
++        if (!userId) return res.status(400).json({ message: 'Missing "userId"' })
++
++        const routine = await routineService.getRoutine(userId, parseInt(id, 10))
+         if (!routine) return res.status(400).json({ message: 'Error getting routine' })
+         return res.json(routine)
+     } catch (err) {
+@@ -40,7 +47,10 @@
+         if (!name) return res.status(400).json({ message: 'Missing "name"' })
+         if (!description) return res.status(400).json({ message: 'Missing "description"' })
+ 
+-        const routine = await routineService.addRoutine(name, description)
++        const {userId} = res.locals
++        if (!userId) return res.status(400).json({ message: 'Missing "userId"' })
++
++        const routine = await routineService.addRoutine(userId, name, description)
+         if (!routine) return res.status(400).json({ message: 'Error creating routine' })
+         return res.json(routine)
+     } catch (err) {
+@@ -55,6 +65,8 @@
+ ) => {
+     try {
+         const { id } = req.params
++        const {userId} = res.locals
++        if (!userId) return res.status(400).json({ message: 'Missing "userId"' })
+         const routines = await routineService.getExercises(parseInt(id, 10))
+         if (!routines) return res.status(400).json({ message: 'Error getting routines' })
+         return res.json(routines)
+Index: apps/api/src/routes/workout.ts
+===================================================================
+diff --git a/apps/api/src/routes/workout.ts b/apps/api/src/routes/workout.ts
+--- a/apps/api/src/routes/workout.ts	
++++ b/apps/api/src/routes/workout.ts	
+@@ -1,9 +1,7 @@
+-import { Router, Request, Response } from 'express'
++import { Router } from 'express'
+ import { requireAuth } from '@src/middlewares/requireAuth'
+ import { getRoutines, getFavorites, getExercises } from '@src/controllers/workoutController'
+ 
+-require('dotenv').config()
+-
+ const router = Router()
+ router.use(requireAuth)
+ router.get('/routine', getRoutines)

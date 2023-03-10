@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d605e9ba-3ef8-454e-a1b7-dc29ca7d9d20" name="Changes" comment="new head" />
+    <list id="8d4ccd1c-79fc-4be3-9bd8-d6fa2a697f41" name="unversioned" comment="unversioned" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="main" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2MAoKj0OwoC9JsWUm2HguFFVnOv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/nickholasboboaca/Documents/school/year_4/CECS491/workoutloud/apps/dashboard/src/components/Workout/Exercises",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/nickholasboboaca/Documents/school/year_4/CECS491/workoutloud/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/dashboard/src/components/Workout/Exercises" />
+      <recent name="$PROJECT_DIR$/apps/dashboard/src/components/Workout/Routines" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/dashboard/src/components/Workout/Routines" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d605e9ba-3ef8-454e-a1b7-dc29ca7d9d20" name="Changes" comment="" />
+      <changelist id="8d4ccd1c-79fc-4be3-9bd8-d6fa2a697f41" name="unversioned" comment="" />
+      <created>1677219685828</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1677219685828</updated>
+      <workItem from="1677219687355" duration="9443000" />
+      <workItem from="1677229220871" duration="518000" />
+      <workItem from="1677264759745" duration="1593000" />
+      <workItem from="1677707103973" duration="1000" />
+      <workItem from="1678423334901" duration="322000" />
+      <workItem from="1678423659569" duration="3605000" />
+    </task>
+    <task id="LOCAL-00001" summary="feature(api): init prisma routine and exerceise, init routine router and controller">
+      <created>1677222648820</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1677222648820</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feature(api): init add routine, get routines">
+      <created>1677224848297</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1677224848297</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feature(api): get routine and load on frontend">
+      <created>1677226602255</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677226602255</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feature(api): add routine and get routines">
+      <created>1677227922673</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1677227922673</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feature(dashboard): routine component">
+      <created>1677228244613</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1677228244613</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix(dashboard): fix use router">
+      <created>1677228929919</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1677228929919</updated>
+    </task>
+    <task id="LOCAL-00007" summary="chore(dashboard): cleanup">
+      <created>1677229467395</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1677229467395</updated>
+    </task>
+    <task id="LOCAL-00008" summary="chore(dashboard): log error on axios">
+      <created>1677229705772</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1677229705772</updated>
+    </task>
+    <task id="LOCAL-00009" summary="gitignore updates">
+      <created>1678423728028</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1678423728028</updated>
+    </task>
+    <task id="LOCAL-00010" summary="init">
+      <created>1678426714515</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678426714515</updated>
+    </task>
+    <task id="LOCAL-00011" summary="init">
+      <created>1678426760655</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1678426760655</updated>
+    </task>
+    <task id="LOCAL-00012" summary="new head">
+      <created>1678426846885</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1678426846885</updated>
+    </task>
+    <task id="LOCAL-00013" summary="new head">
+      <created>1678426944139</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1678426944139</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feature(api): init prisma routine and exerceise, init routine router and controller" />
+    <MESSAGE value="feature(api): init add routine, get routines" />
+    <MESSAGE value="feature(api): get routine and load on frontend" />
+    <MESSAGE value="feature(api): add routine and get routines" />
+    <MESSAGE value="feature(dashboard): routine component" />
+    <MESSAGE value="fix(dashboard): fix use router" />
+    <MESSAGE value="chore(dashboard): cleanup" />
+    <MESSAGE value="chore(dashboard): log error on axios" />
+    <MESSAGE value="gitignore updates" />
+    <MESSAGE value="init" />
+    <MESSAGE value="new head" />
+    <option name="LAST_COMMIT_MESSAGE" value="new head" />
+  </component>
+</project>
