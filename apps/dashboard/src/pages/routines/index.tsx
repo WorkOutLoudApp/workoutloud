@@ -81,8 +81,18 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <div>
+          <div className="border-b border-black pb-5">
             <p className="text-3xl font-bold">Favorite Routines</p>
+            <p>{JSON.stringify(routines)}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {routines.filter((routine) => routine.isFavorite ).map((routine: any, i: number) => (
+                  <Routine
+                      key={routine.id}
+                      {...routine}
+                      onDelete={() => onDelete(routine.id)}
+                  />
+              ))}
+            </div>
           </div>
         </div>
       ) : (
