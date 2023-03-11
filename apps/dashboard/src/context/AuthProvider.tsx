@@ -16,9 +16,9 @@ interface AuthInterface {
     lastName: string
     avatar: string
   }
-  setUser: React.Dispatch<React.SetStateAction<boolean>>
+  setUser: React.Dispatch<React.SetStateAction<any>>
   token: String
-  setToken: React.Dispatch<React.SetStateAction<boolean>>
+  setToken: React.Dispatch<React.SetStateAction<any>>
 }
 
 const AuthContext = createContext({} as AuthInterface)

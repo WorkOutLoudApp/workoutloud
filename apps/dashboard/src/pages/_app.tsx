@@ -9,18 +9,14 @@ import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { AuthProvider } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
-
-// import PUBLIC_GOOGLE_API_TOKEN from '@src/utils/keys'
+import { ThemeProvider } from '@src/context/ThemeProvider'
 
 let PUBLIC_GOOGLE_API_TOKEN = ''
-axios
-  .get(`http://localhost:4000/v1/key/google`)
-  .then((response) => {
-    PUBLIC_GOOGLE_API_TOKEN = response.data.key
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
+  PUBLIC_GOOGLE_API_TOKEN = response.data.key
+}).catch((error) => {
+  console.log(error)
+})
 
 function App({ Component, pageProps }: AppProps) {
   const [width, setWidth] = useState(undefined)
@@ -45,13 +41,14 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <WindowTypeContext.Provider value={isMobile}>
-      <AuthProvider>
-        <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
-          <div className="font-poppins h-screen">
-              <Navbar/>
+      <ThemeProvider>
+        <AuthProvider>
+          <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
+            <div className="font-poppins h-screen">
+              <Navbar />
               {isMobile ? (
                 <div className='flex pt-20 w-full' >
-                <Component {...pageProps} />
+                  <Component {...pageProps} />
                 </div>
               ) : (
                 <div className='flex flex-row h-full pt-14'>
@@ -64,8 +61,9 @@ function App({ Component, pageProps }: AppProps) {
                 </div>
               )}
             </div>
-        </GoogleOAuthProvider>
-      </AuthProvider>
+          </GoogleOAuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </WindowTypeContext.Provider>
   )
 }
