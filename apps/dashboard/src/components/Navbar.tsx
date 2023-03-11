@@ -4,6 +4,7 @@ import { FaUserCircle } from 'react-icons/fa'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { HiUser } from 'react-icons/hi'
 import { IoLogOut, IoNotifications } from 'react-icons/io5'
+import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 import { navbarItems, navbarItemsMobile } from '@src/utils/constants/navbar'
 import { googleLogout } from '@react-oauth/google'
@@ -11,8 +12,13 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import MobileMenuModal from './Mobilemodal'
+import { useTheme, saveTheme } from '../context/ThemeProvider'
 
 const Navbar = () => {
+  //testing
+  const { theme, setTheme } = useTheme()
+
+  ////
   const isMobile = useContext(WindowTypeContext)
   const { auth, setAuth, user, setUser } = useAuth()
   const [showUserTooltip, setShowUserTooltip] = useState(false)
@@ -236,20 +242,29 @@ const Navbar = () => {
                     </li>
                   </button>
                 </Link>
-
-                <Link href="/">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      localStorage.removeItem('user')
-                      setShowUserTooltip(false)
-                      googleLogout()
-                      setUser(null)
-                      setAuth(false)
-                    }}
-                  >
-                    <li className="flex items-center rounded-md px-2 py-1 hover:bg-gray-200">
-                      <div className="mr-2 rounded-full bg-gray-300 px-1 py-1">
+                {/* Dark Mode */}
+                <button type='button' onClick={() => {
+                  const newTheme = { ...theme, darkMode: !theme.darkMode }
+                  saveTheme(newTheme)
+                  setTheme(newTheme)
+                }}>
+                  <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>
+                    <div className='rounded-full bg-gray-300 px-1 py-1 mr-2'>
+                      {theme.darkMode ? <MdLightMode /> : <MdDarkMode />}
+                    </div>
+                    {theme.darkMode ? `Light mode` : `Dark mode`}
+                  </li>
+                </button>
+                <Link href='/'>
+                  <button type='button' onClick={() => {
+                    localStorage.removeItem('user')
+                    setShowUserTooltip(false)
+                    googleLogout()
+                    setUser(null)
+                    setAuth(false)
+                  }}>
+                    <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>
+                      <div className='rounded-full bg-gray-300 px-1 py-1 mr-2'>
                         <IoLogOut />
                       </div>
                       Logout
