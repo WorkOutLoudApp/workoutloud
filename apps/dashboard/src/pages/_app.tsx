@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app'
 import React, { useEffect, useState } from 'react'
 import '../styles/index.css'
 
+import Playbar from '../components/Playbar'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { AuthProvider } from '../context/AuthProvider'
@@ -11,12 +12,15 @@ import WindowTypeContext from '../context/WindowTypeProvider'
 
 // import PUBLIC_GOOGLE_API_TOKEN from '@src/utils/keys'
 
-let PUBLIC_GOOGLE_API_TOKEN=''
-axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
-  PUBLIC_GOOGLE_API_TOKEN=response.data.key
-}).catch((error) => {
-  console.log(error)
-})
+let PUBLIC_GOOGLE_API_TOKEN = ''
+axios
+  .get(`http://localhost:4000/v1/key/google`)
+  .then((response) => {
+    PUBLIC_GOOGLE_API_TOKEN = response.data.key
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 
 function App({ Component, pageProps }: AppProps) {
   const [width, setWidth] = useState(undefined)
@@ -44,15 +48,16 @@ function App({ Component, pageProps }: AppProps) {
       <AuthProvider>
         <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
           <div className="font-poppins">
-            <Navbar/>
+            <Navbar />
+            <Playbar />
             {isMobile ? (
               <Component {...pageProps} />
             ) : (
-              <div className='flex'>
-                <div className='flex basis-1/5 h-[92vh] border-r-2 border-gray-300 overflow-hidden hover:overflow-auto'>
+              <div className="flex">
+                <div className="flex h-[92vh] basis-1/5 overflow-hidden border-r-2 border-gray-300 hover:overflow-auto">
                   <Sidebar />
                 </div>
-                <div className='flex basis-4/5' >
+                <div className="flex basis-4/5">
                   <Component {...pageProps} />
                 </div>
               </div>
