@@ -11,7 +11,6 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import MobileMenuModal from './Mobilemodal'
-import { Transition } from '@headlessui/react'
 
 const Navbar = () => {
   const isMobile = useContext(WindowTypeContext)
@@ -102,14 +101,12 @@ const Navbar = () => {
               )}
 
               {/* Menu */}
-              <Link href="/">
                 <div className="flex items-center">
                   <GiHamburgerMenu
                     onClick={toggleMobileMenu}
                     className="cursor-pointer rounded-full bg-gray-200 px-1 text-3xl"
                   />
                 </div>
-              </Link>
             </div>
           </div>
 
@@ -288,7 +285,10 @@ const Navbar = () => {
         </nav>
       )}
       {showMobileMenu && (
-        <MobileMenuModal toggleMobileMenu={toggleMobileMenu} />
+        <MobileMenuModal toggleMobileMenu={toggleMobileMenu}
+        isOpen = {showMobileMenu} 
+        setShowMobileMenu={setShowMobileMenu}
+        />
       )}
     </div>
   )
