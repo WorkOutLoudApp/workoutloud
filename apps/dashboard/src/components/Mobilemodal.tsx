@@ -1,9 +1,13 @@
-import React from 'react';
-import Link from 'next/link';
-import { AiOutlineClose } from 'react-icons/ai';
-import { useAuth } from '@src/context/AuthProvider';
-import { googleLogout } from '@react-oauth/google';
-import { useEffect } from 'react';
+import React from 'react'
+import Link from 'next/link'
+import { AiOutlineClose } from 'react-icons/ai'
+import { useAuth } from '@src/context/AuthProvider'
+import { googleLogout } from '@react-oauth/google'
+import { useState, useEffect } from 'react'
+import { FaUserCircle } from 'react-icons/fa'
+import { AiOutlineHome } from 'react-icons/ai'
+import { IoLogIn, IoLogOut } from 'react-icons/io5'
+import { TbHandFinger } from 'react-icons/tb'
 
 interface MobileMenuModalProps {
   toggleMobileMenu: () => void
@@ -11,56 +15,73 @@ interface MobileMenuModalProps {
   setShowMobileMenu: (value: boolean) => void
 }
 
-const MobileMenuModal: React.FC<MobileMenuModalProps> = ({ toggleMobileMenu, isOpen, setShowMobileMenu }) => {
-  const { user } = useAuth();
+const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
+  toggleMobileMenu,
+  isOpen,
+  setShowMobileMenu,
+}) => {
+  const { auth, setAuth, user, setUser } = useAuth()
 
-  
   const handleClickOutside = (event: MouseEvent) => {
-    if (!event.target) return;
-    const target = event.target as HTMLElement;
-    if (target.closest('.mobile-menu')) return;
-    setShowMobileMenu(false);
-  };
+    if (!event.target) return
+    const target = event.target as HTMLElement
+    if (target.closest('.mobile-menu')) return
+    setShowMobileMenu(false)
+  }
+
+  const [showUserTooltip, setShowUserTooltip] = useState(false)
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <div
-      className={`fixed inset-0 z-50 left-auto right-0 w-4/5 h-full transition-all duration-300 ease-in-out ${
+      className={`fixed inset-0 left-auto right-0 z-50 h-full w-2/3 transition-all duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } bg-white mobile-menu`}
+      } mobile-menu bg-gray-100`}
     >
-      <header className='flex justify-end items-center p-4 border-b-0'>
-        <button onClick={toggleMobileMenu} className='text-2xl'>
+      <header className="flex items-center justify-end border-b-0 p-4">
+        <button onClick={toggleMobileMenu} className="text-2xl">
           <AiOutlineClose />
         </button>
       </header>
-      <nav className='p-4'>
+      <nav className="p-4">
         <ul>
-          <li className='p-2'>
-            <Link href='/'>
-              <a onClick={toggleMobileMenu} className='text-xl block rounded-lg p-2 hover:bg-gray-100'>
+          <li className="p-2">
+            <Link href="/">
+              <a
+                onClick={toggleMobileMenu}
+                className="hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
+              >
+                <AiOutlineHome className="mr-2" />
                 Home
               </a>
             </Link>
           </li>
           {!user && (
             <>
-              <li className='p-2'>
-                <Link href='/login'>
-                  <a onClick={toggleMobileMenu} className='text-xl block rounded-lg p-2 hover:bg-gray-100'>
+              <li className="p-2">
+                <Link href="/login">
+                  <a
+                    onClick={toggleMobileMenu}
+                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                  >
+                    <IoLogIn className="mr-2" />
                     Login
                   </a>
                 </Link>
               </li>
-              <li className='p-2'>
-                <Link href='/register'>
-                  <a onClick={toggleMobileMenu} className='text-xl block rounded-lg p-2 hover:bg-gray-100'>
+              <li className="p-2">
+                <Link href="/register">
+                  <a
+                    onClick={toggleMobileMenu}
+                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                  >
+                    <TbHandFinger className="mr-2" />
                     Sign Up
                   </a>
                 </Link>
@@ -69,18 +90,32 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({ toggleMobileMenu, isO
           )}
           {user && (
             <>
-              <li className='p-2'>
-                <Link href='/profile'>
-                  <a onClick={toggleMobileMenu} className='text-xl block rounded-lg p-2 hover:bg-gray-100'>
+              <li className="p-2">
+                <Link href="/profile">
+                  <a
+                    onClick={toggleMobileMenu}
+                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                  >
+                    <FaUserCircle className="mr-2" />
                     Profile
                   </a>
                 </Link>
               </li>
-              <li className='p-2'>
-                <Link href='/'>
-                  <a onClick={toggleMobileMenu} className='text-xl block rounded-lg p-2 hover:bg-gray-100'>
+              <li className="p-2">
+                <Link href="/">
+                  <button
+                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    onClick={() => {
+                      localStorage.removeItem('user')
+                      setShowUserTooltip(false)
+                      googleLogout()
+                      setUser(null)
+                      setAuth(false)
+                    }}
+                  >
+                    <IoLogOut className="mr-2" />
                     Logout
-                  </a>
+                  </button>
                 </Link>
               </li>
               {/* Add more menu items for authenticated users as needed */}
@@ -90,7 +125,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({ toggleMobileMenu, isO
         </ul>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default MobileMenuModal;
+export default MobileMenuModal
