@@ -153,7 +153,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
         </ul>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default MobileMenuModal;
+export default MobileMenuModal
