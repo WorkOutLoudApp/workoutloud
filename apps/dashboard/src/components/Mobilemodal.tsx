@@ -1,13 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose, AiFillHome } from 'react-icons/ai'
 import { useAuth } from '@src/context/AuthProvider'
 import { googleLogout } from '@react-oauth/google'
 import { useState, useEffect } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { AiOutlineHome } from 'react-icons/ai'
 import { IoLogIn, IoLogOut } from 'react-icons/io5'
 import { TbHandFinger } from 'react-icons/tb'
+import { MdOutlineDarkMode, MdDarkMode } from 'react-icons/md'
 
 interface MobileMenuModalProps {
   toggleMobileMenu: () => void
@@ -30,6 +30,10 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
   }
 
   const [showUserTooltip, setShowUserTooltip] = useState(false)
+  const [isDark, setIsDark] = useState(false)
+  const handleDarkMode = () => {
+    setIsDark(!isDark)
+  }
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside)
@@ -51,24 +55,24 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
       </header>
       <nav className="p-4">
         <ul>
-          <li className="p-2">
-            <Link href="/">
-              <a
-                onClick={toggleMobileMenu}
-                className="hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
-              >
-                <AiOutlineHome className="mr-2" />
-                Home
-              </a>
-            </Link>
-          </li>
           {!user && (
             <>
+              <li className="p-2">
+                <Link href="/">
+                  <a
+                    onClick={toggleMobileMenu}
+                    className="font-poppins hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
+                  >
+                    <AiFillHome className="mr-2" />
+                    Home
+                  </a>
+                </Link>
+              </li>
               <li className="p-2">
                 <Link href="/login">
                   <a
                     onClick={toggleMobileMenu}
-                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
                   >
                     <IoLogIn className="mr-2" />
                     Login
@@ -79,7 +83,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/register">
                   <a
                     onClick={toggleMobileMenu}
-                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
                   >
                     <TbHandFinger className="mr-2" />
                     Sign Up
@@ -91,10 +95,21 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
           {user && (
             <>
               <li className="p-2">
+                <Link href="/homepage">
+                  <a
+                    onClick={toggleMobileMenu}
+                    className="font-poppins hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
+                  >
+                    <AiFillHome className="mr-2" />
+                    Home
+                  </a>
+                </Link>
+              </li>
+              <li className="p-2">
                 <Link href="/profile">
                   <a
                     onClick={toggleMobileMenu}
-                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
                   >
                     <FaUserCircle className="mr-2" />
                     Profile
@@ -102,9 +117,22 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 </Link>
               </li>
               <li className="p-2">
+                <button
+                  onClick={handleDarkMode || toggleMobileMenu}
+                  className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                >
+                  {isDark ? (
+                    <MdOutlineDarkMode className="mr-2" />
+                  ) : (
+                    <MdDarkMode className="mr-2" />
+                  )}
+                  Dark Mode
+                </button>
+              </li>
+              <li className="p-2">
                 <Link href="/">
                   <button
-                    className="flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
                     onClick={() => {
                       localStorage.removeItem('user')
                       setShowUserTooltip(false)
