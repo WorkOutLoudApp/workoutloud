@@ -101,12 +101,12 @@ const Navbar = () => {
               )}
 
               {/* Menu */}
-                <div className="flex items-center">
-                  <GiHamburgerMenu
-                    onClick={toggleMobileMenu}
-                    className="cursor-pointer rounded-full bg-gray-200 px-1 text-3xl"
-                  />
-                </div>
+              <div className="flex items-center">
+                <GiHamburgerMenu
+                  onClick={toggleMobileMenu}
+                  className="cursor-pointer rounded-full bg-gray-200 px-1 text-3xl"
+                />
+              </div>
             </div>
           </div>
 
@@ -285,9 +285,10 @@ const Navbar = () => {
         </nav>
       )}
       {showMobileMenu && (
-        <MobileMenuModal toggleMobileMenu={toggleMobileMenu}
-        isOpen = {showMobileMenu} 
-        setShowMobileMenu={setShowMobileMenu}
+        <MobileMenuModal
+          toggleMobileMenu={toggleMobileMenu}
+          isOpen={showMobileMenu}
+          setShowMobileMenu={setShowMobileMenu}
         />
       )}
     </div>
