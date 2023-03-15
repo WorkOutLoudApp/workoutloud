@@ -46,6 +46,7 @@ function App({ Component, pageProps }: AppProps) {
           <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
             <div className="font-poppins h-screen">
               <Navbar />
+              <Playbar />
               {isMobile ? (
                 <div className='flex pt-20 w-full' >
                   <Component {...pageProps} />
