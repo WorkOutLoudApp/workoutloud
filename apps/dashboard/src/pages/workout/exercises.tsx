@@ -3,7 +3,7 @@ import SearchBar from '@src/components/Searchbar'
 import { useAuth } from '@src/context/AuthProvider'
 import Login from '../login'
 import { searchExercises } from './exerciseAPI'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 import { useForm } from 'react-hook-form'
 import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
 
@@ -17,7 +17,7 @@ interface ExerciseSearch {
 }
 
 interface Props {
-  onAdd?: (exercise: Exercise) => void
+  onAdd?: (exercise: IExercise) => void
 }
 
 const Exercises: React.FC<Props> = ({ onAdd }) => {
