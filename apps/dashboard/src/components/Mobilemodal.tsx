@@ -122,9 +122,9 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                   className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
                 >
                   {isDark ? (
-                    <MdOutlineDarkMode className="mr-2" />
-                  ) : (
                     <MdDarkMode className="mr-2" />
+                  ) : (
+                    <MdOutlineDarkMode className="mr-2" />
                   )}
                   Dark Mode
                 </button>
