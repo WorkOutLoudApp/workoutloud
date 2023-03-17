@@ -6,19 +6,18 @@ import { HiUser } from 'react-icons/hi'
 import { IoLogOut, IoNotifications } from 'react-icons/io5'
 import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
-import { navbarItems, navbarItemsMobile } from '@src/utils/constants/navbar'
+import { navbarItems, navbarItemsMobile} from '@src/utils/constants/navbar'
 import { googleLogout } from '@react-oauth/google'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import MobileMenuModal from './Mobilemodal'
 import { useTheme, saveTheme } from '../context/ThemeProvider'
+import {lightModeColors, darkModeColors} from '@src/utils/constants/theme'
 
 const Navbar = () => {
   //testing
-  const { theme, setTheme } = useTheme()
-
-  ////
+  const { theme, setTheme, colors, setColors } = useTheme()
   const isMobile = useContext(WindowTypeContext)
   const { auth, setAuth, user, setUser } = useAuth()
   const [showUserTooltip, setShowUserTooltip] = useState(false)
@@ -29,10 +28,10 @@ const Navbar = () => {
   const [showNotificationTooltip, setShowNotificationTooltip] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
-  const itemStyle =
-    'grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-gray-200'
-  const itemStyleActive =
-    'grid justify-items-center cursor-pointer py-1 rounded-lg bg-gray-200'
+  const itemStyle = `grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-gray-200`
+  const itemStyleActive = "grid justify-items-center cursor-pointer py-1 rounded-lg bg-gray-200"
+  const itemStyleDarkMode = `grid justify-items-center cursor-pointer py-1 hover:border-b-2 hover:border-indigo-600`
+  const itemStyleActiveDarkMode = "grid justify-items-center cursor-pointer py-1"
 
   const handleUserOnClick = () => {
     setShowUserTooltip(!showUserTooltip)
@@ -82,12 +81,13 @@ const Navbar = () => {
     <div className="z-50">
       {isMobile ? (
         // Mobile
-        <nav className='fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 bg-white'>
+        // <nav className='fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 bg-white'> //current
+        <nav className={`fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 ${colors.navbar_bg}`}>
           <div className='flex justify-between'>
             {/* Logo */}
-            <div className="flex basis-1/5">
-              <Link href="/">
-                <p className="font-poppins cursor-pointer font-bold text-indigo-600">
+            <div className='flex basis-1/5'>
+              <Link href='/'>
+                <p className={`font-poppins ${colors.logo} font-bold cursor-pointer`}>
                   WorkOutLoud
                 </p>
               </Link>
@@ -141,7 +141,7 @@ const Navbar = () => {
         </nav>
       ) : (
         // Desktop
-        <nav className='fixed block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-14 bg-white'>
+        <nav className={`fixed block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-14 ${colors.navbar_bg}`}>
           <div className='flex items-center h-full justify-between'>
             {/* Logo */}
             <div className="flex basis-1/4">
@@ -157,18 +157,8 @@ const Navbar = () => {
               <div className="grid basis-2/4 grid-cols-3 items-center">
                 {navbarItems.map((item) => (
                   <Link key={item.name} href={item.path}>
-                    <div
-                      className={`${
-                        item.path === window.location.pathname ||
-                        window.location.pathname.match(item.name)
-                          ? itemStyleActive
-                          : itemStyle
-                      }`}
-                    >
-                      {item.path === window.location.pathname ||
-                      window.location.pathname.match(item.name)
-                        ? item.iconActive
-                        : item.icon}
+                    <div className={`${((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? (theme.darkMode? itemStyleActiveDarkMode : itemStyleActive) : (theme.darkMode? itemStyleDarkMode : itemStyle)}`}>
+                      {((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? (theme.darkMode? item.iconActiveDarkMode : item.iconActive) : (theme.darkMode? item.iconDarkMode : item.icon)}
                     </div>
                   </Link>
                 ))}
@@ -247,6 +237,7 @@ const Navbar = () => {
                   const newTheme = { ...theme, darkMode: !theme.darkMode }
                   saveTheme(newTheme)
                   setTheme(newTheme)
+                  setColors(newTheme.darkMode? darkModeColors : lightModeColors)
                 }}>
                   <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>
                     <div className='rounded-full bg-gray-300 px-1 py-1 mr-2'>
