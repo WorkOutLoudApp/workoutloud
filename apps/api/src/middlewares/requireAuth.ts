@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
 
-
 require('dotenv').config()
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +11,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         return res.status(401).json({error: 'Authorization token is required'})
     }
 
-    const token = authorization.split(' ')[1]
+  const token = authorization.split(' ')[1]
 
     // const token = req.headers.authorization?.split(' ')[1];
     // if (!token) {
@@ -44,4 +43,10 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     } finally {
         await prisma.$disconnect()
     }
+  } catch (error) {
+    console.log(error)
+    res.status(401).json({ error: 'Request is not authorized' })
+  } finally {
+    await prisma.$disconnect()
+  }
 }

@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { HiUser } from 'react-icons/hi'
 import { GrNext } from 'react-icons/gr'
 import { BiArrowBack } from 'react-icons/bi'
+import favoriteIcon from '../assets/heart.svg'
+import routineIcon from '../assets/task-clock.svg'
+import dumbellIcon from '../assets/dumbell.svg'
 
 import sidebarWorkoutItems from '@src/utils/constants/sidebar'
 import SidebarRoutines from './Workout/SidebarRoutines'
@@ -11,17 +15,25 @@ import SidebarExercises from './Workout/SidebarExercises'
 import SidebarHistory from './Workout/SidebarHistory'
 
 import { useAuth } from '../context/AuthProvider'
+import axios from 'axios'
 
-const routines = [
-  {
-    name: 'Routine Name',
-    description: 'Description',
-  },
-  {
-    name: 'Routine Name',
-    description: 'Description',
-  },
-]
+const fetchRoutines = async (token : String, setRoutines: React.Dispatch<React.SetStateAction<any[]>>) => {
+  const response = await axios.get(`http://localhost:4000/v1/workout/routine`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  setRoutines(response.data)
+}
+
+const fetchFavorites = async (token : String, setFavorites: React.Dispatch<React.SetStateAction<any[]>>) => {
+  const response = await axios.get(`http://localhost:4000/v1/workout/favorite`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  setFavorites(response.data)
+}
 
 const exercises = [
   {
@@ -93,6 +105,13 @@ export const WorkoutSidebar = (props: any) => {
 }
 
 const RoutinesSidebar = (props: any) => {
+  const { token } = useAuth()
+  const [routines, setRoutines] = useState([])
+
+  useEffect(() => {
+    fetchRoutines(token, setRoutines)
+  }, [])
+
   const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
@@ -112,20 +131,34 @@ const RoutinesSidebar = (props: any) => {
       <div className='flex flex-col h-full w-full'>
         <div className='w-full font-bold'>Your Routines</div>
         <div className='flex flex-col'>
-          {routines.map((routine: any, i: number) => (
-            <SidebarRoutines
-            key={i}
-            name={routine.name}
-            description={routine.description}
-          />
-          ))}
+          {routines.length ? (
+            routines.map((routine: any, i: number) => (
+              <SidebarRoutines
+                key={i}
+                name={routine.name}
+                description={routine.description}
+                image={routineIcon}
+              />
+            ))
+          ) : (
+            ``
+          )}
         </div>
       </div>
     </div>
   )
 }
 
+
+
 const FavoritesSidebar = (props: any) => {
+  const { token } = useAuth()
+  const [favorites, setFavorites] = useState([])
+
+  useEffect(() => {
+    fetchFavorites(token,setFavorites)
+  }, [])
+
   const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
@@ -145,12 +178,13 @@ const FavoritesSidebar = (props: any) => {
       <div className='flex flex-col h-full w-full'>
         <div className='w-full font-bold'>Your Favorites</div>
         <div className='flex flex-col'>
-          {routines.map((routine: any, i: number) => (
+          {favorites.map((favorite: any, i: number) => (
             <SidebarRoutines
-            key={i}
-            name={routine.name}
-            description={routine.description}
-          />
+              key={i}
+              name={favorite.name}
+              description={favorite.description}
+              image={favoriteIcon}
+            />
           ))}
         </div>
       </div>
@@ -180,10 +214,10 @@ const ExercisesSidebar = (props: any) => {
         <div className='flex flex-col'>
           {exercises.map((exercise: any, i: number) => (
             <SidebarExercises
-            key={i}
-            name={exercise.name}
-            description={exercise.description}
-          />
+              key={i}
+              name={exercise.name}
+              description={exercise.description}
+            />
           ))}
         </div>
       </div>
@@ -213,7 +247,7 @@ const HistorySidebar = (props: any) => {
         <div className='flex flex-col'>
           {history.map((history: any, i: number) => (
             <SidebarHistory
-              name = {history.name}
+              name={history.name}
             />
           ))}
         </div>
@@ -234,8 +268,7 @@ export const FriendsSidebar = (props: any) => {
 
 const Sidebar = () => {
   const style = 'flex flex-col'
-  const { auth, setAuth, user, setUser } = useAuth()
-
+  const { auth, user } = useAuth()
 
   const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
@@ -261,15 +294,15 @@ const Sidebar = () => {
       {window.location.pathname === '/workout/routines' && (
         <RoutinesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/favorites' && (
         <FavoritesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/exercises' && (
         <ExercisesSidebar />
       )}
-      
+
       {window.location.pathname === '/workout/history' && (
         <HistorySidebar />
       )}

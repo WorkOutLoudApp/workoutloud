@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: any) => {
   const [auth, setAuth] = useState(undefined)
   const [user, setUser] = useState(undefined)
   const [token, setToken] = useState(undefined)
-
   // check if user logged in
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))
