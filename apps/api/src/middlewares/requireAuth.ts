@@ -43,10 +43,4 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     } finally {
         await prisma.$disconnect()
     }
-  } catch (error) {
-    console.log(error)
-    res.status(401).json({ error: 'Request is not authorized' })
-  } finally {
-    await prisma.$disconnect()
-  }
 }

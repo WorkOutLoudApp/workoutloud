@@ -31,3 +31,4 @@ yarn-error.log*
 
 # turbo
 .turbo
+apps/api/prisma/migrations/20230317182300_nick_schema/migration.sql
