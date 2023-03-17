@@ -1,11 +1,11 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
-  onAdd: (exercise: Exercise) => void
+  onAdd: (exercise: IExercise) => void
 }
 
 export default function AddRoutineModal({ open, setOpen, onAdd }: Props) {
@@ -34,7 +34,7 @@ export default function AddRoutineModal({ open, setOpen, onAdd }: Props) {
             </div>
             <form
               className="mt-6 space-y-3"
-              onSubmit={handleSubmit((data) => onAdd(data as Exercise))}
+              onSubmit={handleSubmit((data) => onAdd(data as IExercise))}
             >
               <input
                 {...register('name', { required: true })}

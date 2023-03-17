@@ -32,6 +32,7 @@ model Routine {
   id          Int        @id @default(autoincrement())
   name        String
   description String
+  isFavorite Boolean    @default(false)
   userId      Int
   user        User       @relation(fields: [userId], references: [id])
   exercises   Exercise[]
@@ -41,6 +42,7 @@ model Exercise {
   id          Int     @id @default(autoincrement())
   name        String
   description String
+  image       String?
   routineId   Int
   routine     Routine @relation(fields: [routineId], references: [id])
 }

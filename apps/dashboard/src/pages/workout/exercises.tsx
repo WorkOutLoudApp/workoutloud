@@ -3,9 +3,11 @@ import SearchBar from '@src/components/Searchbar'
 import { useAuth } from '@src/context/AuthProvider'
 import Login from '../login'
 import { searchExercises } from './exerciseAPI'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 import { useForm } from 'react-hook-form'
 import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
+import axios from "axios";
+import {GetServerSideProps} from "next";
 
 interface ExerciseSearch {
   name: string
@@ -17,14 +19,14 @@ interface ExerciseSearch {
 }
 
 interface Props {
-  onAdd?: (exercise: Exercise) => void
+  routine?: string
 }
 
-const Exercises: React.FC<Props> = ({ onAdd }) => {
+const Exercises: React.FC<Props> = ({ routine }) => {
   const [searchResults, setSearchResults] = useState<ExerciseSearch[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [resultsPerPage, setResultsPerPage] = useState<number>(15)
-  const { auth } = useAuth()
+  const { auth, token } = useAuth()
 
   const handleSearch = async (searchTerm: string, filters: string[]) => {
     try {
@@ -66,6 +68,26 @@ const Exercises: React.FC<Props> = ({ onAdd }) => {
   const pageNumbers = []
   for (let i = 1; i <= Math.ceil(searchResults.length / resultsPerPage); i++) {
     pageNumbers.push(i)
+  }
+
+  const onAdd = (result: any) => {
+    if (!routine) {
+      alert('No routine found')
+    }
+    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, {
+      name: result.name,
+        description: result.target,
+      image: result.gifUrl ? result.gifUrl : ''
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      alert('Exercise added to routine')
+    }).catch((err) => {
+      console.log(err)
+      alert('Error adding exercise to routine')
+    })
   }
 
   return (
@@ -143,6 +165,14 @@ const Exercises: React.FC<Props> = ({ onAdd }) => {
       )}
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      routine: context.query.routine,
+    },
+  }
 }
 
 export default Exercises

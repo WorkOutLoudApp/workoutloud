@@ -5,20 +5,25 @@ import { faHeart, faImage, faPlay } from '@fortawesome/free-solid-svg-icons'
 interface RoutineHeaderProps {
   name: string
   description: string
+  isFavorite: boolean
   image?: string
   tabs: string[]
   currentTab: string
   setTab: (tab: string) => void
+  onFavorite: () => void
 }
 
 export default function RoutineHeader({
   name,
   description,
+  isFavorite,
   image,
   tabs,
   currentTab,
   setTab,
+                                        onFavorite
 }: RoutineHeaderProps) {
+
   return (
     <div className="flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] p-3">
       <div className="flex w-full justify-between">
@@ -39,8 +44,8 @@ export default function RoutineHeader({
           <button type="button">
             <FontAwesomeIcon icon={faPlay} className="fa-lg" />
           </button>
-          <button type="button">
-            <FontAwesomeIcon icon={faHeart} className="fa-lg" />
+          <button type="button" onClick={() => onFavorite()}>
+            <FontAwesomeIcon icon={faHeart} className={`fa-lg ${isFavorite ? 'text-red-400' : null}`} />
           </button>
         </div>
       </div>
