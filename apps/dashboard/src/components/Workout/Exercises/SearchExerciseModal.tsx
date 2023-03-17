@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 import { useForm } from 'react-hook-form'
 import Exercises from '@src/pages/workout/exercises'
 
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
-  onAdd: (exercise: Exercise) => void
+  onAdd: (exercise: IExercise) => void
 }
 
 export default function SearchExercisesModal({ open, setOpen, onAdd }: Props) {
-  const handleAdd = (result: Exercise) => {
+  const handleAdd = (result: IExercise) => {
     onAdd(result)
     setOpen(false)
   }

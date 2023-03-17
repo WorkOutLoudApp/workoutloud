@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal'
 import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
-import { Exercise } from '@src/types/Workout'
+import { IExercise } from '@src/types/Workout'
 
 const routines = [
   {
@@ -26,11 +26,11 @@ const RoutinePage = () => {
   const [searchExerciseModalOpen, setSearchExerciseModalOpen] = useState(false)
   const [exercises, setExercises] = useState([])
 
-  const onAddExercise = (exercise: Exercise) => {
+  const onAddExercise = (exercise: IExercise) => {
     setExercises([...exercises, exercise])
   }
 
-  const onAddSearchExercise = (exercise: Exercise) => {
+  const onAddSearchExercise = (exercise: IExercise) => {
     setExercises([...exercises, exercise])
   }
 
