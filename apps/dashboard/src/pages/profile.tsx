@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
 
 interface ProfileProps {
   userId: number
@@ -155,27 +152,6 @@ const Profile = ({
       </div>
     </div>
   )
-}
-
-export async function getServerSideProps() {
-  const user = await prisma.user.findUnique({
-    where: { id: 1 }, // replace with the user id you want to retrieve from the database
-    include: {
-      account: true,
-    },
-  })
-
-  return {
-    props: {
-      userId: user.id,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      avatar: user.avatar,
-      email: user.account.email,
-      password: user.account.password,
-    },
-  }
 }
 
 export default Profile
