@@ -38,8 +38,8 @@ export const AuthProvider = ({ children }: any) => {
     }
 
     // // For testing purpose (to bypass the login)
-    setAuth(true)
-    setUser({email:'test@wol.com', username:'test', firstName:'first', lastName:'last', avatar:''})
+    // setAuth(true)
+    // setUser({email:'test@wol.com', username:'test', firstName:'first', lastName:'last', avatar:''})
   }, [])
 
   const value = useMemo(
