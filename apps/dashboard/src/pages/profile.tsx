@@ -1,44 +1,36 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '@src/context/AuthProvider'
 
-interface ProfileProps {
-  userId: number
-  username: string
-  firstName: string
-  lastName: string
-  avatar: string
-  email: string
-  password: string
-}
+const Profile = () => {
+  const { user } = useAuth()
 
-const Profile = ({
-  userId,
-  username,
-  firstName,
-  lastName,
-  avatar,
-  email,
-  password,
-}: ProfileProps) => {
+  if (!user) {
+    return <div>Please log in to continue.</div>
+  }
+
+  const { username, firstName, lastName, avatar, email } = user
+
   const [newUsername, setNewUsername] = useState(username)
   const [newFirstName, setNewFirstName] = useState(firstName)
   const [newLastName, setNewLastName] = useState(lastName)
   const [newAvatar, setNewAvatar] = useState(avatar)
   const [newEmail, setNewEmail] = useState(email)
-  const [newPassword, setNewPassword] = useState(password)
+  const [oldPassword, setOldPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmNewPassword, setConfirmNewPassword] = useState('')
+  const [showChangePassword, setShowChangePassword] = useState(false)
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     try {
       await axios.put('/api/profile', {
-        userId,
         username: newUsername,
         firstName: newFirstName,
         lastName: newLastName,
         avatar: newAvatar,
         email: newEmail,
-        password: newPassword,
       })
 
       alert('Profile updated successfully')
@@ -48,12 +40,45 @@ const Profile = ({
     }
   }
 
+  const handlePasswordChangeSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault()
+
+    if (newPassword !== confirmNewPassword) {
+      alert('New password and confirmation do not match')
+      return
+    }
+
+    try {
+      await axios.put('/api/profile', {
+        email,
+        oldPassword,
+        newPassword,
+      })
+
+      alert('Password changed successfully')
+    } catch (error) {
+      console.error(error)
+      alert('Password change failed')
+    }
+  }
+
+  const handlePasswordFocus = () => {
+    setShowChangePassword(true)
+  }
+
+  const handlePasswordBlur = () => {
+    setShowChangePassword(false)
+  }
+
   return (
     <div className="flex">
       <div className="mx-auto max-w-3xl py-12 px-4">
         <h1 className="mb-8 text-center text-3xl font-bold">
           Profile Settings
         </h1>
+
         <form
           className="mb-4 grid grid-cols-2 gap-6 rounded bg-white px-8 pt-6 pb-8 shadow-md"
           onSubmit={handleFormSubmit}
@@ -61,7 +86,7 @@ const Profile = ({
           <div>
             <img
               className="mb-4 h-24 w-24 rounded-lg"
-              src={'https://randomuser.me/api/portraits/lego/1.jpg'}
+              src={avatar}
               alt="Avatar"
             />
             <label
@@ -135,7 +160,7 @@ const Profile = ({
                 className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
                 id="password"
                 type="password"
-                value={newPassword}
+                value={oldPassword}
                 onChange={(event) => setNewPassword(event.target.value)}
               />
             </div>
@@ -147,7 +172,7 @@ const Profile = ({
             >
               Save Changes
             </button>
-          </div>
+          </div>{' '}
         </form>
       </div>
     </div>
