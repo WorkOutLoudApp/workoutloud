@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
+import { useAuth } from '../context/AuthProvider'
 
 const PostPopup = () => {
   const [showModal, setShowModal] = useState(false)
   const [postContent, setPostContent] = useState('')
   const [posts, setPosts] = useState([])
+  const { user } = useAuth()
+
+  if (!user) {
+    return <div>Please log in to continue.</div>
+  }
 
   const handleOpenModal = () => {
     setShowModal(true)
@@ -25,7 +31,7 @@ const PostPopup = () => {
       <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
         <img
           className="mr-4 h-10 w-10 rounded-full"
-          src="https://randomuser.me/api/portraits/lego/1.jpg"
+          src={user.avatar}
           alt="Profile"
         />
         <button
@@ -70,7 +76,7 @@ const PostPopup = () => {
           <div key={post} className="mb-2 flex rounded-md bg-gray-200 p-2">
             <img
               className="mr-4 h-10 w-10 rounded-full"
-              src="https://randomuser.me/api/portraits/lego/1.jpg"
+              src={user.avatar}
               alt="Profile"
             />
             <div className="max-w-md">
