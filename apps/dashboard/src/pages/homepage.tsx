@@ -28,14 +28,14 @@ const PostPopup = () => {
 
   return (
     <div className="flex-grow items-center justify-center">
-      <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
+      <div className="dark:bg-background-dark flex items-center justify-center rounded-md bg-gray-200 p-2">
         <img
           className="mr-4 h-10 w-10 rounded-full"
           src={user.avatar}
           alt="Profile"
         />
         <button
-          className="rounded-md border border-gray-400 bg-blue-400/20 py-2 px-4 text-gray-800 hover:bg-gray-200"
+          className="dark:bg-secondary-dark borde rounded-md bg-blue-400/20 py-2 px-4 text-gray-800 hover:bg-gray-200 dark:text-black"
           onClick={handleOpenModal}
         >
           What's on your mind?

@@ -74,23 +74,23 @@ const Profile = () => {
 
   return (
     <div className="flex">
-      <div className="mx-auto max-w-3xl py-12 px-4">
+      <div className="mx-auto max-w-3xl py-12 px-4 ">
         <h1 className="mb-8 text-center text-3xl font-bold">
           Profile Settings
         </h1>
 
         <form
-          className="mb-4 grid grid-cols-2 gap-6 rounded bg-white px-8 pt-6 pb-8 shadow-md"
+          className="dark:bg-background-dark mb-4 grid grid-cols-2 gap-6 rounded bg-white px-8 pt-6 pb-8 shadow-md"
           onSubmit={handleFormSubmit}
         >
           <div>
             <img
-              className="mb-4 h-24 w-24 rounded-lg"
+              className="dark:text-dark mb-4 h-24 w-24 rounded-lg"
               src={avatar}
               alt="Avatar"
             />
             <label
-              className="mb-2 block font-bold text-gray-700"
+              className="dark:text-dark mb-2 block font-bold"
               htmlFor="username"
             >
               Username
@@ -106,7 +106,7 @@ const Profile = () => {
           <div>
             <div className="mb-4">
               <label
-                className="mb-2 block font-bold text-gray-700"
+                className="dark:text-dark mb-2 block font-bold text-gray-700"
                 htmlFor="firstName"
               >
                 First Name
@@ -121,7 +121,7 @@ const Profile = () => {
             </div>
             <div className="mb-4">
               <label
-                className="mb-2 block font-bold text-gray-700"
+                className="dark:text-dark mb-2 block font-bold text-gray-700"
                 htmlFor="lastName"
               >
                 Last Name
@@ -136,7 +136,7 @@ const Profile = () => {
             </div>
             <div className="mb-4">
               <label
-                className="mb-2 block font-bold text-gray-700"
+                className="dark:text-dark mb-2 block font-bold text-gray-700"
                 htmlFor="email"
               >
                 Email
@@ -151,7 +151,7 @@ const Profile = () => {
             </div>
             <div className="mb-4">
               <label
-                className="mb-2 block font-bold text-gray-700"
+                className="dark:text-dark mb-2 block font-bold text-gray-700"
                 htmlFor="password"
               >
                 Password
@@ -167,7 +167,7 @@ const Profile = () => {
           </div>
           <div className="col-span-2 flex justify-center">
             <button
-              className="focus:shadow-outline rounded bg-indigo-500 py-2 px-4 font-bold text-white hover:bg-indigo-600 focus:outline-none"
+              className="dark:bg-secondary-dark focus:shadow-outline rounded bg-indigo-500 py-2 px-4 font-bold text-white hover:bg-indigo-600 focus:outline-none dark:text-black"
               type="submit"
             >
               Save Changes
