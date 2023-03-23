@@ -96,7 +96,7 @@ const Profile = () => {
               Username
             </label>
             <input
-              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
+              className="dark:bg-background-dark focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none dark:text-white"
               id="username"
               type="text"
               value={newUsername}
@@ -112,7 +112,7 @@ const Profile = () => {
                 First Name
               </label>
               <input
-                className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
+                className="dark:bg-background-dark focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none dark:text-white"
                 id="firstName"
                 type="text"
                 value={newFirstName}
@@ -127,7 +127,7 @@ const Profile = () => {
                 Last Name
               </label>
               <input
-                className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
+                className="dark:bg-background-dark focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none dark:text-white"
                 id="lastName"
                 type="text"
                 value={newLastName}
@@ -142,7 +142,7 @@ const Profile = () => {
                 Email
               </label>
               <input
-                className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
+                className="dark:bg-background-dark focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none dark:text-white"
                 id="email"
                 type="email"
                 value={newEmail}
@@ -157,10 +157,10 @@ const Profile = () => {
                 Password
               </label>
               <input
-                className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none"
+                className="dark:bg-background-dark focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 focus:outline-none dark:text-white"
                 id="password"
                 type="password"
-                value={oldPassword}
+                value="*************" /*placeholder for the time being*/
                 onChange={(event) => setNewPassword(event.target.value)}
               />
             </div>
