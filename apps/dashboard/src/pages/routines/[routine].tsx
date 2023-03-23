@@ -23,24 +23,23 @@ const RoutinePage = ({
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
 
   const [data, setData] = useState<any>(null)
-  useEffect(() => {
-    if (!token) return
-    axios.get(`http://localhost:4000/v1/routine/${routine}/get`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      setData(res.data)
-    }).catch((err) => {
-        console.log(err)
-    })
-  }, [token])
-
   const [exercises, setExercises] = useState([])
-  useEffect(() => {
-    if (!token) return
-    getExercises()
-  }, [token])
+  
+  if (typeof window !== 'undefined') {
+    useEffect(() => {
+      if (!token) return
+      axios.get(`http://localhost:4000/v1/routine/${routine}/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then((res) => {
+        setData(res.data)
+        getExercises()
+      }).catch((err) => {
+          console.log(err)
+      })
+    }, [token,window.location.pathname]) //fetch data on path change
+  }
 
   const getExercises = () => {
     axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`, {
@@ -113,14 +112,14 @@ const RoutinePage = ({
               />
               <button
                 type="button"
-                className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
+                className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1"
                 onClick={() => setExerciseModalOpen(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>
               <button
                   type="button"
-                  className="rounded border border-black bg-[#d9d9d9] px-2 py-1 ml-2"
+                  className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1 ml-2"
                   onClick={() => router.push(`/workout/exercises?routine=${routine}`)}
               >
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search Exercises

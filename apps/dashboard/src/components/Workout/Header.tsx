@@ -25,7 +25,7 @@ export default function RoutineHeader({
 }: RoutineHeaderProps) {
 
   return (
-    <div className="flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] p-3">
+    <div className="flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] dark:bg-background-dark p-3">
       <div className="flex w-full justify-between">
         <div className="flex space-x-3">
           {image ? (

@@ -1,41 +1,41 @@
 import React from 'react'
-import { HiUser, HiClipboardList } from 'react-icons/hi'
-import { GrYoga, GrPowerCycle } from 'react-icons/gr'
-import { FaStar } from 'react-icons/fa'
-import { RiHistoryFill } from 'react-icons/ri'
+import { FaStar, FaWalking } from 'react-icons/fa'
+import { RiFileList2Fill, RiHeartFill, RiHistoryFill, RiHomeHeartFill } from 'react-icons/ri'
 
-const activeStyle = ''
+
+const styleDefault = ''
+const styleActive = `fill-icon-active dark:fill-icon-active-dark`
 
 const sidebarWorkoutItems = [
     {
         name: 'Home',
         path: '/routines',
-        icon: <HiClipboardList/>,
-        iconActive: <HiClipboardList className={activeStyle} />
+        icon: <RiHomeHeartFill className={styleDefault}/>,
+        iconActive: <RiHomeHeartFill className={styleActive} />
     },
     {
         name: 'Routines',
         path: '/routines/routines',
-        icon: <GrPowerCycle/>,
-        iconActive: <GrPowerCycle className={activeStyle} />
+        icon: <RiFileList2Fill className={styleDefault}/>,
+        iconActive: <RiFileList2Fill className={styleActive} />
     },
     {
         name: 'Favorites',
         path: '/routines/favorites',
-        icon: <FaStar/>,
-        iconActive: <FaStar className={activeStyle} />
+        icon: <RiHeartFill className={styleDefault}/>,
+        iconActive: <RiHeartFill className={styleActive} />
     },
     {
         name: 'Exercises',
         path: '/routines/exercises',
-        icon: <GrYoga/>,
-        iconActive: <GrYoga className={activeStyle} />
+        icon: <FaWalking className={styleDefault}/>,
+        iconActive: <FaWalking className={styleActive} />
     },
     {
         name: 'History',
         path: '/routines/history',
-        icon: <RiHistoryFill/>,
-        iconActive: <RiHistoryFill className={activeStyle} />
+        icon: <RiHistoryFill className={styleDefault}/>,
+        iconActive: <RiHistoryFill className={styleActive} />
     },
 
 ]

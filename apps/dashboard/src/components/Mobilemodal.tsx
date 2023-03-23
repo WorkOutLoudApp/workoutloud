@@ -8,17 +8,21 @@ import { FaUserCircle } from 'react-icons/fa'
 import { IoLogIn, IoLogOut } from 'react-icons/io5'
 import { TbHandFinger } from 'react-icons/tb'
 import { MdOutlineDarkMode, MdDarkMode } from 'react-icons/md'
-
+import { saveTheme } from '@src/context/ThemeProvider' 
 interface MobileMenuModalProps {
   toggleMobileMenu: () => void
   isOpen: boolean
   setShowMobileMenu: (value: boolean) => void
+  isDark: boolean
+  setIsDark: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
   toggleMobileMenu,
   isOpen,
   setShowMobileMenu,
+  isDark,
+  setIsDark
 }) => {
   const { auth, setAuth, user, setUser } = useAuth()
 
@@ -30,8 +34,11 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
   }
 
   const [showUserTooltip, setShowUserTooltip] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+
+  const styleButton = "font-poppins flex items-center rounded-lg p-2 text-xl text-secondary dark:text-dark hover:bg-gray-100 dark:hover:bg-background-dark w-full"
+
   const handleDarkMode = () => {
+    saveTheme(isDark? {isDark: false} : {isDark: true})
     setIsDark(!isDark)
   }
 
@@ -46,7 +53,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
     <div
       className={`fixed inset-0 left-auto right-0 z-50 h-full w-2/3 transition-all duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } mobile-menu bg-gray-100`}
+      } mobile-menu bg-primary-variant dark:bg-primary-variant-dark`}
     >
       <header className="flex items-center justify-end border-b-0 p-4">
         <button onClick={toggleMobileMenu} className="text-2xl">
@@ -61,7 +68,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/">
                   <a
                     onClick={toggleMobileMenu}
-                    className="font-poppins hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
+                    className={styleButton}
                   >
                     <AiFillHome className="mr-2" />
                     Home
@@ -72,7 +79,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/login">
                   <a
                     onClick={toggleMobileMenu}
-                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className={styleButton}
                   >
                     <IoLogIn className="mr-2" />
                     Login
@@ -83,7 +90,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/register">
                   <a
                     onClick={toggleMobileMenu}
-                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className={styleButton}
                   >
                     <TbHandFinger className="mr-2" />
                     Sign Up
@@ -98,7 +105,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/homepage">
                   <a
                     onClick={toggleMobileMenu}
-                    className="font-poppins hover:bg-gray-10 flex items-center rounded-lg p-2 text-xl text-indigo-600"
+                    className={styleButton}
                   >
                     <AiFillHome className="mr-2" />
                     Home
@@ -109,7 +116,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
                 <Link href="/profile">
                   <a
                     onClick={toggleMobileMenu}
-                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className={styleButton}
                   >
                     <FaUserCircle className="mr-2" />
                     Profile
@@ -119,7 +126,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
               <li className="p-2">
                 <button
                   onClick={handleDarkMode || toggleMobileMenu}
-                  className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                  className={styleButton}
                 >
                   {isDark ? (
                     <MdDarkMode className="mr-2" />
@@ -132,7 +139,7 @@ const MobileMenuModal: React.FC<MobileMenuModalProps> = ({
               <li className="p-2">
                 <Link href="/">
                   <button
-                    className="font-poppins flex items-center rounded-lg p-2 text-xl text-indigo-600 hover:bg-gray-100"
+                    className={styleButton}
                     onClick={() => {
                       localStorage.removeItem('user')
                       setShowUserTooltip(false)

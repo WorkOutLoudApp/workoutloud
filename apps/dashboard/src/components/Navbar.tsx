@@ -12,12 +12,12 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import MobileMenuModal from './Mobilemodal'
-import { useTheme, saveTheme } from '../context/ThemeProvider'
-import {lightModeColors, darkModeColors} from '@src/utils/constants/theme'
+import { saveTheme } from '../context/ThemeProvider'
 
-const Navbar = () => {
+const Navbar = (props :any) => {
   //testing
-  const { theme, setTheme, colors, setColors } = useTheme()
+  const {isDark, setIsDark} = props
+  ///
   const isMobile = useContext(WindowTypeContext)
   const { auth, setAuth, user, setUser } = useAuth()
   const [showUserTooltip, setShowUserTooltip] = useState(false)
@@ -28,10 +28,11 @@ const Navbar = () => {
   const [showNotificationTooltip, setShowNotificationTooltip] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
-  const itemStyle = `grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-gray-200`
-  const itemStyleActive = "grid justify-items-center cursor-pointer py-1 rounded-lg bg-gray-200"
-  const itemStyleDarkMode = `grid justify-items-center cursor-pointer py-1 hover:border-b-2 hover:border-indigo-600`
-  const itemStyleActiveDarkMode = "grid justify-items-center cursor-pointer py-1"
+  const itemStyle = `grid justify-items-center cursor-pointer py-1 hover:rounded-lg hover:bg-background dark:hover:bg-gray-700`
+  const itemStyleActive = `grid justify-items-center cursor-pointer py-1 rounded-lg bg-background dark:bg-transparent dark:hover:bg-background-dark`
+  const styleTooltips = 'flex items-center rounded-md px-2 py-1 hover:bg-background dark:hover:bg-background-dark'
+  const styleTooltipsIconBgr = 'rounded-full bg-background dark:bg-transparent px-1 py-1 mr-2'
+  const styleTooltipsIcon = 'fill-icon dark:fill-icon-dark'
 
   const handleUserOnClick = () => {
     setShowUserTooltip(!showUserTooltip)
@@ -82,12 +83,12 @@ const Navbar = () => {
       {isMobile ? (
         // Mobile
         // <nav className='fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 bg-white'> //current
-        <nav className={`fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-20 ${colors.navbar_bg}`}>
+        <nav className={`fixed block flex-wrap w-full justify-between items-center border-b-2 border-gray-300 dark:border-primary-variant-dark py-2 px-2 text-2xl h-20 bg-primary-variant dark:bg-primary-variant-dark`}>
           <div className='flex justify-between'>
             {/* Logo */}
             <div className='flex basis-1/5'>
               <Link href='/'>
-                <p className={`font-poppins ${colors.logo} font-bold cursor-pointer`}>
+                <p className={`font-poppins text-secondary dark:text-secondary-dark font-bold cursor-pointer`}>
                   WorkOutLoud
                 </p>
               </Link>
@@ -110,7 +111,7 @@ const Navbar = () => {
               <div className="flex items-center">
                 <GiHamburgerMenu
                   onClick={toggleMobileMenu}
-                  className="cursor-pointer rounded-full bg-gray-200 px-1 text-3xl"
+                  className="cursor-pointer rounded-full bg-background dark:bg-transparent px-1 text-3xl"
                 />
               </div>
             </div>
@@ -141,12 +142,12 @@ const Navbar = () => {
         </nav>
       ) : (
         // Desktop
-        <nav className={`fixed block w-full justify-between items-center border-b-2 border-gray-300 py-2 px-2 text-2xl h-14 ${colors.navbar_bg}`}>
+        <nav className={`fixed block w-full justify-between items-center border-b-2 border-gray-300 dark:border-primary-dark py-2 px-2 text-2xl h-14 bg-primary-variant dark:bg-primary-variant-dark`}>
           <div className='flex items-center h-full justify-between'>
             {/* Logo */}
             <div className="flex basis-1/4">
               <Link href="/">
-                <p className="font-poppins cursor-pointer font-bold text-indigo-600">
+                <p className="font-poppins cursor-pointer font-bold text-secondary dark:text-secondary-dark">
                   WorkOutLoud
                 </p>
               </Link>
@@ -157,8 +158,8 @@ const Navbar = () => {
               <div className="grid basis-2/4 grid-cols-3 items-center">
                 {navbarItems.map((item) => (
                   <Link key={item.name} href={item.path}>
-                    <div className={`${((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? (theme.darkMode? itemStyleActiveDarkMode : itemStyleActive) : (theme.darkMode? itemStyleDarkMode : itemStyle)}`}>
-                      {((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? (theme.darkMode? item.iconActiveDarkMode : item.iconActive) : (theme.darkMode? item.iconDarkMode : item.icon)}
+                    <div className={`${((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? itemStyleActive : itemStyle}`}>
+                      {((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? item.iconActive : item.icon}
                     </div>
                   </Link>
                 ))}
@@ -177,12 +178,12 @@ const Navbar = () => {
                       className="flex h-full"
                       onClick={handleNotificationOnClick}
                     >
-                      <div className="flex aspect-square h-full cursor-pointer place-content-center items-center rounded-full bg-gray-200">
-                        <IoNotifications className="p-0.5" />
+                      <div className={`flex aspect-square h-full cursor-pointer place-content-center items-center rounded-full bg-background dark:bg-transparent`}>
+                        <IoNotifications className={`p-0.5 fill-icon dark:fill-icon-dark`} />
                       </div>
                     </button>
 
-                    <div className="flex aspect-square h-full place-content-center items-center rounded-full bg-gray-200">
+                    <div className="flex aspect-square h-full place-content-center items-center rounded-full bg-gray-200 dark:bg-transparent">
                       <button
                         ref={userButtonRef}
                         type="button"
@@ -213,20 +214,20 @@ const Navbar = () => {
           </div>
 
           {/* Tooltips */}
-          <aside className="relative">
+          <aside className="relative ">
             {showUserTooltip && (
               <menu
                 ref={wrapperRef}
-                className="absolute top-0 right-0 mt-2 flex flex-col rounded-md border-2 bg-white px-2 py-2 text-lg drop-shadow-md"
+                className="absolute top-0 right-0 mt-2 flex flex-col rounded-md border-2 dark:border-primary-variant-dark px-2 py-2 text-lg drop-shadow-md bg-primary-variant dark:bg-primary-variant-dark"
               >
                 <Link href="/profile">
                   <button
                     type="button"
                     onClick={() => setShowUserTooltip(false)}
                   >
-                    <li className="flex items-center rounded-md px-2 py-1 hover:bg-gray-200">
-                      <div className="mr-2 rounded-full bg-gray-300 px-1 py-1">
-                        <FaUserCircle />
+                    <li className={styleTooltips}>
+                      <div className={styleTooltipsIconBgr}>
+                        <FaUserCircle className={styleTooltipsIcon}/>
                       </div>
                       Profile
                     </li>
@@ -234,16 +235,14 @@ const Navbar = () => {
                 </Link>
                 {/* Dark Mode */}
                 <button type='button' onClick={() => {
-                  const newTheme = { ...theme, darkMode: !theme.darkMode }
-                  saveTheme(newTheme)
-                  setTheme(newTheme)
-                  setColors(newTheme.darkMode? darkModeColors : lightModeColors)
+                  saveTheme(isDark? {isDark: false} : {isDark: true})
+                  setIsDark(!isDark)
                 }}>
-                  <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>
-                    <div className='rounded-full bg-gray-300 px-1 py-1 mr-2'>
-                      {theme.darkMode ? <MdLightMode /> : <MdDarkMode />}
+                  <li className={styleTooltips}>
+                    <div className={styleTooltipsIconBgr}>
+                      {isDark ? <MdLightMode className={styleTooltipsIcon}/> : <MdDarkMode className={styleTooltipsIcon}/>}
                     </div>
-                    {theme.darkMode ? `Light mode` : `Dark mode`}
+                    {isDark ? `Light mode` : `Dark mode`}
                   </li>
                 </button>
                 <Link href='/'>
@@ -254,9 +253,9 @@ const Navbar = () => {
                     setUser(null)
                     setAuth(false)
                   }}>
-                    <li className='flex items-center rounded-md px-2 py-1 hover:bg-gray-200'>
-                      <div className='rounded-full bg-gray-300 px-1 py-1 mr-2'>
-                        <IoLogOut />
+                    <li className={styleTooltips}>
+                      <div className={styleTooltipsIconBgr}>
+                        <IoLogOut className={styleTooltipsIcon}/>
                       </div>
                       Logout
                     </li>
@@ -269,18 +268,18 @@ const Navbar = () => {
             {showNotificationTooltip && (
               <menu
                 ref={wrapperNotificationRef}
-                className="absolute top-0 right-0 mt-2 flex flex-col rounded-md border-2 bg-white px-2 py-2 text-lg drop-shadow-md"
+                className="absolute top-0 right-0 mt-2 flex flex-col rounded-md border-2  dark:border-primary-variant-dark px-2 py-2 text-lg drop-shadow-md bg-primary-variant dark:bg-primary-variant-dark"
               >
                 <Link href="/notifications">
                   <div className="notification-dropdown">
                     {/* Testing purposes. Need to add live data in the future */}
-                    <p className="flex items-center rounded-md px-2 py-1 hover:bg-gray-200">
+                    <p className={styleTooltips}>
                       Notifcation 1
                     </p>
-                    <p className="flex items-center rounded-md px-2 py-1 hover:bg-gray-200">
+                    <p className={styleTooltips}>
                       Notifcation 2
                     </p>
-                    <p className="flex items-center rounded-md px-2 py-1 hover:bg-gray-200">
+                    <p className={styleTooltips}>
                       Notifcation 3
                     </p>
                   </div>
@@ -295,6 +294,8 @@ const Navbar = () => {
           toggleMobileMenu={toggleMobileMenu}
           isOpen={showMobileMenu}
           setShowMobileMenu={setShowMobileMenu}
+          isDark={isDark}
+          setIsDark={setIsDark}
         />
       )}
     </div>

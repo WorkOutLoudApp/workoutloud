@@ -121,7 +121,35 @@ export const getRoutines: RequestHandler = async (
     } catch (err) {
         return next(err)
     }
-};
+}, getFavorites: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const favorites = await routineService.getFavorites(userId)
+        if (!favorites) return res.status(400).json({message: 'Error getting favorites'})
+        return res.json(favorites)
+    } catch (err) {
+        return next(err)
+    }
+}, getAllExercises: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const exercises = await routineService.getAllExercises(userId)
+        if (!exercises) return res.status(400).json({message: 'Error getting exercises'})
+        return res.json(exercises)
+    } catch (err) {
+        return next(err)
+    }
+}
 
 
 

@@ -18,27 +18,34 @@ import SidebarHistory from './Workout/SidebarHistory'
 import { useAuth } from '../context/AuthProvider'
 import axios from 'axios'
 import { Router } from 'next/router'
+import { RiArrowRightSLine } from 'react-icons/ri'
 
-const fetchRoutines = async (token: String, setRoutines: React.Dispatch<React.SetStateAction<any[]>>) => {
-  const response = await axios.get(`http://localhost:4000/v1/workout/routine`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  setRoutines(response.data)
+const fetchRoutines = async (token: String, setState: React.Dispatch<React.SetStateAction<any[]>>) => {
+  axios.get(`http://localhost:4000/v1/routine/getRoutines`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      setState(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
 }
 
-const fetchFavorites = async (token: String, setFavorites: React.Dispatch<React.SetStateAction<any[]>>) => {
-  const response = await axios.get(`http://localhost:4000/v1/workout/favorite`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  setFavorites(response.data)
+const fetchFavorites = async (token: String, setState: React.Dispatch<React.SetStateAction<any[]>>) => {
+  axios.get(`http://localhost:4000/v1/routine/getFavorites`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      setState(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
 }
 
 const fetchExercises = async (token: String, setState: React.Dispatch<React.SetStateAction<any[]>>) => {
-  const response = await axios.get(`http://localhost:4000/v1/workout/exercise`, {
+  const response = await axios.get(`http://localhost:4000/v1/routine/getAllExercises`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -66,11 +73,11 @@ export const HomeSidebar = (props: any) => {
             <img src={avatar} alt='avatar' className='rounded-full' />
           </div>
         ) : (
-          <div className='flex aspect-square items-center place-content-center h-full rounded-full bg-gray-200'>
+          <div className='flex aspect-square items-center place-content-center h-full rounded-full bg-gray-200 dark:bg-transparent'>
             <HiUser className='' />
           </div>
         )}
-        <h1 className='font-poppins text-md'>{user.firstName} {user.lastName}</h1>
+        <h1 className='font-poppins'>{user.firstName} {user.lastName}</h1>
       </div>
     </div>
   )
@@ -80,7 +87,7 @@ export const WorkoutSidebar = (props: any) => {
   const setCurrentSidebar = props.function
   const router = useRouter()
 
-  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
+  const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-background dark:hover:bg-background-dark cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl'>
@@ -90,19 +97,21 @@ export const WorkoutSidebar = (props: any) => {
           <button type='button' key={item.name} onClick={() => {
             if (item.name === 'Home') {
               router.push('/routines')
+            } if(item.name ==='Exercises') {
+              router.push('/exercises')
             } else {
               setCurrentSidebar(item.name)
             }
           }
           } >
-            <div className={`${styleWorkoutItem} ${item.path === window.location.pathname && 'bg-gray-200'}`}>
+            <div className={`${styleWorkoutItem} ${item.path === window.location.pathname && 'bg-background dark:bg-background-dark'}`}>
               <div className={styleWorkoutLogo}>
                 {item.path === window.location.pathname ? item.iconActive : item.icon}
               </div>
-              <span className='font-poppins text-md'>{item.name}</span>
+              <span className={`font-poppins text-md ${item.path === window.location.pathname && 'text-secondary dark:text-secondary-dark'}`}>{item.name}</span>
               {item.name !== 'Home' && (
                 <span className='flex w-full justify-end'>
-                  <GrNext />
+                  <RiArrowRightSLine className='fill-icon dark:fill-icon-dark'/>
                 </span>
               )}
             </div>
@@ -130,7 +139,7 @@ const RoutinesSidebar = (props: any) => {
       <div className='flex items-center w-full space-x-2'>
         {/* <Link href={'/routines'}> */}
         <button type='button' onClick={() => { setCurrentSidebar('Workout') }}>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer rounded-full p-0.5 bg-background dark:bg-background-dark'>
             <BiArrowBack />
           </div>
         </button>
@@ -151,7 +160,7 @@ const RoutinesSidebar = (props: any) => {
                 id={routine.id}
                 name={routine.name}
                 description={routine.description}
-                image={routineIcon}
+                icon={sidebarWorkoutItems.find(item => item.name === 'Routines').icon}
               />
             ))
           ) : (
@@ -201,7 +210,7 @@ const FavoritesSidebar = (props: any) => {
               id={favorite.id}
               name={favorite.name}
               description={favorite.description}
-              image={favoriteIcon}
+              icon={sidebarWorkoutItems.find(item => item.name === 'Favorites').icon}
             />
           ))}
         </div>
@@ -308,10 +317,11 @@ const Sidebar = () => {
         setCurrentSidebar('Workout')
       } else if (window.location.pathname === '/homepage') {
         setCurrentSidebar('Homepage')
+      } else if (window.location.pathname === '/friends') {
+        setCurrentSidebar('Friends')
       }
     }, [location.pathname])
   }
-
 
   const styleWorkoutItem = `flex w-full items-center align-middle space-x-2 rounded hover:bg-gray-200 cursor-pointer`
   const styleWorkoutLogo = `flex aspect-square items-center place-content-center h-full`
@@ -327,6 +337,9 @@ const Sidebar = () => {
       )}
       {currentSidebar === ('Workout' || 'Home') && (
         <WorkoutSidebar function={setCurrentSidebar} />
+      )}
+      {currentSidebar === ('Friends') && (
+        <FriendsSidebar function={setCurrentSidebar} />
       )}
       {currentSidebar === 'Routines' && (
         <RoutinesSidebar function={setCurrentSidebar} />

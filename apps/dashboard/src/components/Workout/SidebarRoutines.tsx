@@ -11,20 +11,22 @@ interface RoutineProps {
   name: string
   description?: string
   image?: string | StaticImageData
+  icon?: JSX.Element
 }
 
-export default function SidebarRoutines({ id, name, description, image }: RoutineProps) {
+export default function SidebarRoutines({ id, name, description, image, icon }: RoutineProps) {
   const router = useRouter()
   return (
-    <div className='flex items-center text-md h-14 w-full'>
+    <div className='flex items-center text-md h-14 w-full hover:bg-background dark:hover:bg-background-dark'>
       <button
         type="button"
         className="flex flex-row w-full space-x-2 p-3 items-center h-full"
         onClick={() => router.push(`/routines/${id}`)}
       >
-        {image ? (
+        {icon ? (
           <div className="flex aspect-square items-center place-content-center rounded-full h-full">
-            <Image src={image} layout='intrinsic'></Image>
+            {/* <Image src={image} layout='intrinsic'></Image> */}
+            {icon}
           </div>
         ) : (
           <div className="flex aspect-square items-center place-content-center h-full rounded-full border-2">
@@ -41,4 +43,5 @@ export default function SidebarRoutines({ id, name, description, image }: Routin
 }
 SidebarRoutines.defaultProps = {
   image: null,
+  icon: null
 }
