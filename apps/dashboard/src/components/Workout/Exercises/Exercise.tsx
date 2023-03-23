@@ -14,7 +14,7 @@ export default function Exercise({ id, name, description, image, onDelete }: Exe
   return (
       <div className="flex">
         <div
-            className="flex w-full space-x-3 border border-black bg-[#d9d9d9] p-3"
+            className="flex w-full space-x-3 border border-black bg-[#d9d9d9] dark:bg-background-dark p-3"
         >
           {image ? (
               <img src={image} alt={name} className="w-12 h-12" />

@@ -20,7 +20,7 @@ axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
 
 function App({ Component, pageProps }: AppProps) {
   const [width, setWidth] = useState(undefined)
-
+  const [isDark, setIsDark] = useState(false)
   useEffect(() => {
     // to be called on window resize
     const handleWindowResize = () => {
@@ -29,8 +29,10 @@ function App({ Component, pageProps }: AppProps) {
 
     window.addEventListener('resize', handleWindowResize)
 
-    handleWindowResize()
-
+    const storedTheme = JSON.parse(localStorage.getItem('theme'))
+    if (storedTheme) {
+      setIsDark(storedTheme.isDark)
+    }
     // Remove event listener on clean up
     return () => {
       window.removeEventListener('resize', handleWindowResize)
@@ -41,26 +43,30 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <WindowTypeContext.Provider value={isMobile}>
-      <ThemeProvider>
+      <ThemeProvider theme={{ isDark }}>
         <AuthProvider>
           <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
-            <div className="font-poppins h-screen">
-              <Navbar />
-              <Playbar />
-              {isMobile ? (
-                <div className='flex pt-20 w-full' >
-                  <Component {...pageProps} />
-                </div>
-              ) : (
-                <div className='flex flex-row h-full pt-14'>
-                  <div className='flex fixed w-52 border-r-2 border-gray-300 h-full overflow-hidden hover:overflow-auto'>
-                    <Sidebar />
-                  </div>
-                  <div className='flex pl-52 w-full' >
+            <div className={`${isDark ? 'dark' : 'light'}`}>
+              <div className="font-poppins h-screen bg-primary dark:bg-primary-dark text dark:text-dark">
+                <Navbar {...{ isDark, setIsDark }} />
+                <div className='bg-primary dark:bg-primary-dark'>
+                {isMobile ? (
+                  <div className='flex pt-20 w-full pb-14' >
                     <Component {...pageProps} />
                   </div>
+                ) : (
+                  <div className='flex flex-row pt-14 pb-14'>
+                    <div className='flex fixed w-52 border-r-2 border-gray-300 dark:border-primary-variant-dark h-full overflow-hidden hover:overflow-auto'>
+                      <Sidebar />
+                    </div>
+                    <div className='flex pl-52 w-full' >
+                      <Component {...pageProps} />
+                    </div>
+                  </div>
+                )}
                 </div>
-              )}
+                <Playbar />
+              </div>
             </div>
           </GoogleOAuthProvider>
         </AuthProvider>

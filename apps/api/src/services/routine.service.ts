@@ -154,6 +154,45 @@ const deleteExercise = async (exerciseId: number) => {
     }
 }
 
+const getFavorites = async (userId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const favorites = await prisma.routine.findMany({
+            where: {
+                userId,
+                isFavorite: true
+            },
+            orderBy: {
+                name: 'asc'
+            }
+        })
+        return favorites
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+const getAllExercises = async (userId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const exercises = await prisma.exercise.findMany({
+            where: {
+                routine: {
+                    userId
+                }
+            },
+            distinct: ['name']
+        })
+        return exercises
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 export default {
     getRoutines,
     getRoutine,
@@ -162,5 +201,7 @@ export default {
     favoriteRoutine,
     getExercises,
     addExercise,
-    deleteExercise
+    deleteExercise,
+    getFavorites,
+    getAllExercises
 }

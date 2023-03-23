@@ -62,7 +62,7 @@ const Index = () => {
           <AddRoutineModal open={routineModalOpen} setOpen={setRoutineModalOpen} onAdd={onAddExercise} />
           <button
             type="button"
-            className="rounded border border-black bg-[#d9d9d9] px-2 py-1"
+            className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1"
           >
             <button type="button" onClick={() => setRoutineModalOpen(true)}>
               <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Routine

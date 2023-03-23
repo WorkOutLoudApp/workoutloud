@@ -19,7 +19,7 @@ export default function Routine({ id, name, description, image, onDelete }: Rout
     <div className="flex">
       <button
           type="button"
-          className="flex w-full space-x-3 border border-black bg-[#d9d9d9] p-3"
+          className="flex w-full space-x-3 border border-black bg-[#d9d9d9] dark:bg-background-dark p-3"
           onClick={() => router.push(`/routines/${id}`)}
       >
         {image ? (

@@ -25,7 +25,7 @@ const Playbar = () => {
   return (
     <>
       {user && (
-        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-4 text-black">
+        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 dark:bg-primary-variant-dark p-4 text-black dark:text-dark">
           <div className="absolute left-4 flex items-center space-x-2">
             <span className="text-lg">Routine Name</span>
             <button className= "invisible lg:visible " onClick={handleLike}>

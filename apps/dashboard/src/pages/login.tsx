@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
 
 const Login = () => {
-  const { auth, setAuth, user, setUser } = useAuth()
+  const { auth, setAuth, user, setUser, setToken } = useAuth()
   const userRef = useRef<HTMLInputElement>(null)
   const errRef = useRef()
   const router = useRouter()
@@ -33,6 +33,7 @@ const Login = () => {
       if (response.data.success===true) {
         setAuth(true)
         setUser(response.data.user)
+        setToken(response.data.authToken)
         localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
         router.push('/homepage')
       } else {
@@ -88,6 +89,7 @@ const Login = () => {
                     if (response.data.success === true) {
                       setAuth(true)
                       setUser(response.data.user)
+                      setToken(response.data.authToken)
                       localStorage.setItem('user', JSON.stringify({user: response.data.user, token: response.data.authToken}))
                       router.push('/homepage')
                     } else {

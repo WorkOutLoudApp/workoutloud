@@ -5,44 +5,38 @@ import React, {
     useMemo,
     useState,
   } from 'react'
-import {lightModeColors, darkModeColors} from '@src/utils/constants/theme'
-
 
   interface ThemeInterface {
     theme : {
-      darkMode: boolean
+      isDark: boolean
     }
     setTheme: React.Dispatch<React.SetStateAction<any>>
-    colors: any
-    setColors: React.Dispatch<React.SetStateAction<any>>
   }
 
   interface Theme {
-    darkMode: boolean
+    isDark: boolean
   }
 
-  const defaultTheme = {darkMode: false}
+  const defaultTheme = {isDark: false}
   
   const ThemeContext = createContext({} as ThemeInterface)
   
   export const ThemeProvider = ({ children }: any) => {
     const [theme, setTheme] = useState(defaultTheme)
-    const [colors, setColors] = useState(lightModeColors)
 
     // check if theme is in local storage
     useEffect(() => {
       const storedTheme = JSON.parse(localStorage.getItem('theme'))
       if (storedTheme) {
         setTheme(storedTheme)
-        setColors(storedTheme.darkMode? darkModeColors : lightModeColors)
       } else {
         localStorage.setItem('theme', JSON.stringify(defaultTheme))
       } 
     }, [])
   
     const value = useMemo(
-      () => ({ theme, setTheme, colors, setColors}),
-      [theme, setTheme, colors, setColors]
+      () => ({ theme, setTheme}),
+      [theme, setTheme]
     )
   
     return (

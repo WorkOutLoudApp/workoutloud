@@ -34,7 +34,6 @@ model Routine {
   description String
   isFavorite Boolean    @default(false)
   userId      Int
-  isFavorite Boolean
   user        User       @relation(fields: [userId], references: [id])
   exercises   Exercise[]
 }
