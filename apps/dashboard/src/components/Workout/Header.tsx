@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faImage, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faImage, faPlay, faStop } from '@fortawesome/free-solid-svg-icons'
+import { useSpeech } from '@src/context/SpeechProvider'
 
 interface RoutineHeaderProps {
   name: string
@@ -11,6 +12,7 @@ interface RoutineHeaderProps {
   currentTab: string
   setTab: (tab: string) => void
   onFavorite: () => void
+  onAction: (action: string) => void
 }
 
 export default function RoutineHeader({
@@ -21,8 +23,10 @@ export default function RoutineHeader({
   tabs,
   currentTab,
   setTab,
-                                        onFavorite
+                                        onFavorite,
+                                        onAction
 }: RoutineHeaderProps) {
+  const { speechStatus } = useSpeech()
 
   return (
     <div className="flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] dark:bg-background-dark p-3">
@@ -41,9 +45,20 @@ export default function RoutineHeader({
           </div>
         </div>
         <div className="space-x-5">
-          <button type="button">
-            <FontAwesomeIcon icon={faPlay} className="fa-lg" />
-          </button>
+        {speechStatus === 'speaking' && (
+            <button type="button" onClick={() => {
+              onAction('stop')
+              }}>
+              <FontAwesomeIcon icon={faStop} className="fa-lg" />
+            </button>
+          )} 
+          {speechStatus === 'ended' && (
+            <button type="button" onClick={() => {
+              onAction('start')
+              }}>
+              <FontAwesomeIcon icon={faPlay} className="fa-lg" />
+            </button>
+          )}
           <button type="button" onClick={() => onFavorite()}>
             <FontAwesomeIcon icon={faHeart} className={`fa-lg ${isFavorite ? 'text-red-400' : null}`} />
           </button>

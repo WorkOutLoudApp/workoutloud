@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '@src/context/AuthProvider'
 import RoutineHeader from '@src/components/Workout/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,13 +10,14 @@ import { GetServerSideProps } from 'next'
 import Exercise from "@src/components/Workout/Exercises/Exercise";
 import Login from '../login'
 import router from 'next/router'
+import { useSpeech } from '@src/context/SpeechProvider'
 
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
   routine: string
 }
 const RoutinePage = ({
- routine
+  routine
 }: RoutinePageProps) => {
   const { auth, token } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
@@ -24,7 +25,10 @@ const RoutinePage = ({
 
   const [data, setData] = useState<any>(null)
   const [exercises, setExercises] = useState([])
-  
+
+  const [synth, setSynth] = useState(undefined)
+  const { setSpeechStatus } = useSpeech()
+
   if (typeof window !== 'undefined') {
     useEffect(() => {
       if (!token) return
@@ -35,10 +39,11 @@ const RoutinePage = ({
       }).then((res) => {
         setData(res.data)
         getExercises()
+        getSynth()
       }).catch((err) => {
-          console.log(err)
+        console.log(err)
       })
-    }, [token,window.location.pathname]) //fetch data on path change
+    }, [token, window.location.pathname]) //fetch data on path change
   }
 
   const getExercises = () => {
@@ -62,7 +67,7 @@ const RoutinePage = ({
     }).then((res) => {
       setExercises([...exercises, res.data])
     }).catch((err) => {
-        console.log(err)
+      console.log(err)
     })
   }
 
@@ -74,7 +79,7 @@ const RoutinePage = ({
     }).then((res) => {
       setData(res.data)
     }).catch((err) => {
-        console.log(err)
+      console.log(err)
     })
   }
 
@@ -90,18 +95,57 @@ const RoutinePage = ({
     })
   }
 
+  const getSynth = () => {
+    const synth = window.speechSynthesis
+    setSynth(synth)
+  }
+
+  const onAction = (action: string) => {
+    if (action === 'start') {
+      const voices = synth.getVoices()
+      const defaultVoice = voices.find((voice: { default: any; lang: string }) => (voice.default && voice.lang === 'en-US'))
+      console.log(defaultVoice)
+      const read = `Start ${data.name}. ${exercises.map((exercise, index) => `exercise ${index + 1}: ${exercise.name}`)}`
+      const utterThis = new SpeechSynthesisUtterance(read)
+      utterThis.voice = defaultVoice
+      utterThis.addEventListener('end', (event) => {
+        synth.speak(new SpeechSynthesisUtterance('. Finished routine'))
+        setSpeechStatus('ended')
+      })
+      // utterThis.addEventListener('pause', (event) => {
+      //   setAction('pause')
+      // })
+      // utterThis.addEventListener('resume', (event) => {
+      //   setAction('resume')
+      // })
+      synth.speak(utterThis)
+      setSpeechStatus('speaking')
+    } else if (action === 'pause') {
+      synth.pause()
+      setSpeechStatus('paused')
+    } else if (action === 'resume') {
+      synth.resume()
+      setSpeechStatus('speaking')
+    } else if (action === 'stop') {
+      synth.cancel()
+      setSpeechStatus('ended')
+    }
+  }
+
+
   return (
     <div className="w-full">
       {auth ? (
         <div className="space-y-3">
           {data ? <RoutineHeader
-              name={data.name}
-              description={data.description}
-              isFavorite={data.isFavorite}
-              tabs={headerTabs}
-              currentTab={currentTab}
-              setTab={setCurrentTab}
-              onFavorite={onFavorite}
+            name={data.name}
+            description={data.description}
+            isFavorite={data.isFavorite}
+            tabs={headerTabs}
+            currentTab={currentTab}
+            setTab={setCurrentTab}
+            onFavorite={onFavorite}
+            onAction={onAction}
           /> : null}
           {currentTab === 'Exercises' ? (
             <div className="px-3">
@@ -118,9 +162,9 @@ const RoutinePage = ({
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>
               <button
-                  type="button"
-                  className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1 ml-2"
-                  onClick={() => router.push(`/workout/exercises?routine=${routine}`)}
+                type="button"
+                className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1 ml-2"
+                onClick={() => router.push(`/workout/exercises?routine=${routine}`)}
               >
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search Exercises
               </button>

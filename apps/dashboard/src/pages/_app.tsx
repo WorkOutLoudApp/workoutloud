@@ -10,6 +10,7 @@ import Sidebar from '../components/Sidebar'
 import { AuthProvider } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import { ThemeProvider } from '@src/context/ThemeProvider'
+import {SpeechProvider} from '@src/context/SpeechProvider'
 
 let PUBLIC_GOOGLE_API_TOKEN = ''
 axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
@@ -21,6 +22,7 @@ axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
 function App({ Component, pageProps }: AppProps) {
   const [width, setWidth] = useState(undefined)
   const [isDark, setIsDark] = useState(false)
+
   useEffect(() => {
     // to be called on window resize
     const handleWindowResize = () => {
@@ -46,6 +48,7 @@ function App({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={{ isDark }}>
         <AuthProvider>
           <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
+            <SpeechProvider>
             <div className={`${isDark ? 'dark' : 'light'}`}>
               <div className="font-poppins h-screen bg-primary dark:bg-primary-dark text dark:text-dark">
                 <Navbar {...{ isDark, setIsDark }} />
@@ -68,6 +71,7 @@ function App({ Component, pageProps }: AppProps) {
                 <Playbar />
               </div>
             </div>
+            </SpeechProvider>
           </GoogleOAuthProvider>
         </AuthProvider>
       </ThemeProvider>
