@@ -12,12 +12,9 @@ const Index = () => {
   const [routineModalOpen, setRoutineModalOpen] = useState(false)
   const { auth, token } = useAuth()
 
-  const [routines, setRoutines] = useState([])
-  useEffect(() => {
-    if (!token) return
-    getRoutines()
-  }, [token])
+  console.log(auth, token)
 
+  const [routines, setRoutines] = useState([])
   const getRoutines = () => {
     axios.get(`http://localhost:4000/v1/routine/getRoutines`, {
       headers: {
@@ -29,8 +26,14 @@ const Index = () => {
       console.log(err)
     })
   }
+  useEffect(() => {
+    if (!token) return
+    getRoutines()
+  }, [token])
+
 
   const onAddExercise = async (routine: IRoutine) => {
+    console.log(routine)
     axios.post(`http://localhost:4000/v1/routine/add`, routine, {
       headers: {
         Authorization: `Bearer ${token}`

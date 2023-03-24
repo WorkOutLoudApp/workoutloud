@@ -59,13 +59,35 @@ const RoutinePage = ({
   }
 
   const onAddExercise = async (exercise: IExercise) => {
+    const formattedExercise = {
+      ...exercise,
+        sets: parseInt(exercise.sets, 10),
+        reps: parseInt(exercise.reps, 10)
+    }
     setExerciseModalOpen(false)
-    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, exercise, {
+    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, formattedExercise, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     }).then((res) => {
       setExercises([...exercises, res.data])
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const onEditExercise = async (exercise: any) => {
+    const formattedExercise = {
+        ...exercise,
+        sets: parseInt(exercise.sets, 10),
+        reps: parseInt(exercise.reps, 10)
+    }
+    axios.post(`http://localhost:4000/v1/routine/${formattedExercise}/editExercise`, formattedExercise, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      getExercises()
     }).catch((err) => {
       console.log(err)
     })
@@ -169,8 +191,11 @@ const RoutinePage = ({
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search Exercises
               </button>
               <div>{JSON.stringify(exercises)}</div>
-              <div className="grid gap-3">
-                {exercises.map((exercise: any) => <Exercise key={exercise.id} {...exercise} onDelete={() => onDelete(exercise.id)} />)}
+              <div className="grid grid-cols-2 gap-3">
+                {exercises.map((exercise: any) => <Exercise key={exercise.id} {...exercise} onDelete={() => onDelete(exercise.id)} onEdit={(updatedExercise) => onEditExercise({
+                  exerciseId: exercise.id,
+                  ...updatedExercise
+                })} />)}
               </div>
             </div>
           ) : null}

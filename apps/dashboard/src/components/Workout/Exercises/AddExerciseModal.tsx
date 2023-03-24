@@ -6,9 +6,10 @@ interface Props {
   open: boolean
   setOpen: (open: boolean) => void
   onAdd: (exercise: IExercise) => void
+  title?: string
 }
 
-export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
+export default function AddExerciseModal({ open, setOpen, onAdd, title }: Props) {
   const {
     register,
     handleSubmit,
@@ -21,7 +22,7 @@ export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
         <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center bg-black bg-opacity-60">
           <div className="mx-auto max-w-lg rounded-md bg-white p-4 shadow-xl">
             <div className="flex justify-between">
-              <h3 className="text-xl font-medium">Add Exercise</h3>
+              <h3 className="text-xl font-medium">{title ? title : 'Add Exercise' }</h3>
               <button
                 type="button"
                 className="font-medium text-gray-800"
@@ -46,6 +47,18 @@ export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
                   className="w-full rounded-md border border-gray-400 p-2"
                   placeholder="Description"
               />
+              <div className="flex space-x-2">
+                <input
+                    {...register('sets', { required: true })}
+                    className="w-full rounded-md border border-gray-400 p-2"
+                    placeholder="Sets"
+                />
+                <input
+                    {...register('reps', { required: true })}
+                    className="w-full rounded-md border border-gray-400 p-2"
+                    placeholder="Reps"
+                />
+              </div>
               <button
                 type="submit"
                 className="rounded bg-blue-400/20 py-2 px-2 font-semibold text-gray-800"
@@ -58,4 +71,8 @@ export default function AddExerciseModal({ open, setOpen, onAdd }: Props) {
       ) : null}
     </div>
   )
+}
+
+AddExerciseModal.defaultProps = {
+    title: null,
 }

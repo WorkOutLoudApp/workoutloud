@@ -70,14 +70,27 @@ const Exercises: React.FC<Props> = ({ routine }) => {
     pageNumbers.push(i)
   }
 
+  const [reps, setReps] = useState<number>(0)
+    const [sets, setSets] = useState<number>(0)
+
   const onAdd = (result: any) => {
     if (!routine) {
       alert('No routine found')
+      return
+    }
+    if (!reps || !sets) {
+        alert('Please enter reps and sets')
+      return
     }
     axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, {
       name: result.name,
-        description: result.target,
-      image: result.gifUrl ? result.gifUrl : ''
+        description: `This workout targets ${result.target} using ${result.equipment}`,
+      reps,
+      sets,
+      image: result.gifUrl ? result.gifUrl : '',
+      bodyPart: result.bodyPart ? result.bodyPart : '',
+      equipment: result.equipment ? result.equipment : '',
+      target: result.target ? result.target : ''
     }, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -98,6 +111,12 @@ const Exercises: React.FC<Props> = ({ routine }) => {
             Exercise Search
           </h1>
           <SearchBar onSearch={handleSearch} />
+<div className="flex space-x-2 mt-2">
+  <input               className="rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                       onChange={(e) => setSets(parseInt(e.target.value, 10))} placeholder="Sets" />
+  <input               className="rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                       onChange={(e) => setReps(parseInt(e.target.value, 10))} placeholder="Reps" />
+</div>
           <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {currentResults.map((result) => (
               <li

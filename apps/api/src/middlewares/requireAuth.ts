@@ -11,12 +11,11 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         return res.status(401).json({error: 'Authorization token is required'})
     }
 
-  const token = authorization.split(' ')[1]
 
-    // const token = req.headers.authorization?.split(' ')[1];
-    // if (!token) {
-    //     return res.status(401).send('Unauthorized');
-    // }
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+        return res.status(401).send('Unauthorized');
+    }
 
     const prisma = new PrismaClient()
     try {
@@ -38,7 +37,6 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
             }
         }
     } catch (error) {
-        console.log(error)
         res.status(401).json({ error: 'Request is not authorized' })
     } finally {
         await prisma.$disconnect()
