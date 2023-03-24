@@ -6,4 +6,6 @@ export interface IRoutine {
 export interface IExercise {
   name: string
   description: string
+  sets: string
+    reps: string
 }

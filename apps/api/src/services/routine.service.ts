@@ -6,6 +6,9 @@ const getRoutines = async (userId: number) => {
         const routines = await prisma.routine.findMany({
             where: {
                 userId
+            },
+            include: {
+                exercises: true
             }
         })
         return routines
@@ -119,19 +122,51 @@ const getExercises = async (routineId: number) => {
     }
 }
 
-const addExercise = async (userId: number, routineId: number, name: string, description: string, image?: string) => {
+const addExercise = async (userId: number, routineId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.create({
             data: {
                 name,
                 description,
+                reps: reps || 1,
+                sets: sets || 1,
                 image,
+                bodyPart,
+                equipment,
+                target,
                 routineId
             }
         })
         return exercise
     } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+const editExercise = async (userId: number, routineId: number, exerciseId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
+    const prisma = new PrismaClient()
+    try {
+        const exercise = await prisma.exercise.update({
+            where: {
+                id: exerciseId
+            },
+            data: {
+                name,
+                description,
+                reps: reps || 1,
+                sets: sets || 1,
+                image,
+                bodyPart,
+                equipment,
+                target,
+            }
+        })
+        return exercise
+    } catch (error) {
+        console.log(error)
         return null
     } finally {
         await prisma.$disconnect()
@@ -202,6 +237,7 @@ export default {
     getExercises,
     addExercise,
     deleteExercise,
+    editExercise,
     getFavorites,
     getAllExercises
 }

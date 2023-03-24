@@ -8,11 +8,12 @@ interface RoutineProps {
   id: number
   name: string
   description: string
+    exercises?: any[],
   image?: string
     onDelete: () => void
 }
 
-export default function Routine({ id, name, description, image, onDelete }: RoutineProps) {
+export default function Routine({ id, name, description, exercises, image, onDelete }: RoutineProps) {
   const router = useRouter()
 
   return (
@@ -32,6 +33,7 @@ export default function Routine({ id, name, description, image, onDelete }: Rout
         <div className="text-left">
           <p className="font-bold">{name}</p>
           <p>{description}</p>
+            {exercises && exercises.length > 0 ? <p>{exercises.length} exercise{exercises.length > 1 ? 's': ''}</p> : null}
         </div>
       </button>
       <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
@@ -40,4 +42,5 @@ export default function Routine({ id, name, description, image, onDelete }: Rout
 }
 Routine.defaultProps = {
   image: null,
+    exercises: []
 }

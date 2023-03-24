@@ -42,7 +42,12 @@ model Exercise {
   id          Int     @id @default(autoincrement())
   name        String
   description String
+  reps        Int
+    sets        Int
   image       String?
+  bodyPart    String?
+  equipment   String?
+  target      String?
   routineId   Int
   routine     Routine @relation(fields: [routineId], references: [id])
 }
