@@ -81,7 +81,6 @@ const Login = () => {
               <GoogleLogin
                 onSuccess={async credentialResponse => {
                   const decodedToken = jwt_decode<any>(credentialResponse.credential)
-                  console.log(decodedToken)
                   
                   await axios.post(`http://localhost:4000/v1/user/googlelogin`, {
                     token: decodedToken,

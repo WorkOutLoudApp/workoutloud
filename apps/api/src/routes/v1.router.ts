@@ -3,8 +3,8 @@ import bodyParser from 'body-parser'
 import { devOrigins } from '@src/utils/config/cors.config'
 import cors from 'cors'
 import { Router, Request, Response } from 'express'
-import userRouter from '@src/routes/user'
-import requireAuthRouter from '@src/routes/auth'
+import userRouter from '@src/routes/user.router'
+import requireAuthRouter from '@src/routes/auth.router'
 import routineRouter from '@src/routes/routine.router'
 
 require('dotenv').config()

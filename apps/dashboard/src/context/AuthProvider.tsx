@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import axios from 'axios'
 
 interface AuthInterface {
   auth: boolean
@@ -23,18 +24,34 @@ interface AuthInterface {
 
 const AuthContext = createContext({} as AuthInterface)
 
+const verifyToken = async (storedUser: any, setAuth: React.Dispatch<React.SetStateAction<boolean>>, setUser: React.Dispatch<React.SetStateAction<any>>, setToken: React.Dispatch<React.SetStateAction<any>>) => {
+  axios.get(`http://localhost:4000/v1/auth/verifyToken`, {
+    headers: {
+      Authorization: `Bearer ${storedUser.token}`,
+    }
+  }).then((res) => {
+    if (res.data.success) {
+      setAuth(true)
+      setUser(storedUser.user)
+      setToken(storedUser.token)
+    } else {
+      console.log('Message: ', res.data.error.message)
+    }
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
 export const AuthProvider = ({ children }: any) => {
   const [auth, setAuth] = useState(undefined)
   const [user, setUser] = useState(undefined)
   const [token, setToken] = useState(undefined)
-  // check if user logged in
+  // check if user logged in and token is valid
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))
 
     if (storedUser) {
-      setAuth(true)
-      setUser(storedUser.user)
-      setToken(storedUser.token)
+      verifyToken(storedUser, setAuth, setUser, setToken)
     }
 
     // // For testing purpose (to bypass the login)

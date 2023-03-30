@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { loginUser, registerUser, loginGoogle, registerGoogle} from '@src/controllers/userController'
+import { loginUser, registerUser, loginGoogle, registerGoogle} from '@src/controllers/user.controller'
 
 require('dotenv').config()
 
