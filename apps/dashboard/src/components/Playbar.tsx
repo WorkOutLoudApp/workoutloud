@@ -11,8 +11,17 @@ import {
 import { useAuth } from '@src/context/AuthProvider'
 import axios from 'axios'
 
-const Playbar = () => {
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+interface PlaybarProps {
+  imageUrl: string | null
+  exerciseName: string
+  routineName: string
+}
+
+const Playbar: React.FC<PlaybarProps> = ({
+  imageUrl,
+  exerciseName,
+  routineName,
+}) => {  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [liked, setLiked] = useState(false)
   const [micActive, setMicActive] = useState(false)
@@ -38,21 +47,6 @@ const Playbar = () => {
     },
     exercises: [],
   })
-
-  useEffect(() => {
-    async function fetchRoutines() {
-      try {
-        const response = await axios.get('http://localhost:3000/routines')
-        if (response.data && response.data.length > 0) {
-          setCurrentRoutine(response.data[0])
-        }
-      } catch (error) {
-        console.error('Error fetching routines:', error)
-      }
-    }
-
-    fetchRoutines()
-  }, [])
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying)
@@ -85,20 +79,19 @@ const Playbar = () => {
     <>
       {user && (
         <div className="dark:bg-background-dark fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-4 text-black">
-          {currentRoutine && currentRoutine.routine ? (
             <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
               <div className="h-10 w-10">
                 <img
-                  src={currentRoutine.routine.routinePicture.images[0].url}
-                  alt="exercise"
+                  src={imageUrl}
+                  alt="null"
                 />
               </div>
               <div>
                 <div className="font-bold dark:text-white">
-                  {currentRoutine.routine.exerciseName}
+                  {exerciseName}
                 </div>
                 <div className="text-sm dark:text-white">
-                  {currentRoutine.routine.routineName[0].name}
+                  {routineName}
                 </div>
               </div>
               <button className="invisible lg:visible" onClick={handleLike}>
@@ -109,21 +102,6 @@ const Playbar = () => {
                 )}
               </button>
             </div>
-          ) : (
-            <div className="absolute left-4 flex items-center space-x-2">
-              <div className="h-10 w-10">
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="No routine selected"
-                />
-              </div>
-              <div>
-                <div className="font-bold dark:text-white">
-                  No routine selected
-                </div>
-              </div>
-            </div>
-          )}
 
           <div className="flex items-center space-x-4">
             <button className="invisible lg:visible" onClick={handleRewind}>

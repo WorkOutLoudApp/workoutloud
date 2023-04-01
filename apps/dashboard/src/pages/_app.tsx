@@ -68,8 +68,8 @@ function App({ Component, pageProps }: AppProps) {
                   </div>
                 )}
                 </div>
-                <Playbar />
               </div>
+
             </div>
             </SpeechProvider>
           </GoogleOAuthProvider>

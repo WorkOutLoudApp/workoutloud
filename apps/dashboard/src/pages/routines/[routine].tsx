@@ -11,6 +11,7 @@ import Exercise from "@src/components/Workout/Exercises/Exercise";
 import Login from '../login'
 import router from 'next/router'
 import { useSpeech } from '@src/context/SpeechProvider'
+import Playbar from '@src/components/Playbar'
 
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
@@ -28,6 +29,8 @@ const RoutinePage = ({
 
   const [synth, setSynth] = useState(undefined)
   const { setSpeechStatus } = useSpeech()
+  const currentExercise = exercises.length > 0 ? exercises[0] : { image: null, name: '', routineName: '' };
+
 
   if (typeof window !== 'undefined') {
     useEffect(() => {
@@ -53,6 +56,7 @@ const RoutinePage = ({
       }
     }).then((res) => {
       setExercises(res.data)
+      if (res.data.length > 0) {}
     }).catch((err) => {
       console.log(err)
     })
@@ -203,6 +207,11 @@ const RoutinePage = ({
       ) : (
         <Login />
       )}
+        <Playbar
+          imageUrl={currentExercise?.image}
+          exerciseName={currentExercise?.name}
+          routineName={data ? data.name : ''}
+        />
     </div>
   )
 }
