@@ -15,38 +15,25 @@ interface PlaybarProps {
   imageUrl: string | null
   exerciseName: string
   routineName: string
+  currentExerciseIndex: number
+  setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
+  exercises: any[]
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
   imageUrl,
   exerciseName,
   routineName,
-}) => {  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  currentExerciseIndex,
+  setCurrentExerciseIndex,
+  exercises,
+}) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [liked, setLiked] = useState(false)
   const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
-
-  const [currentRoutine, setCurrentRoutine] = useState({
-    routine: {
-      routinePicture: {
-        images: [
-          {
-            url: '',
-          },
-        ],
-      },
-      exerciseName: '',
-      routineName: [
-        {
-          name: '',
-        },
-      ],
-    },
-    exercises: [],
-  })
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying)
@@ -67,10 +54,7 @@ const Playbar: React.FC<PlaybarProps> = ({
   }
 
   const handleFastForward = () => {
-    if (
-      currentRoutine &&
-      currentExerciseIndex < currentRoutine.exercises.length - 1
-    ) {
+    if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1)
     }
   }
@@ -79,29 +63,22 @@ const Playbar: React.FC<PlaybarProps> = ({
     <>
       {user && (
         <div className="dark:bg-background-dark fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-4 text-black">
-            <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
-              <div className="h-10 w-10">
-                <img
-                  src={imageUrl}
-                  alt="null"
-                />
-              </div>
-              <div>
-                <div className="font-bold dark:text-white">
-                  {exerciseName}
-                </div>
-                <div className="text-sm dark:text-white">
-                  {routineName}
-                </div>
-              </div>
-              <button className="invisible lg:visible" onClick={handleLike}>
-                {liked ? (
-                  <AiFillHeart size="1.5em" className="text-red-500" />
-                ) : (
-                  <AiOutlineHeart size="1.5em" className="text-red-500" />
-                )}
-              </button>
+          <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
+            <div className="h-10 w-10">
+              <img src={imageUrl} alt="null" />
             </div>
+            <div>
+              <div className="font-bold dark:text-white">{exerciseName}</div>
+              <div className="text-sm dark:text-white">{routineName}</div>
+            </div>
+            <button className="invisible lg:visible" onClick={handleLike}>
+              {liked ? (
+                <AiFillHeart size="1.5em" className="text-red-500" />
+              ) : (
+                <AiOutlineHeart size="1.5em" className="text-red-500" />
+              )}
+            </button>
+          </div>
 
           <div className="flex items-center space-x-4">
             <button className="invisible lg:visible" onClick={handleRewind}>

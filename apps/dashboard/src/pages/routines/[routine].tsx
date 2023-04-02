@@ -7,7 +7,7 @@ import AddExerciseModal from '@src/components/Workout/Exercises/AddExerciseModal
 import { IExercise } from '@src/types/Workout'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
-import Exercise from "@src/components/Workout/Exercises/Exercise";
+import Exercise from '@src/components/Workout/Exercises/Exercise'
 import Login from '../login'
 import router from 'next/router'
 import { useSpeech } from '@src/context/SpeechProvider'
@@ -17,9 +17,7 @@ const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
   routine: string
 }
-const RoutinePage = ({
-  routine
-}: RoutinePageProps) => {
+const RoutinePage = ({ routine }: RoutinePageProps) => {
   const { auth, token } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
@@ -29,96 +27,130 @@ const RoutinePage = ({
 
   const [synth, setSynth] = useState(undefined)
   const { setSpeechStatus } = useSpeech()
-  const currentExercise = exercises.length > 0 ? exercises[0] : { image: null, name: '', routineName: '' };
-
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  const currentExercise =
+    exercises.length > 0
+      ? exercises[currentExerciseIndex]
+      : { image: null, name: '', routineName: '' }
 
   if (typeof window !== 'undefined') {
     useEffect(() => {
       if (!token) return
-      axios.get(`http://localhost:4000/v1/routine/${routine}/get`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then((res) => {
-        setData(res.data)
-        getExercises()
-        getSynth()
-      }).catch((err) => {
-        console.log(err)
-      })
+      axios
+        .get(`http://localhost:4000/v1/routine/${routine}/get`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setData(res.data)
+          getExercises()
+          getSynth()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }, [token, window.location.pathname]) //fetch data on path change
   }
 
   const getExercises = () => {
-    axios.get(`http://localhost:4000/v1/routine/${routine}/getExercises`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      setExercises(res.data)
-      if (res.data.length > 0) {}
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .get(`http://localhost:4000/v1/routine/${routine}/getExercises`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setExercises(res.data)
+        if (res.data.length > 0) {
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const onAddExercise = async (exercise: IExercise) => {
     const formattedExercise = {
       ...exercise,
-        sets: parseInt(exercise.sets, 10),
-        reps: parseInt(exercise.reps, 10)
+      sets: parseInt(exercise.sets, 10),
+      reps: parseInt(exercise.reps, 10),
     }
     setExerciseModalOpen(false)
-    axios.post(`http://localhost:4000/v1/routine/${routine}/addExercise`, formattedExercise, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      setExercises([...exercises, res.data])
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .post(
+        `http://localhost:4000/v1/routine/${routine}/addExercise`,
+        formattedExercise,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setExercises([...exercises, res.data])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const onEditExercise = async (exercise: any) => {
     const formattedExercise = {
-        ...exercise,
-        sets: parseInt(exercise.sets, 10),
-        reps: parseInt(exercise.reps, 10)
+      ...exercise,
+      sets: parseInt(exercise.sets, 10),
+      reps: parseInt(exercise.reps, 10),
     }
-    axios.post(`http://localhost:4000/v1/routine/${formattedExercise}/editExercise`, formattedExercise, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      getExercises()
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .post(
+        `http://localhost:4000/v1/routine/${formattedExercise}/editExercise`,
+        formattedExercise,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        getExercises()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const onFavorite = async () => {
-    axios.patch(`http://localhost:4000/v1/routine/${routine}/favorite`, {}, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      setData(res.data)
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .patch(
+        `http://localhost:4000/v1/routine/${routine}/favorite`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setData(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const onDelete = async (id: number) => {
-    axios.get(`http://localhost:4000/v1/routine/${id}/deleteExercise`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      getExercises()
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .get(`http://localhost:4000/v1/routine/${id}/deleteExercise`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        getExercises()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const getSynth = () => {
@@ -129,9 +161,14 @@ const RoutinePage = ({
   const onAction = (action: string) => {
     if (action === 'start') {
       const voices = synth.getVoices()
-      const defaultVoice = voices.find((voice: { default: any; lang: string }) => (voice.default && voice.lang === 'en-US'))
+      const defaultVoice = voices.find(
+        (voice: { default: any; lang: string }) =>
+          voice.default && voice.lang === 'en-US'
+      )
       console.log(defaultVoice)
-      const read = `Start ${data.name}. ${exercises.map((exercise, index) => `exercise ${index + 1}: ${exercise.name}`)}`
+      const read = `Start ${data.name}. ${exercises.map(
+        (exercise, index) => `exercise ${index + 1}: ${exercise.name}`
+      )}`
       const utterThis = new SpeechSynthesisUtterance(read)
       utterThis.voice = defaultVoice
       utterThis.addEventListener('end', (event) => {
@@ -158,21 +195,22 @@ const RoutinePage = ({
     }
   }
 
-
   return (
     <div className="w-full">
       {auth ? (
         <div className="space-y-3">
-          {data ? <RoutineHeader
-            name={data.name}
-            description={data.description}
-            isFavorite={data.isFavorite}
-            tabs={headerTabs}
-            currentTab={currentTab}
-            setTab={setCurrentTab}
-            onFavorite={onFavorite}
-            onAction={onAction}
-          /> : null}
+          {data ? (
+            <RoutineHeader
+              name={data.name}
+              description={data.description}
+              isFavorite={data.isFavorite}
+              tabs={headerTabs}
+              currentTab={currentTab}
+              setTab={setCurrentTab}
+              onFavorite={onFavorite}
+              onAction={onAction}
+            />
+          ) : null}
           {currentTab === 'Exercises' ? (
             <div className="px-3">
               <AddExerciseModal
@@ -182,24 +220,36 @@ const RoutinePage = ({
               />
               <button
                 type="button"
-                className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1"
+                className="dark:bg-background-dark rounded border border-black bg-[#d9d9d9] px-2 py-1"
                 onClick={() => setExerciseModalOpen(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-md" /> Add Exercise
               </button>
               <button
                 type="button"
-                className="rounded border border-black bg-[#d9d9d9] dark:bg-background-dark px-2 py-1 ml-2"
-                onClick={() => router.push(`/workout/exercises?routine=${routine}`)}
+                className="dark:bg-background-dark ml-2 rounded border border-black bg-[#d9d9d9] px-2 py-1"
+                onClick={() =>
+                  router.push(`/workout/exercises?routine=${routine}`)
+                }
               >
-                <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search Exercises
+                <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search
+                Exercises
               </button>
               <div>{JSON.stringify(exercises)}</div>
               <div className="grid grid-cols-2 gap-3">
-                {exercises.map((exercise: any) => <Exercise key={exercise.id} {...exercise} onDelete={() => onDelete(exercise.id)} onEdit={(updatedExercise) => onEditExercise({
-                  exerciseId: exercise.id,
-                  ...updatedExercise
-                })} />)}
+                {exercises.map((exercise: any) => (
+                  <Exercise
+                    key={exercise.id}
+                    {...exercise}
+                    onDelete={() => onDelete(exercise.id)}
+                    onEdit={(updatedExercise) =>
+                      onEditExercise({
+                        exerciseId: exercise.id,
+                        ...updatedExercise,
+                      })
+                    }
+                  />
+                ))}
               </div>
             </div>
           ) : null}
@@ -207,11 +257,14 @@ const RoutinePage = ({
       ) : (
         <Login />
       )}
-        <Playbar
-          imageUrl={currentExercise?.image}
-          exerciseName={currentExercise?.name}
-          routineName={data ? data.name : ''}
-        />
+      <Playbar
+        imageUrl={currentExercise?.image}
+        exerciseName={currentExercise?.name}
+        routineName={data ? data.name : ''}
+        currentExerciseIndex={currentExerciseIndex}
+        setCurrentExerciseIndex={setCurrentExerciseIndex}
+        exercises={exercises}
+      />
     </div>
   )
 }
