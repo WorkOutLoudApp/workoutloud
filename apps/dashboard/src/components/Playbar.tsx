@@ -9,7 +9,7 @@ import {
   AiFillAudio,
 } from 'react-icons/ai'
 import { useAuth } from '@src/context/AuthProvider'
-import axios from 'axios'
+import { usePlayStatus } from '@src/context/PlayStatus'
 
 interface PlaybarProps {
   imageUrl: string | null
@@ -18,6 +18,7 @@ interface PlaybarProps {
   currentExerciseIndex: number
   setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
   exercises: any[]
+  onAction: (action: string) => void
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
@@ -27,17 +28,24 @@ const Playbar: React.FC<PlaybarProps> = ({
   currentExerciseIndex,
   setCurrentExerciseIndex,
   exercises,
+  onAction
 }) => {
-  const [isPlaying, setIsPlaying] = useState(false)
   const [liked, setLiked] = useState(false)
   const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
+  const { isPlaying, setIsPlaying } = usePlayStatus()
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
+    if (isPlaying) {
+      onAction("stop");
+    } else {
+      onAction("start");
+    }
+    setIsPlaying(!isPlaying);
+  };
+  
 
   const handleLike = () => {
     setLiked(!liked)
@@ -71,7 +79,7 @@ const Playbar: React.FC<PlaybarProps> = ({
               <div className="font-bold dark:text-white">{exerciseName}</div>
               <div className="text-sm dark:text-white">{routineName}</div>
             </div>
-            <button className="invisible lg:visible" onClick={handleLike}>
+            <button className="invisible lg:visible" onClick={()=> setIsPlaying(!isPlaying)}>
               {liked ? (
                 <AiFillHeart size="1.5em" className="text-red-500" />
               ) : (

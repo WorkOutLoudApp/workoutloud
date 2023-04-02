@@ -2,6 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faImage, faPlay, faStop } from '@fortawesome/free-solid-svg-icons'
 import { useSpeech } from '@src/context/SpeechProvider'
+import { usePlayStatus } from '@src/context/PlayStatus'
 
 interface RoutineHeaderProps {
   name: string
@@ -27,6 +28,8 @@ export default function RoutineHeader({
                                         onAction
 }: RoutineHeaderProps) {
   const { speechStatus } = useSpeech()
+  const { isPlaying, setIsPlaying } = usePlayStatus()
+
 
   return (
     <div className="flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] dark:bg-background-dark p-3">
@@ -55,8 +58,9 @@ export default function RoutineHeader({
           {speechStatus === 'ended' && (
             <button type="button" onClick={() => {
               onAction('start')
+              setIsPlaying(true)
               }}>
-              <FontAwesomeIcon icon={faPlay} className="fa-lg" />
+              <FontAwesomeIcon icon={isPlaying ? faStop: faPlay} className="fa-lg" />
             </button>
           )}
           <button type="button" onClick={() => onFavorite()}>

@@ -264,7 +264,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         currentExerciseIndex={currentExerciseIndex}
         setCurrentExerciseIndex={setCurrentExerciseIndex}
         exercises={exercises}
-      />
+        onAction={onAction}
+        />
     </div>
   )
 }
