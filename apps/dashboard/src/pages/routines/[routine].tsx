@@ -12,6 +12,7 @@ import Login from '../login'
 import router from 'next/router'
 import { useSpeech } from '@src/context/SpeechProvider'
 import Playbar from '@src/components/Playbar'
+import { usePlayStatus } from '@src/context/PlayStatus'
 
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
@@ -29,6 +30,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const { setSpeechStatus } = useSpeech()
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [currentSpokenText, setCurrentSpokenText] = useState('')
+  const { isPlaying, setIsPlaying } = usePlayStatus()
+
   const currentExercise =
     exercises.length > 0
       ? exercises[currentExerciseIndex]
@@ -200,12 +203,13 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
           const finishUtterance = new SpeechSynthesisUtterance(
             '. Finished routine'
           )
+          setIsPlaying(false);
+
           finishUtterance.voice = defaultVoice
           synth.speak(finishUtterance)
           setSpeechStatus('ended')
         }
       }
-
       // utterThis.addEventListener('pause', (event) => {
       //   setAction('pause')
       // })
@@ -225,6 +229,24 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
     } else if (action === 'stop') {
       synth.cancel()
       setSpeechStatus('ended')
+    } else if (action === 'forward') {
+      if (currentExerciseIndex < exercises.length - 1) {
+        synth.cancel();
+        setCurrentExerciseIndex(currentExerciseIndex + 1);
+        setCurrentSpokenText(`Exercise ${currentExerciseIndex + 2}: ${exercises[currentExerciseIndex + 1].name}`);
+        const utterThis = new SpeechSynthesisUtterance(`Exercise ${currentExerciseIndex + 2}: ${exercises[currentExerciseIndex + 1].name}`)
+        utterThis.voice = defaultVoice
+        synth.speak(utterThis)
+      }
+    } else if (action === 'rewind') {
+      if (currentExerciseIndex > 0) {
+        synth.cancel();
+        setCurrentExerciseIndex(currentExerciseIndex - 1);
+        setCurrentSpokenText(`Exercise ${currentExerciseIndex}: ${exercises[currentExerciseIndex - 1].name}`);
+        const utterThis = new SpeechSynthesisUtterance(`Exercise ${currentExerciseIndex}: ${exercises[currentExerciseIndex - 1].name}`)
+        utterThis.voice = defaultVoice
+        synth.speak(utterThis)
+      }
     }
   }
 
