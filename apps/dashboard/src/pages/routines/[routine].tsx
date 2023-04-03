@@ -203,8 +203,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
           const finishUtterance = new SpeechSynthesisUtterance(
             '. Finished routine'
           )
-          setIsPlaying(false);
-
+          setIsPlaying(false)
           finishUtterance.voice = defaultVoice
           synth.speak(finishUtterance)
           setSpeechStatus('ended')
@@ -231,19 +230,45 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       setSpeechStatus('ended')
     } else if (action === 'forward') {
       if (currentExerciseIndex < exercises.length - 1) {
-        synth.cancel();
-        setCurrentExerciseIndex(currentExerciseIndex + 1);
-        setCurrentSpokenText(`Exercise ${currentExerciseIndex + 2}: ${exercises[currentExerciseIndex + 1].name}`);
-        const utterThis = new SpeechSynthesisUtterance(`Exercise ${currentExerciseIndex + 2}: ${exercises[currentExerciseIndex + 1].name}`)
+        synth.cancel()
+        setCurrentExerciseIndex(currentExerciseIndex + 1)
+        setCurrentSpokenText(
+          `Exercise ${currentExerciseIndex + 2}: ${
+            exercises[currentExerciseIndex + 1].name
+          }`
+        )
+        const utterThis = new SpeechSynthesisUtterance(
+          `Exercise ${currentExerciseIndex + 2}: ${
+            exercises[currentExerciseIndex + 1].name
+          }`
+        )
+        const voices = synth.getVoices()
+        const defaultVoice = voices.find(
+          (voice: { default: any; lang: string }) =>
+            voice.default && voice.lang === 'en-US'
+        )
         utterThis.voice = defaultVoice
         synth.speak(utterThis)
       }
     } else if (action === 'rewind') {
       if (currentExerciseIndex > 0) {
-        synth.cancel();
-        setCurrentExerciseIndex(currentExerciseIndex - 1);
-        setCurrentSpokenText(`Exercise ${currentExerciseIndex}: ${exercises[currentExerciseIndex - 1].name}`);
-        const utterThis = new SpeechSynthesisUtterance(`Exercise ${currentExerciseIndex}: ${exercises[currentExerciseIndex - 1].name}`)
+        synth.cancel()
+        setCurrentExerciseIndex(currentExerciseIndex - 1)
+        setCurrentSpokenText(
+          `Exercise ${currentExerciseIndex}: ${
+            exercises[currentExerciseIndex - 1].name
+          }`
+        )
+        const utterThis = new SpeechSynthesisUtterance(
+          `Exercise ${currentExerciseIndex}: ${
+            exercises[currentExerciseIndex - 1].name
+          }`
+        )
+        const voices = synth.getVoices()
+        const defaultVoice = voices.find(
+          (voice: { default: any; lang: string }) =>
+            voice.default && voice.lang === 'en-US'
+        )
         utterThis.voice = defaultVoice
         synth.speak(utterThis)
       }
