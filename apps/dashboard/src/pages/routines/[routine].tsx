@@ -28,6 +28,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const [synth, setSynth] = useState(undefined)
   const { setSpeechStatus } = useSpeech()
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  const [currentSpokenText, setCurrentSpokenText] = useState('')
   const currentExercise =
     exercises.length > 0
       ? exercises[currentExerciseIndex]
@@ -165,24 +166,56 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         (voice: { default: any; lang: string }) =>
           voice.default && voice.lang === 'en-US'
       )
-      console.log(defaultVoice)
-      const read = `Start ${data.name}. ${exercises.map(
-        (exercise, index) => `exercise ${index + 1}: ${exercise.name}`
-      )}`
-      const utterThis = new SpeechSynthesisUtterance(read)
-      utterThis.voice = defaultVoice
-      utterThis.addEventListener('end', (event) => {
-        synth.speak(new SpeechSynthesisUtterance('. Finished routine'))
-        setSpeechStatus('ended')
-      })
+
+      const exercisePhrases = exercises.map(
+        (exercise, index) => `Exercise ${index + 1}: ${exercise.name}`
+      )
+
+      let utteranceIndex = -1
+
+      const speakNext = () => {
+        utteranceIndex++
+        if (utteranceIndex === 0) {
+          setCurrentSpokenText(`Start ${data.name}.`)
+          const startUtterance = new SpeechSynthesisUtterance(
+            `Start ${data.name}.`
+          )
+          startUtterance.voice = defaultVoice
+          startUtterance.addEventListener('end', speakNext)
+          synth.speak(startUtterance)
+        } else if (
+          utteranceIndex > 0 &&
+          utteranceIndex <= exercisePhrases.length
+        ) {
+          setCurrentSpokenText(exercisePhrases[utteranceIndex - 1])
+          setCurrentExerciseIndex(utteranceIndex - 1)
+          const utterThis = new SpeechSynthesisUtterance(
+            exercisePhrases[utteranceIndex - 1]
+          )
+          utterThis.voice = defaultVoice
+          utterThis.addEventListener('end', speakNext)
+          synth.speak(utterThis)
+        } else {
+          setCurrentSpokenText('. Finished routine')
+          const finishUtterance = new SpeechSynthesisUtterance(
+            '. Finished routine'
+          )
+          finishUtterance.voice = defaultVoice
+          synth.speak(finishUtterance)
+          setSpeechStatus('ended')
+        }
+      }
+
       // utterThis.addEventListener('pause', (event) => {
       //   setAction('pause')
       // })
       // utterThis.addEventListener('resume', (event) => {
       //   setAction('resume')
       // })
-      synth.speak(utterThis)
+
+      // Start the speech
       setSpeechStatus('speaking')
+      speakNext()
     } else if (action === 'pause') {
       synth.pause()
       setSpeechStatus('paused')
@@ -209,6 +242,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
               setTab={setCurrentTab}
               onFavorite={onFavorite}
               onAction={onAction}
+              handlePlayStatus={onAction}
             />
           ) : null}
           {currentTab === 'Exercises' ? (
@@ -265,7 +299,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         setCurrentExerciseIndex={setCurrentExerciseIndex}
         exercises={exercises}
         onAction={onAction}
-        />
+        spokenText={currentSpokenText}
+      />
     </div>
   )
 }

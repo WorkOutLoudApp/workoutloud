@@ -19,6 +19,7 @@ interface PlaybarProps {
   setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
   exercises: any[]
   onAction: (action: string) => void
+  spokenText: string
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
@@ -28,7 +29,8 @@ const Playbar: React.FC<PlaybarProps> = ({
   currentExerciseIndex,
   setCurrentExerciseIndex,
   exercises,
-  onAction
+  onAction,
+  spokenText,
 }) => {
   const [liked, setLiked] = useState(false)
   const [micActive, setMicActive] = useState(false)
@@ -39,13 +41,12 @@ const Playbar: React.FC<PlaybarProps> = ({
 
   const handlePlayPause = () => {
     if (isPlaying) {
-      onAction("stop");
+      onAction('stop')
     } else {
-      onAction("start");
+      onAction('start')
     }
-    setIsPlaying(!isPlaying);
-  };
-  
+    setIsPlaying(!isPlaying)
+  }
 
   const handleLike = () => {
     setLiked(!liked)
@@ -79,7 +80,7 @@ const Playbar: React.FC<PlaybarProps> = ({
               <div className="font-bold dark:text-white">{exerciseName}</div>
               <div className="text-sm dark:text-white">{routineName}</div>
             </div>
-            <button className="invisible lg:visible" onClick={()=> setIsPlaying(!isPlaying)}>
+            <button className="invisible lg:visible" onClick={handleLike}>
               {liked ? (
                 <AiFillHeart size="1.5em" className="text-red-500" />
               ) : (
