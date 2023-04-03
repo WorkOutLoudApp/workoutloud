@@ -242,12 +242,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
             exercises[currentExerciseIndex + 1].name
           }`
         )
-        const voices = synth.getVoices()
-        const defaultVoice = voices.find(
-          (voice: { default: any; lang: string }) =>
-            voice.default && voice.lang === 'en-US'
-        )
-        utterThis.voice = defaultVoice
+        /*utterThis.voice = defaultVoice*/ /*needs to be worked on*/
         synth.speak(utterThis)
       }
     } else if (action === 'rewind') {
@@ -264,12 +259,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
             exercises[currentExerciseIndex - 1].name
           }`
         )
-        const voices = synth.getVoices()
-        const defaultVoice = voices.find(
-          (voice: { default: any; lang: string }) =>
-            voice.default && voice.lang === 'en-US'
-        )
-        utterThis.voice = defaultVoice
+        /*utterThis.voice = defaultVoice*/ /*needs to be worked on*/
         synth.speak(utterThis)
       }
     }
