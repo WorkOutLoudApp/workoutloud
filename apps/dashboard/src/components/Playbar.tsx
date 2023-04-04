@@ -59,12 +59,14 @@ const Playbar: React.FC<PlaybarProps> = ({
   const handleRewind = () => {
     if (currentExerciseIndex > 0) {
       setCurrentExerciseIndex(currentExerciseIndex - 1)
+      onAction('rewind')
     }
   }
 
   const handleFastForward = () => {
     if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1)
+      onAction('forward')
     }
   }
 

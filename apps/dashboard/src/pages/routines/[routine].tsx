@@ -13,6 +13,7 @@ import router from 'next/router'
 import { useSpeech } from '@src/context/SpeechProvider'
 import Playbar from '@src/components/Playbar'
 import { usePlayStatus } from '@src/context/PlayStatus'
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
@@ -31,6 +32,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [currentSpokenText, setCurrentSpokenText] = useState('')
   const { isPlaying, setIsPlaying } = usePlayStatus()
+  const { speakExercise } = useSpeechActions(synth, exercises)
 
   const currentExercise =
     exercises.length > 0
@@ -232,35 +234,13 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       if (currentExerciseIndex < exercises.length - 1) {
         synth.cancel()
         setCurrentExerciseIndex(currentExerciseIndex + 1)
-        setCurrentSpokenText(
-          `Exercise ${currentExerciseIndex + 2}: ${
-            exercises[currentExerciseIndex + 1].name
-          }`
-        )
-        const utterThis = new SpeechSynthesisUtterance(
-          `Exercise ${currentExerciseIndex + 2}: ${
-            exercises[currentExerciseIndex + 1].name
-          }`
-        )
-        /*utterThis.voice = defaultVoice*/ /*needs to be worked on*/
-        synth.speak(utterThis)
+        speakExercise(currentExerciseIndex + 1)
       }
     } else if (action === 'rewind') {
       if (currentExerciseIndex > 0) {
         synth.cancel()
         setCurrentExerciseIndex(currentExerciseIndex - 1)
-        setCurrentSpokenText(
-          `Exercise ${currentExerciseIndex}: ${
-            exercises[currentExerciseIndex - 1].name
-          }`
-        )
-        const utterThis = new SpeechSynthesisUtterance(
-          `Exercise ${currentExerciseIndex}: ${
-            exercises[currentExerciseIndex - 1].name
-          }`
-        )
-        /*utterThis.voice = defaultVoice*/ /*needs to be worked on*/
-        synth.speak(utterThis)
+        speakExercise(currentExerciseIndex - 1)
       }
     }
   }
