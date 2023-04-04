@@ -32,7 +32,7 @@ export default function RoutineHeader({
   setTab,
   onFavorite,
   onAction,
-  handlePlayStatus,
+  handlePlayStatus
 }: RoutineHeaderProps) {
   const { speechStatus } = useSpeech()
   const { isPlaying, setIsPlaying } = usePlayStatus()

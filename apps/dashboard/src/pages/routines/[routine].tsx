@@ -33,6 +33,12 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const [currentSpokenText, setCurrentSpokenText] = useState('')
   const { isPlaying, setIsPlaying } = usePlayStatus()
   const { speakExercise } = useSpeechActions(synth, exercises)
+  const [isFavorite, setIsFavorite] = useState(false);
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
+  
+
 
   const currentExercise =
     exercises.length > 0
@@ -138,6 +144,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       )
       .then((res) => {
         setData(res.data)
+        setIsFavorite(res.data.isFavorite);
       })
       .catch((err) => {
         console.log(err)
@@ -317,6 +324,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         exercises={exercises}
         onAction={onAction}
         spokenText={currentSpokenText}
+        isFavorite={isFavorite}
+        onFavorite={onFavorite}
       />
     </div>
   )

@@ -3,13 +3,15 @@ import { IoPlay, IoPause } from 'react-icons/io5'
 import { RiRewindFill } from 'react-icons/ri'
 import {
   AiOutlineForward,
-  AiFillHeart,
-  AiOutlineHeart,
   AiOutlineAudio,
   AiFillAudio,
+  AiFillHeart,
+  AiOutlineHeart,
 } from 'react-icons/ai'
 import { useAuth } from '@src/context/AuthProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 interface PlaybarProps {
   imageUrl: string | null
@@ -20,6 +22,8 @@ interface PlaybarProps {
   exercises: any[]
   onAction: (action: string) => void
   spokenText: string
+  isFavorite: boolean
+  onFavorite: () => void
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
@@ -31,8 +35,9 @@ const Playbar: React.FC<PlaybarProps> = ({
   exercises,
   onAction,
   spokenText,
+  isFavorite,
+  onFavorite,
 }) => {
-  const [liked, setLiked] = useState(false)
   const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
   const { isPlaying, setIsPlaying } = usePlayStatus()
@@ -46,10 +51,6 @@ const Playbar: React.FC<PlaybarProps> = ({
       onAction('start')
     }
     setIsPlaying(!isPlaying)
-  }
-
-  const handleLike = () => {
-    setLiked(!liked)
   }
 
   const handleMicrophoneClick = () => {
@@ -82,8 +83,12 @@ const Playbar: React.FC<PlaybarProps> = ({
               <div className="font-bold dark:text-white">{exerciseName}</div>
               <div className="text-sm dark:text-white">{routineName}</div>
             </div>
-            <button className="invisible lg:visible" onClick={handleLike}>
-              {liked ? (
+            <button
+              className="invisible lg:visible"
+              type="button"
+              onClick={() => onFavorite()}
+            >
+              {isFavorite ? (
                 <AiFillHeart size="1.5em" className="text-red-500" />
               ) : (
                 <AiOutlineHeart size="1.5em" className="text-red-500" />
