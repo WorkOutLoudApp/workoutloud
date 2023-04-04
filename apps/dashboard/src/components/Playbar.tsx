@@ -1,76 +1,94 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IoPlay, IoPause } from 'react-icons/io5'
 import { RiRewindFill } from 'react-icons/ri'
 import {
   AiOutlineForward,
-  AiFillHeart,
-  AiOutlineHeart,
   AiOutlineAudio,
   AiFillAudio,
+  AiFillHeart,
+  AiOutlineHeart,
 } from 'react-icons/ai'
 import { useAuth } from '@src/context/AuthProvider'
+import { usePlayStatus } from '@src/context/PlayStatus'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
-const Playbar = () => {
-  // Add a song object for demonstration purposes
-  const currentRoutine = {
-    routine: {
-      routinePicture: {
-        images: [
-          {
-            url: 'https://via.placeholder.com/150',
-          },
-        ],
-      },
-      exerciseName: 'Exercise Name',
-      routineName: [
-        {
-          name: 'Routine Name',
-        },
-      ],
-    },
-  }
+interface PlaybarProps {
+  imageUrl: string | null
+  exerciseName: string
+  routineName: string
+  currentExerciseIndex: number
+  setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
+  exercises: any[]
+  onAction: (action: string) => void
+  spokenText: string
+  isFavorite: boolean
+  onFavorite: () => void
+}
 
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [liked, setLiked] = useState(false)
+const Playbar: React.FC<PlaybarProps> = ({
+  imageUrl,
+  exerciseName,
+  routineName,
+  currentExerciseIndex,
+  setCurrentExerciseIndex,
+  exercises,
+  onAction,
+  spokenText,
+  isFavorite,
+  onFavorite,
+}) => {
   const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
-  const styleDefault = ``
-  const styleActive = `fill-icon-active dark:fill-icon-active-dark`
+  const { isPlaying, setIsPlaying } = usePlayStatus()
+  const styleDefault = ''
+  const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
 
   const handlePlayPause = () => {
+    if (isPlaying) {
+      onAction('stop')
+    } else {
+      onAction('start')
+    }
     setIsPlaying(!isPlaying)
-  }
-
-  const handleLike = () => {
-    setLiked(!liked)
   }
 
   const handleMicrophoneClick = () => {
     setMicActive(!micActive)
   }
 
+  const handleRewind = () => {
+    if (currentExerciseIndex > 0) {
+      setCurrentExerciseIndex(currentExerciseIndex - 1)
+      onAction('rewind')
+    }
+  }
+
+  const handleFastForward = () => {
+    if (currentExerciseIndex < exercises.length - 1) {
+      setCurrentExerciseIndex(currentExerciseIndex + 1)
+      onAction('forward')
+    }
+  }
+
   return (
     <>
       {user && (
         <div className="dark:bg-background-dark fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-4 text-black">
-          {/* Add the photo, exercise, and routine here */}
           <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
             <div className="h-10 w-10">
-              <img
-                src={currentRoutine.routine.routinePicture.images[0].url}
-                alt="exercise"
-              />
+              <img src={imageUrl} alt="null" />
             </div>
             <div>
-              <div className="font-bold">
-                {currentRoutine.routine.exerciseName}
-              </div>
-              <div className="text-sm">
-                {currentRoutine.routine.routineName[0].name}
-              </div>
+              <div className="font-bold dark:text-white">{exerciseName}</div>
+              <div className="text-sm dark:text-white">{routineName}</div>
             </div>
-            <button className="invisible lg:visible" onClick={handleLike}>
-              {liked ? (
+            <button
+              className="invisible lg:visible"
+              type="button"
+              onClick={() => onFavorite()}
+            >
+              {isFavorite ? (
                 <AiFillHeart size="1.5em" className="text-red-500" />
               ) : (
                 <AiOutlineHeart size="1.5em" className="text-red-500" />
@@ -79,10 +97,7 @@ const Playbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button
-              className="invisible lg:visible "
-              onClick={() => console.log('Rewind')}
-            >
+            <button className="invisible lg:visible" onClick={handleRewind}>
               <RiRewindFill className={styleActive} size="1.5em" />
             </button>
             <button className="invisible lg:visible" onClick={handlePlayPause}>
@@ -94,7 +109,7 @@ const Playbar = () => {
             </button>
             <button
               className="invisible lg:visible"
-              onClick={() => console.log('Fast-forward')}
+              onClick={handleFastForward}
             >
               <AiOutlineForward className={styleActive} size="1.5em" />
             </button>

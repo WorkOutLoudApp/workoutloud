@@ -11,6 +11,7 @@ import { AuthProvider } from '../context/AuthProvider'
 import WindowTypeContext from '../context/WindowTypeProvider'
 import { ThemeProvider } from '@src/context/ThemeProvider'
 import {SpeechProvider} from '@src/context/SpeechProvider'
+import { PlayStatusProvider } from '@src/context/PlayStatus'
 
 let PUBLIC_GOOGLE_API_TOKEN = ''
 axios.get(`http://localhost:4000/v1/key/google`).then((response) => {
@@ -49,6 +50,7 @@ function App({ Component, pageProps }: AppProps) {
         <AuthProvider>
           <GoogleOAuthProvider clientId={PUBLIC_GOOGLE_API_TOKEN}>
             <SpeechProvider>
+              <PlayStatusProvider>
             <div className={`${isDark ? 'dark' : 'light'}`}>
               <div className="font-poppins h-screen bg-primary dark:bg-primary-dark text dark:text-dark">
                 <Navbar {...{ isDark, setIsDark }} />
@@ -68,9 +70,10 @@ function App({ Component, pageProps }: AppProps) {
                   </div>
                 )}
                 </div>
-                <Playbar />
               </div>
+
             </div>
+            </PlayStatusProvider>
             </SpeechProvider>
           </GoogleOAuthProvider>
         </AuthProvider>
