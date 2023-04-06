@@ -59,6 +59,7 @@ export default function RoutineHeader({
               type="button"
               onClick={() => {
                 onAction('stop')
+                setIsPlaying(false)
               }}
             >
               <FontAwesomeIcon icon={faStop} className="fa-lg" />
