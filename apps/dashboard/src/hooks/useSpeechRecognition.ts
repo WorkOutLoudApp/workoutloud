@@ -23,7 +23,7 @@ const useSpeechRecognition = () => {
                 
                 recognition.onresult = (event: SpeechRecognitionEvent) => {
                     const voiceCommand = event.results[0][0].transcript
-                    const validCommands = ['play', 'pause', 'stop', 'forward', 'backward', 'rewind', 'mute'] 
+                    const validCommands = ['play', 'pause', 'stop', 'forward', 'rewind', 'mute'] 
                     if (validCommands.includes(voiceCommand)) {
                         setText(voiceCommand)
                         console.log('valid')
@@ -58,7 +58,7 @@ const useSpeechRecognition = () => {
     }
 
     return {
-        text, isListening, setIsListening, startListening, stopListening, hasRecognitionSupport: !!recognition
+        text, setText, isListening, setIsListening, startListening, stopListening, hasRecognitionSupport: !!recognition
     }
 
 }

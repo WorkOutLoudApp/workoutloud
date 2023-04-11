@@ -28,7 +28,6 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const [exercises, setExercises] = useState([])
 
   const [synth, setSynth] = useState(undefined)
-  const { setSpeechStatus } = useSpeech()
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [currentSpokenText, setCurrentSpokenText] = useState('')
   const { isPlaying, setIsPlaying } = usePlayStatus()
@@ -57,7 +56,6 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         .then((res) => {
           setData(res.data)
           getExercises()
-          getSynth()
         })
         .catch((err) => {
           console.log(err)
@@ -166,92 +164,6 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       })
   }
 
-  const getSynth = () => {
-    const synth = window.speechSynthesis
-    setSynth(synth)
-  }
-
-  const onAction = (action: string) => {
-    if (action === 'start') {
-      const voices = synth.getVoices()
-      const defaultVoice = voices.find(
-        (voice: { default: any; lang: string }) =>
-          voice.default && voice.lang === 'en-US'
-      )
-
-      const exercisePhrases = exercises.map(
-        (exercise, index) => `Exercise ${index + 1}: ${exercise.name}`
-      )
-
-      let utteranceIndex = -1
-
-      const speakNext = () => {
-        utteranceIndex++
-        if (utteranceIndex === 0) {
-          setCurrentSpokenText(`Start ${data.name}.`)
-          const startUtterance = new SpeechSynthesisUtterance(
-            `Start ${data.name}.`
-          )
-          startUtterance.voice = defaultVoice
-          startUtterance.addEventListener('end', speakNext)
-          synth.speak(startUtterance)
-        } else if (
-          utteranceIndex > 0 &&
-          utteranceIndex <= exercisePhrases.length
-        ) {
-          setCurrentSpokenText(exercisePhrases[utteranceIndex - 1])
-          setCurrentExerciseIndex(utteranceIndex - 1)
-          const utterThis = new SpeechSynthesisUtterance(
-            exercisePhrases[utteranceIndex - 1]
-          )
-          utterThis.voice = defaultVoice
-          utterThis.addEventListener('end', speakNext)
-          synth.speak(utterThis)
-        } else {
-          setCurrentSpokenText('. Finished routine')
-          const finishUtterance = new SpeechSynthesisUtterance(
-            '. Finished routine'
-          )
-          setIsPlaying(false)
-          finishUtterance.voice = defaultVoice
-          synth.speak(finishUtterance)
-          setSpeechStatus('ended')
-        }
-      }
-      // utterThis.addEventListener('pause', (event) => {
-      //   setAction('pause')
-      // })
-      // utterThis.addEventListener('resume', (event) => {
-      //   setAction('resume')
-      // })
-
-      // Start the speech
-      setSpeechStatus('speaking')
-      speakNext()
-    } else if (action === 'pause') {
-      synth.pause()
-      setSpeechStatus('paused')
-    } else if (action === 'resume') {
-      synth.resume()
-      setSpeechStatus('speaking')
-    } else if (action === 'stop') {
-      synth.cancel()
-      setSpeechStatus('ended')
-    } else if (action === 'forward') {
-      if (currentExerciseIndex < exercises.length - 1) {
-        synth.cancel()
-        setCurrentExerciseIndex(currentExerciseIndex + 1)
-        speakExercise(currentExerciseIndex + 1)
-      }
-    } else if (action === 'rewind') {
-      if (currentExerciseIndex > 0) {
-        synth.cancel()
-        setCurrentExerciseIndex(currentExerciseIndex - 1)
-        speakExercise(currentExerciseIndex - 1)
-      }
-    }
-  }
-
   return (
     <div className="w-full">
       {auth ? (
@@ -265,8 +177,6 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
               currentTab={currentTab}
               setTab={setCurrentTab}
               onFavorite={onFavorite}
-              onAction={onAction}
-              handlePlayStatus={onAction}
             />
           ) : null}
           {currentTab === 'Exercises' ? (
@@ -317,13 +227,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       )}
       <Playbar
         imageUrl={currentExercise?.image}
-        exerciseName={currentExercise?.name}
         routineName={data ? data.name : ''}
-        currentExerciseIndex={currentExerciseIndex}
-        setCurrentExerciseIndex={setCurrentExerciseIndex}
         exercises={exercises}
-        onAction={onAction}
-        spokenText={currentSpokenText}
         isFavorite={isFavorite}
         onFavorite={onFavorite}
       />

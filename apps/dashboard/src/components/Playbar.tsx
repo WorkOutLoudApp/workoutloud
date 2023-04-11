@@ -13,66 +13,98 @@ import { usePlayStatus } from '@src/context/PlayStatus'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import useSpeechRecognition from '@src/hooks/useSpeechRecognition'
+import { getUtterance, useSpeech } from '@src/context/SpeechProvider'
 
 interface PlaybarProps {
   imageUrl: string | null
-  exerciseName: string
   routineName: string
-  currentExerciseIndex: number
-  setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
   exercises: any[]
-  onAction: (action: string) => void
-  spokenText: string
   isFavorite: boolean
   onFavorite: () => void
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
   imageUrl,
-  exerciseName,
   routineName,
-  currentExerciseIndex,
-  setCurrentExerciseIndex,
   exercises,
-  onAction,
-  spokenText,
   isFavorite,
   onFavorite,
 }) => {
-  // const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
   const { isPlaying, setIsPlaying } = usePlayStatus()
 
-  const { text, isListening, setIsListening, startListening, stopListening, hasRecognitionSupport } = useSpeechRecognition()
+  const { text, setText, isListening, startListening, stopListening, hasRecognitionSupport } = useSpeechRecognition()
+
+  const { synthRef, speech, setSpeech } = useSpeech()
+
+  const synth = synthRef.current
+  let currentExerciseIndex = speech.currentExerciseIndex
+  let exerciseName = exercises[currentExerciseIndex]?.name
 
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
 
+  const startUtterance = getUtterance(`Start ${routineName}.`)
+  const exerciseUtterances = exercises.map( (exercise, index) => getUtterance(`Exercise ${index + 1}: ${exercise.name}`))
+  const finishUtterance = getUtterance(`. Finished routine`)
+  finishUtterance.onend = () => { 
+    setSpeech({...speech, currentExerciseIndex: 0})
+    setIsPlaying(false)
+    setText('')
+  }
+
   useEffect(() => {
     if (text === 'play') {
-      handlePlayPause()
+      handlePlay()
     } else if (text === 'pause') {
-      handlePlayPause()
+      handlePause()
     } else if (text === 'stop') {
       handleStop()
     } else if (text === 'forward') {
       handleFastForward()
-    } else if (text === 'backward' || text === 'rewind') {
+    } else if (text === 'rewind') {
       handleRewind()
     }
   }, [text])
 
   const handleStop = () => {
-      //TODO: cancel speech
+      // cancel speech
+      synth.cancel()
+      setSpeech({...speech, currentExerciseIndex: 0})
+      setIsPlaying(false)
   }
 
-  const handlePlayPause = () => {
-    if (isPlaying) {
-      //TODO: pause speech
-    } else {
-      //TODO: play/resume speech
+  const speakExercise = (currentExerciseIndex : number) => {
+    const utterance = exerciseUtterances[currentExerciseIndex]
+    synth.speak(utterance)
+    utterance.onend = () => {
+      if (currentExerciseIndex < exercises.length - 1) {
+        setSpeech({...speech, currentExerciseIndex: currentExerciseIndex+1 })
+        speakExercise(currentExerciseIndex+1)  
+      } else {
+        synth.speak(finishUtterance)
+      }
     }
-    setIsPlaying(!isPlaying)
+  }
+
+  const handlePlay = () => {
+    if (!synth.speaking) {
+      // start routine from beginning
+      synth.speak(startUtterance)
+      speakExercise(currentExerciseIndex)
+    } else {
+      if (synth.paused) {
+        synth.resume()
+      }
+    }
+    setIsPlaying(true)
+  }
+
+  const handlePause = () => {
+    if (synth.speaking && !synth.paused) {
+      synth.pause()
+    }
+    setIsPlaying(false)
   }
 
   const handleMicrophoneClick = () => {
@@ -84,23 +116,31 @@ const Playbar: React.FC<PlaybarProps> = ({
   }
 
   const handleRewind = () => {
-    let newExerciseIndex = null
+    let newExerciseIndex = currentExerciseIndex
     if (currentExerciseIndex > 0) {
       newExerciseIndex = currentExerciseIndex - 1
-      setCurrentExerciseIndex(newExerciseIndex)
-      exerciseName = exercises[newExerciseIndex]
+      setSpeech({...speech, currentExerciseIndex: newExerciseIndex})
     }
-    //TODO: speak new exercise
+    //speak new exercise
+    synth.cancel() // clear queue
+    if (!isPlaying) {
+      setIsPlaying(true)
+    }
+    speakExercise(newExerciseIndex)
   }
 
   const handleFastForward = () => {
-    let newExerciseIndex = null
+    let newExerciseIndex = currentExerciseIndex
     if (currentExerciseIndex < exercises.length - 1) {
       newExerciseIndex = currentExerciseIndex + 1
-      setCurrentExerciseIndex(newExerciseIndex)
-      exerciseName = exercises[newExerciseIndex].name
+      setSpeech({...speech, currentExerciseIndex: newExerciseIndex})
     }
-    //TODO: speak new exercise
+    //speak new exercise
+    synth.cancel()
+    if (!isPlaying) {
+      setIsPlaying(true)
+    }
+    speakExercise(newExerciseIndex)
   }
 
   return (
@@ -132,7 +172,7 @@ const Playbar: React.FC<PlaybarProps> = ({
             <button className="invisible lg:visible" onClick={handleRewind}>
               <RiRewindFill className={styleActive} size="1.5em" />
             </button>
-            <button className="invisible lg:visible" onClick={handlePlayPause}>
+            <button className="invisible lg:visible" onClick={isPlaying ? handlePause : handlePlay}>
               {isPlaying ? (
                 <IoPause className={styleActive} size="1.5em" />
               ) : (
@@ -148,7 +188,7 @@ const Playbar: React.FC<PlaybarProps> = ({
           </div>
 
           <div className="absolute right-4 flex items-center space-x-2">
-            <button className="visible lg:invisible" onClick={handlePlayPause}>
+            <button className="visible lg:invisible" onClick={isPlaying ? handlePause : handlePlay}>
               {isPlaying ? (
                 <IoPause className={styleActive} size="1.5em" />
               ) : (

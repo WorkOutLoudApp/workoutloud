@@ -3,27 +3,54 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react'
 
 interface SpeechInterface {
+    synthRef: React.MutableRefObject<SpeechSynthesis>
     speech: any
     setSpeech: React.Dispatch<React.SetStateAction<any>>
-    speechStatus: any
-    setSpeechStatus: React.Dispatch<React.SetStateAction<any>>
-
 }
 
+const defaultSpeech : any = {
+    voices: [],
+    defaultVoice: undefined,
+    utterance: undefined,
+    currentRoutineId: 0,
+    currentExerciseIndex: 0
+}
 
 const SpeechContext = createContext({} as SpeechInterface)
 
 export const SpeechProvider = ({ children }: any) => {
-    const [speech, setSpeech] = useState(undefined)
-    const [speechStatus, setSpeechStatus] = useState('ended')
+    const synthRef : React.MutableRefObject<SpeechSynthesis> = useRef(null)
+    const [speech, setSpeech] = useState(defaultSpeech)
+
+    // initialize
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storedSpeechInfo = JSON.parse(localStorage.getItem('speechInfo'))
+            if (!storedSpeechInfo) {
+                localStorage.setItem('speechInfo', JSON.stringify({currentRoutineId: 0, currentExerciseIndex: 0}))
+            }
+            const currentRoutineId = storedSpeechInfo.currentRoutineId || 0
+            const currentExerciseIndex = storedSpeechInfo.currentExerciseIndex || 0
+            synthRef.current = window.speechSynthesis
+            const voices = synthRef.current.getVoices()
+            const defaultVoice = voices.find(
+                (voice: { default: any; lang: string }) =>
+                  voice.default && voice.lang === 'en-US'
+              )
+            const utterance = getUtterance('', defaultVoice)
+            setSpeech({voices, defaultVoice, utterance, currentRoutineId, currentExerciseIndex})
+        }
+    },[])
+
 
     const value = useMemo(
-        () => ({ speech, setSpeech, speechStatus, setSpeechStatus }),
-        [speech, setSpeech, speechStatus, setSpeechStatus]
+        () => ({ synthRef, speech, setSpeech }),
+        [synthRef, speech, setSpeech]
     )
 
     return (
@@ -34,6 +61,15 @@ export const SpeechProvider = ({ children }: any) => {
 
 export default SpeechContext
 
-
 export const useSpeech = () => useContext(SpeechContext)
 
+export const getUtterance = (text: string, voice?: SpeechSynthesisVoice) => {
+    let utterance : SpeechSynthesisUtterance = null
+    if (typeof window !== 'undefined') {
+        utterance =  new SpeechSynthesisUtterance(text)
+    }
+    if (voice) {
+        utterance.voice = voice
+    }
+    return utterance
+}
