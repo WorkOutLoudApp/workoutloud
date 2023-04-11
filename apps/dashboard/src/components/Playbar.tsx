@@ -12,6 +12,7 @@ import { useAuth } from '@src/context/AuthProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import useSpeechRecognition from '@src/hooks/useSpeechRecognition'
 
 interface PlaybarProps {
   imageUrl: string | null
@@ -38,37 +39,68 @@ const Playbar: React.FC<PlaybarProps> = ({
   isFavorite,
   onFavorite,
 }) => {
-  const [micActive, setMicActive] = useState(false)
+  // const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
   const { isPlaying, setIsPlaying } = usePlayStatus()
+
+  const { text, isListening, setIsListening, startListening, stopListening, hasRecognitionSupport } = useSpeechRecognition()
+
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
 
+  useEffect(() => {
+    if (text === 'play') {
+      handlePlayPause()
+    } else if (text === 'pause') {
+      handlePlayPause()
+    } else if (text === 'stop') {
+      handleStop()
+    } else if (text === 'forward') {
+      handleFastForward()
+    } else if (text === 'backward' || text === 'rewind') {
+      handleRewind()
+    }
+  }, [text])
+
+  const handleStop = () => {
+      //TODO: cancel speech
+  }
+
   const handlePlayPause = () => {
     if (isPlaying) {
-      onAction('stop')
+      //TODO: pause speech
     } else {
-      onAction('start')
+      //TODO: play/resume speech
     }
     setIsPlaying(!isPlaying)
   }
 
   const handleMicrophoneClick = () => {
-    setMicActive(!micActive)
+    if (isListening) {
+      stopListening()
+    } else {
+      startListening()
+    }
   }
 
   const handleRewind = () => {
+    let newExerciseIndex = null
     if (currentExerciseIndex > 0) {
-      setCurrentExerciseIndex(currentExerciseIndex - 1)
-      onAction('rewind')
+      newExerciseIndex = currentExerciseIndex - 1
+      setCurrentExerciseIndex(newExerciseIndex)
+      exerciseName = exercises[newExerciseIndex]
     }
+    //TODO: speak new exercise
   }
 
   const handleFastForward = () => {
+    let newExerciseIndex = null
     if (currentExerciseIndex < exercises.length - 1) {
-      setCurrentExerciseIndex(currentExerciseIndex + 1)
-      onAction('forward')
+      newExerciseIndex = currentExerciseIndex + 1
+      setCurrentExerciseIndex(newExerciseIndex)
+      exerciseName = exercises[newExerciseIndex].name
     }
+    //TODO: speak new exercise
   }
 
   return (
@@ -123,13 +155,20 @@ const Playbar: React.FC<PlaybarProps> = ({
                 <IoPlay className={styleActive} size="1.5em" />
               )}
             </button>
-            <button onClick={handleMicrophoneClick}>
-              {micActive ? (
-                <AiFillAudio className={styleActive} size="1.5em" />
-              ) : (
-                <AiOutlineAudio className={styleActive} size="1.5em" />
-              )}
-            </button>
+            {hasRecognitionSupport && (
+              <div className='flex flex-row items-center'>
+                <button onClick={handleMicrophoneClick}>
+                  {isListening ? (
+                    <AiFillAudio className={styleActive} size="1.5em" />
+                  ) : (
+                    <AiOutlineAudio className={styleActive} size="1.5em" />
+                  )}
+                </button>
+                <p className='dark:text-secondary-dark text-sm'>{isListening ? 'unmuted' : 'muted'}</p>
+              </div>
+            )
+
+            }
           </div>
         </div>
       )}
