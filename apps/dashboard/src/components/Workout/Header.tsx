@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useSpeech } from '@src/context/SpeechProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 interface RoutineHeaderProps {
   name: string
@@ -30,9 +31,8 @@ export default function RoutineHeader({
   setTab,
   onFavorite,
 }: RoutineHeaderProps) {
-  const { isPlaying, setIsPlaying } = usePlayStatus()
-  const { synthRef, speech, setSpeech } = useSpeech()
-  const synth = synthRef.current
+  const { isPlaying } = usePlayStatus()
+  const { handleStop, handlePlay } = useSpeechActions()
 
   return (
     <div className="dark:bg-background-dark flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] p-3">
@@ -54,9 +54,7 @@ export default function RoutineHeader({
           {isPlaying && (
             <button
               type="button"
-              onClick={() => {
-                // TODO: handleStop()
-              }}
+              onClick={handleStop}
             >
               <FontAwesomeIcon icon={faStop} className="fa-lg" />
             </button>
@@ -64,9 +62,7 @@ export default function RoutineHeader({
           {!isPlaying && (
             <button
               type="button"
-              onClick={() => {
-                // TODO: handlePlay()
-              }}
+              onClick={handlePlay}
             >
               <FontAwesomeIcon
                 icon={faPlay}

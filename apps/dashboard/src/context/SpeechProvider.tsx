@@ -17,7 +17,8 @@ const defaultSpeech : any = {
     voices: [],
     defaultVoice: undefined,
     utterance: undefined,
-    currentRoutineId: 0,
+    routineName: '',
+    exercises: [],
     currentExerciseIndex: 0
 }
 
@@ -31,11 +32,9 @@ export const SpeechProvider = ({ children }: any) => {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const storedSpeechInfo = JSON.parse(localStorage.getItem('speechInfo'))
-            if (!storedSpeechInfo) {
-                localStorage.setItem('speechInfo', JSON.stringify({currentRoutineId: 0, currentExerciseIndex: 0}))
-            }
-            const currentRoutineId = storedSpeechInfo.currentRoutineId || 0
-            const currentExerciseIndex = storedSpeechInfo.currentExerciseIndex || 0
+            const routineName = storedSpeechInfo?.routineName || ''
+            const exercises = storedSpeechInfo?.exercises || []
+            const currentExerciseIndex = storedSpeechInfo?.currentExerciseIndex || 0
             synthRef.current = window.speechSynthesis
             const voices = synthRef.current.getVoices()
             const defaultVoice = voices.find(
@@ -43,7 +42,7 @@ export const SpeechProvider = ({ children }: any) => {
                   voice.default && voice.lang === 'en-US'
               )
             const utterance = getUtterance('', defaultVoice)
-            setSpeech({voices, defaultVoice, utterance, currentRoutineId, currentExerciseIndex})
+            setSpeech({voices, defaultVoice, routineName, exercises, currentExerciseIndex})
         }
     },[])
 

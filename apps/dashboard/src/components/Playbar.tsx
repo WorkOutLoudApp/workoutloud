@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import useSpeechRecognition from '@src/hooks/useSpeechRecognition'
 import { getUtterance, useSpeech } from '@src/context/SpeechProvider'
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 interface PlaybarProps {
   imageUrl: string | null
@@ -31,118 +32,21 @@ const Playbar: React.FC<PlaybarProps> = ({
   onFavorite,
 }) => {
   const { user } = useAuth()
-  const { isPlaying, setIsPlaying } = usePlayStatus()
+  const { isPlaying } = usePlayStatus()
 
-  const { text, setText, isListening, startListening, stopListening, hasRecognitionSupport } = useSpeechRecognition()
+  const { hasRecognitionSupport } = useSpeechRecognition()
 
-  const { synthRef, speech, setSpeech } = useSpeech()
+  const { speech } = useSpeech()
 
-  const synth = synthRef.current
   let currentExerciseIndex = speech.currentExerciseIndex
   let exerciseName = exercises[currentExerciseIndex]?.name
 
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
-
-  const startUtterance = getUtterance(`Start ${routineName}.`)
-  const exerciseUtterances = exercises.map( (exercise, index) => getUtterance(`Exercise ${index + 1}: ${exercise.name}`))
-  const finishUtterance = getUtterance(`. Finished routine`)
-  finishUtterance.onend = () => { 
-    setSpeech({...speech, currentExerciseIndex: 0})
-    setIsPlaying(false)
-    setText('')
-  }
-
-  useEffect(() => {
-    if (text === 'play') {
-      handlePlay()
-    } else if (text === 'pause') {
-      handlePause()
-    } else if (text === 'stop') {
-      handleStop()
-    } else if (text === 'forward') {
-      handleFastForward()
-    } else if (text === 'rewind') {
-      handleRewind()
-    }
-  }, [text])
-
-  const handleStop = () => {
-      // cancel speech
-      synth.cancel()
-      setSpeech({...speech, currentExerciseIndex: 0})
-      setIsPlaying(false)
-  }
-
-  const speakExercise = (currentExerciseIndex : number) => {
-    const utterance = exerciseUtterances[currentExerciseIndex]
-    synth.speak(utterance)
-    utterance.onend = () => {
-      if (currentExerciseIndex < exercises.length - 1) {
-        setSpeech({...speech, currentExerciseIndex: currentExerciseIndex+1 })
-        speakExercise(currentExerciseIndex+1)  
-      } else {
-        synth.speak(finishUtterance)
-      }
-    }
-  }
-
-  const handlePlay = () => {
-    if (!synth.speaking) {
-      // start routine from beginning
-      synth.speak(startUtterance)
-      speakExercise(currentExerciseIndex)
-    } else {
-      if (synth.paused) {
-        synth.resume()
-      }
-    }
-    setIsPlaying(true)
-  }
-
-  const handlePause = () => {
-    if (synth.speaking && !synth.paused) {
-      synth.pause()
-    }
-    setIsPlaying(false)
-  }
-
-  const handleMicrophoneClick = () => {
-    if (isListening) {
-      stopListening()
-    } else {
-      startListening()
-    }
-  }
-
-  const handleRewind = () => {
-    let newExerciseIndex = currentExerciseIndex
-    if (currentExerciseIndex > 0) {
-      newExerciseIndex = currentExerciseIndex - 1
-      setSpeech({...speech, currentExerciseIndex: newExerciseIndex})
-    }
-    //speak new exercise
-    synth.cancel() // clear queue
-    if (!isPlaying) {
-      setIsPlaying(true)
-    }
-    speakExercise(newExerciseIndex)
-  }
-
-  const handleFastForward = () => {
-    let newExerciseIndex = currentExerciseIndex
-    if (currentExerciseIndex < exercises.length - 1) {
-      newExerciseIndex = currentExerciseIndex + 1
-      setSpeech({...speech, currentExerciseIndex: newExerciseIndex})
-    }
-    //speak new exercise
-    synth.cancel()
-    if (!isPlaying) {
-      setIsPlaying(true)
-    }
-    speakExercise(newExerciseIndex)
-  }
-
+  
+  const { handleFastForward, handlePause, handleStop, handlePlay, handleRewind, handleMicrophoneClick} = useSpeechActions()
+  const { isListening } = usePlayStatus()
+  
   return (
     <>
       {user && (

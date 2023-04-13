@@ -27,12 +27,18 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   const [data, setData] = useState<any>(null)
   const [exercises, setExercises] = useState([])
 
-  const [synth, setSynth] = useState(undefined)
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  const { synthRef, speech, setSpeech } = useSpeech()
+  const { handleStop } = useSpeechActions()
+
+  const synth = synthRef.current
+
+  const currentExerciseIndex = speech.currentExerciseIndex
   const [currentSpokenText, setCurrentSpokenText] = useState('')
-  const { isPlaying, setIsPlaying } = usePlayStatus()
-  const { speakExercise } = useSpeechActions(synth, exercises)
   const [isFavorite, setIsFavorite] = useState(false);
+  
+  let currentRoutine : any = null
+  let currentExercises : any = null
+
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
@@ -47,6 +53,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
   if (typeof window !== 'undefined') {
     useEffect(() => {
       if (!token) return
+      handleStop()
       axios
         .get(`http://localhost:4000/v1/routine/${routine}/get`, {
           headers: {
@@ -56,11 +63,12 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
         .then((res) => {
           setData(res.data)
           getExercises()
+          currentRoutine = res.data
         })
         .catch((err) => {
           console.log(err)
         })
-    }, [token, window.location.pathname]) //fetch data on path change
+    }, [token, routine]) //fetch data on path change
   }
 
   const getExercises = () => {
@@ -72,12 +80,18 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       })
       .then((res) => {
         setExercises(res.data)
+        currentExercises = res.data
+        updateSpeech(currentRoutine, currentExercises)
         if (res.data.length > 0) {
         }
       })
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const updateSpeech = (routine: any, exercises: any) => {
+    setSpeech({...speech, routineName: routine.name, exercises: exercises, currentExerciseIndex: 0})
   }
 
   const onAddExercise = async (exercise: IExercise) => {

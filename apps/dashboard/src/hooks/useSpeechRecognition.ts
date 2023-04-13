@@ -1,3 +1,4 @@
+import { usePlayStatus } from "@src/context/PlayStatus"
 import { useState, useEffect } from "react"
 
 let recognition: SpeechRecognition = null
@@ -5,7 +6,7 @@ let recognition: SpeechRecognition = null
 
 const useSpeechRecognition = () => {
     const [text, setText] = useState('')
-    const [isListening, setIsListening] = useState(false)
+    const { isListening, setIsListening } = usePlayStatus()
 
     // initialize when the component is first loaded
     useEffect(() => {
@@ -29,8 +30,6 @@ const useSpeechRecognition = () => {
                         console.log('valid')
                     } else { console.log('invalid voice command')}
                     console.log(voiceCommand)
-                    recognition.stop()
-                    setIsListening(false)
                     if (voiceCommand === 'mute') {
                         recognition.onend = () => {
                             console.log('turned off microphone')
@@ -40,6 +39,8 @@ const useSpeechRecognition = () => {
                             startListening()
                         }
                     }
+                    recognition.stop()
+                    setIsListening(false)
                 }
             }
             if (!recognition) return
