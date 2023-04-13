@@ -12,65 +12,41 @@ import { useAuth } from '@src/context/AuthProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import useSpeechRecognition from '@src/hooks/useSpeechRecognition'
+import { getUtterance, useSpeech } from '@src/context/SpeechProvider'
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 interface PlaybarProps {
   imageUrl: string | null
-  exerciseName: string
   routineName: string
-  currentExerciseIndex: number
-  setCurrentExerciseIndex: React.Dispatch<React.SetStateAction<number>>
   exercises: any[]
-  onAction: (action: string) => void
-  spokenText: string
   isFavorite: boolean
   onFavorite: () => void
 }
 
 const Playbar: React.FC<PlaybarProps> = ({
   imageUrl,
-  exerciseName,
   routineName,
-  currentExerciseIndex,
-  setCurrentExerciseIndex,
   exercises,
-  onAction,
-  spokenText,
   isFavorite,
   onFavorite,
 }) => {
-  const [micActive, setMicActive] = useState(false)
   const { user } = useAuth()
-  const { isPlaying, setIsPlaying } = usePlayStatus()
+  const { isPlaying } = usePlayStatus()
+
+  const { hasRecognitionSupport } = useSpeechRecognition()
+
+  const { speech } = useSpeech()
+
+  let currentExerciseIndex = speech.currentExerciseIndex
+  let exerciseName = exercises[currentExerciseIndex]?.name
+
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
-
-  const handlePlayPause = () => {
-    if (isPlaying) {
-      onAction('stop')
-    } else {
-      onAction('start')
-    }
-    setIsPlaying(!isPlaying)
-  }
-
-  const handleMicrophoneClick = () => {
-    setMicActive(!micActive)
-  }
-
-  const handleRewind = () => {
-    if (currentExerciseIndex > 0) {
-      setCurrentExerciseIndex(currentExerciseIndex - 1)
-      onAction('rewind')
-    }
-  }
-
-  const handleFastForward = () => {
-    if (currentExerciseIndex < exercises.length - 1) {
-      setCurrentExerciseIndex(currentExerciseIndex + 1)
-      onAction('forward')
-    }
-  }
-
+  
+  const { handleFastForward, handlePause, handleStop, handlePlay, handleRewind, handleMicrophoneClick} = useSpeechActions()
+  const { isListening } = usePlayStatus()
+  
   return (
     <>
       {user && (
@@ -100,7 +76,7 @@ const Playbar: React.FC<PlaybarProps> = ({
             <button className="invisible lg:visible" onClick={handleRewind}>
               <RiRewindFill className={styleActive} size="1.5em" />
             </button>
-            <button className="invisible lg:visible" onClick={handlePlayPause}>
+            <button className="invisible lg:visible" onClick={isPlaying ? handlePause : handlePlay}>
               {isPlaying ? (
                 <IoPause className={styleActive} size="1.5em" />
               ) : (
@@ -116,20 +92,27 @@ const Playbar: React.FC<PlaybarProps> = ({
           </div>
 
           <div className="absolute right-4 flex items-center space-x-2">
-            <button className="visible lg:invisible" onClick={handlePlayPause}>
+            <button className="visible lg:invisible" onClick={isPlaying ? handlePause : handlePlay}>
               {isPlaying ? (
                 <IoPause className={styleActive} size="1.5em" />
               ) : (
                 <IoPlay className={styleActive} size="1.5em" />
               )}
             </button>
-            <button onClick={handleMicrophoneClick}>
-              {micActive ? (
-                <AiFillAudio className={styleActive} size="1.5em" />
-              ) : (
-                <AiOutlineAudio className={styleActive} size="1.5em" />
-              )}
-            </button>
+            {hasRecognitionSupport && (
+              <div className='flex flex-row items-center'>
+                <button onClick={handleMicrophoneClick}>
+                  {isListening ? (
+                    <AiFillAudio className={styleActive} size="1.5em" />
+                  ) : (
+                    <AiOutlineAudio className={styleActive} size="1.5em" />
+                  )}
+                </button>
+                <p className='dark:text-secondary-dark text-sm'>{isListening ? 'unmuted' : 'muted'}</p>
+              </div>
+            )
+
+            }
           </div>
         </div>
       )}

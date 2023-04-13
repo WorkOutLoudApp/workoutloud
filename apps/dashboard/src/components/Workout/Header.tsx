@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useSpeech } from '@src/context/SpeechProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 interface RoutineHeaderProps {
   name: string
@@ -18,8 +19,6 @@ interface RoutineHeaderProps {
   currentTab: string
   setTab: (tab: string) => void
   onFavorite: () => void
-  onAction: (action: string) => void
-  handlePlayStatus: (action: string) => void
 }
 
 export default function RoutineHeader({
@@ -31,11 +30,9 @@ export default function RoutineHeader({
   currentTab,
   setTab,
   onFavorite,
-  onAction,
-  handlePlayStatus
 }: RoutineHeaderProps) {
-  const { speechStatus } = useSpeech()
-  const { isPlaying, setIsPlaying } = usePlayStatus()
+  const { isPlaying } = usePlayStatus()
+  const { handleStop, handlePlay } = useSpeechActions()
 
   return (
     <div className="dark:bg-background-dark flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] p-3">
@@ -54,27 +51,21 @@ export default function RoutineHeader({
           </div>
         </div>
         <div className="space-x-5">
-          {speechStatus === 'speaking' && (
+          {isPlaying && (
             <button
               type="button"
-              onClick={() => {
-                onAction('stop')
-                setIsPlaying(false)
-              }}
+              onClick={handleStop}
             >
               <FontAwesomeIcon icon={faStop} className="fa-lg" />
             </button>
           )}
-          {speechStatus === 'ended' && (
+          {!isPlaying && (
             <button
               type="button"
-              onClick={() => {
-                onAction('start')
-                setIsPlaying(true)
-              }}
+              onClick={handlePlay}
             >
               <FontAwesomeIcon
-                icon={isPlaying ? faStop : faPlay}
+                icon={faPlay}
                 className="fa-lg"
               />
             </button>
