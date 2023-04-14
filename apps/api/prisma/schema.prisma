@@ -44,7 +44,7 @@ model Exercise {
   description String
   reps        Int
     sets        Int
-    rest    Int @default(15)
+    rest    Int @default(30)
   image       String?
   bodyPart    String?
   equipment   String?
