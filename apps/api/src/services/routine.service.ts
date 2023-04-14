@@ -250,17 +250,21 @@ const getAllExercises = async (userId: number) => {
     }
 }
 
-const getPopularRoutines = async () => {
+const getPopularRoutines = async (userId: number) => {
     const prisma = new PrismaClient()
     try {
         const routines = await prisma.routine.findMany({
             where: {
+                userId: {
+                    not: userId
+                },
                 views: {
                     gt: 0
                 }
             },
             include: {
-                exercises: true
+                exercises: true,
+                user: true
             },
             orderBy: {
                 views: 'desc'

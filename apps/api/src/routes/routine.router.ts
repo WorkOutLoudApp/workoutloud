@@ -18,6 +18,7 @@ import { requireAuth } from '@src/middlewares/requireAuth'
 const router = Router({ mergeParams: true })
 router.use(requireAuth)
 router.get('/getRoutines', getRoutines)
+router.get('/getPopularRoutines', getPopularRoutines)
 router.post('/add', addRoutine)
 router.get('/:id/get', getRoutine)
 router.patch('/:id/favorite', favoriteRoutine)
@@ -28,7 +29,5 @@ router.get('/:id/deleteExercise', deleteExercise)
 router.post('/:id/editExercise', editExercise)
 router.get('/getFavorites', getFavorites)
 router.get('/getAllExercises', getAllExercises)
-
-router.get('/getPopularRoutines', getPopularRoutines)
 
 export default router

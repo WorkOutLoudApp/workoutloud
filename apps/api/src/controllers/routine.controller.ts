@@ -185,7 +185,7 @@ export const getRoutines: RequestHandler = async (
     try {
         const {userId} = res.locals
         if (!userId) return res.status(400).json({message: 'No user id'})
-        const routines = await routineService.getPopularRoutines()
+        const routines = await routineService.getPopularRoutines(userId)
         if (!routines) return res.status(400).json({message: 'Error getting popular routines'})
         return res.json(routines)
     } catch (err) {
