@@ -8,8 +8,9 @@ interface ExerciseProps {
   id: number
   name: string
   description: string
-    reps: number,
+    reps: number
     sets: number
+    rest: number
   image?: string
     bodyPart?: string
     target?: string
@@ -18,7 +19,7 @@ interface ExerciseProps {
     onEdit: (exercise: IExercise) => void
 }
 
-export default function Exercise({ id, name, description, reps, sets, image, bodyPart, target, equipment, onDelete, onEdit }: ExerciseProps) {
+export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit }: ExerciseProps) {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false)
   return (
       <div className="flex">
@@ -38,6 +39,7 @@ export default function Exercise({ id, name, description, reps, sets, image, bod
             <p>{description}</p>
               <p>Sets: {sets}</p>
             <p>Reps: {reps}</p>
+              <p>Rest: {rest} seconds</p>
               {bodyPart ? <p>Body Part: {bodyPart}</p> : null}
                 {target ? <p>Target: {target}</p> : null}
                 {equipment ? <p>Equipment: {equipment}</p> : null}
