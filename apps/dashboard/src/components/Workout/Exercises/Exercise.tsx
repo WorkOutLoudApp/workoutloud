@@ -8,17 +8,19 @@ interface ExerciseProps {
   id: number
   name: string
   description: string
-    reps: number,
+    reps: number
     sets: number
+    rest: number
   image?: string
     bodyPart?: string
     target?: string
     equipment?: string
     onDelete: () => void
     onEdit: (exercise: IExercise) => void
+    isOwner: boolean
 }
 
-export default function Exercise({ id, name, description, reps, sets, image, bodyPart, target, equipment, onDelete, onEdit }: ExerciseProps) {
+export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit, isOwner }: ExerciseProps) {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false)
   return (
       <div className="flex">
@@ -38,14 +40,15 @@ export default function Exercise({ id, name, description, reps, sets, image, bod
             <p>{description}</p>
               <p>Sets: {sets}</p>
             <p>Reps: {reps}</p>
+              <p>Rest: {rest} seconds</p>
               {bodyPart ? <p>Body Part: {bodyPart}</p> : null}
                 {target ? <p>Target: {target}</p> : null}
                 {equipment ? <p>Equipment: {equipment}</p> : null}
           </div>
         </div>
           <button type="button" className="bg-green-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPlay} /></button>
-          <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button>
-        <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
+          {isOwner ? <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button> : null}
+          {isOwner ? <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button> : null}
       </div>
   )
 }

@@ -26,9 +26,22 @@ const Index = () => {
       console.log(err)
     })
   }
+  const [popularRoutines, setPopularRoutines] = useState([])
+  const getPopularRoutines = () => {
+    axios.get(`http://localhost:4000/v1/routine/getPopularRoutines`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      setPopularRoutines(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
   useEffect(() => {
     if (!token) return
     getRoutines()
+    getPopularRoutines()
   }, [token])
 
 
@@ -86,13 +99,26 @@ const Index = () => {
           </div>
           <div className="border-b border-black pb-5">
             <p className="text-3xl font-bold">Favorite Routines</p>
-            <p>{JSON.stringify(routines)}</p>
             <div className="grid grid-cols-2 gap-3">
               {routines.filter((routine) => routine.isFavorite ).map((routine: any, i: number) => (
                   <Routine
                       key={routine.id}
                       {...routine}
                       onDelete={() => onDelete(routine.id)}
+                  />
+              ))}
+            </div>
+          </div>
+          <div className="border-b border-black pb-5">
+            <p className="text-3xl font-bold">Popular Routines</p>
+            <p>{JSON.stringify(popularRoutines)}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {popularRoutines.map((routine: any, i: number) => (
+                  <Routine
+                      key={routine.id}
+                      {...routine}
+                      onDelete={() => onDelete(routine.id)}
+                      owner={routine.userId}
                   />
               ))}
             </div>

@@ -22,11 +22,22 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
+        const {owner} = req.query
         const {userId} = res.locals
         if (!userId) return res.status(400).json({message: 'No user id'})
-        const routine = await routineService.getRoutine(userId, parseInt(id, 10))
+        const routine = await routineService.getRoutine(parseInt(owner || userId, 10), parseInt(id, 10))
         if (!routine) return res.status(400).json({message: 'Error getting routine'})
-        return res.json(routine)
+        res.json({
+            routine,
+            userId
+        })
+        console.log(owner, userId)
+        if (owner && parseInt(owner as string, 10) !== userId) {
+            console.log('hi')
+            await routineService.addViewCount(parseInt(id, 10))
+        }
+        // eslint-disable-next-line consistent-return
+        return
     } catch (err) {
         return next(err)
     }
@@ -97,11 +108,11 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
-        const {name, description, reps, sets, image, bodyPart, equipment, target} = req.body
+        const {name, description, reps, sets, rest, image, bodyPart, equipment, target} = req.body
         if (!name) return res.status(400).json({message: 'Missing "name"'})
         if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const exercise = await routineService.addExercise(1, parseInt(id, 10), name, description, reps, sets, image, bodyPart, equipment, target)
+        const exercise = await routineService.addExercise(1, parseInt(id, 10), name, description, reps, sets, rest, image, bodyPart, equipment, target)
         if (!exercise) return res.status(400).json({message: 'Error creating exercise'})
         return res.json(exercise)
     } catch (err) {
@@ -128,11 +139,11 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
-        const {exerciseId, name, description, reps, sets, image, bodyPart, equipment, target} = req.body
+        const {exerciseId, name, description, reps, sets, rest, image, bodyPart, equipment, target} = req.body
         if (!name) return res.status(400).json({message: 'Missing "name"'})
         if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const exercise = await routineService.editExercise(1, parseInt(id, 10), exerciseId, name, description, reps, sets, image, bodyPart, equipment, target)
+        const exercise = await routineService.editExercise(1, parseInt(id, 10), exerciseId, name, description, reps, sets, rest, image, bodyPart, equipment, target)
         if (!exercise) return res.status(400).json({message: 'Error creating exercise'})
         return res.json(exercise)
     } catch (err) {
@@ -166,8 +177,21 @@ export const getRoutines: RequestHandler = async (
     } catch (err) {
         return next(err)
     }
+}, getPopularRoutines: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const routines = await routineService.getPopularRoutines(userId)
+        if (!routines) return res.status(400).json({message: 'Error getting popular routines'})
+        return res.json(routines)
+    } catch (err) {
+        return next(err)
+    }
 }
-
 
 
 

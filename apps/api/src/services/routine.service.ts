@@ -36,6 +36,26 @@ const getRoutine = async (userId: number, routineId: number) => {
     }
 }
 
+const addViewCount = async (routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        await prisma.routine.update({
+            where: {
+                id: routineId
+            },
+            data: {
+                views: {
+                    increment: 1
+                }
+            }
+        })
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 const addRoutine = async (userId: number, name: string, description: string) => {
     const prisma = new PrismaClient()
     try {
@@ -122,7 +142,7 @@ const getExercises = async (routineId: number) => {
     }
 }
 
-const addExercise = async (userId: number, routineId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
+const addExercise = async (userId: number, routineId: number, name: string, description: string, reps: number, sets: number, rest: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.create({
@@ -131,6 +151,7 @@ const addExercise = async (userId: number, routineId: number, name: string, desc
                 description,
                 reps: reps || 1,
                 sets: sets || 1,
+                rest: rest || 30,
                 image,
                 bodyPart,
                 equipment,
@@ -146,7 +167,7 @@ const addExercise = async (userId: number, routineId: number, name: string, desc
     }
 }
 
-const editExercise = async (userId: number, routineId: number, exerciseId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
+const editExercise = async (userId: number, routineId: number, exerciseId: number, name: string, description: string, reps: number, sets: number, rest: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.update({
@@ -158,6 +179,7 @@ const editExercise = async (userId: number, routineId: number, exerciseId: numbe
                 description,
                 reps: reps || 1,
                 sets: sets || 1,
+                rest: rest || 30,
                 image,
                 bodyPart,
                 equipment,
@@ -228,6 +250,34 @@ const getAllExercises = async (userId: number) => {
     }
 }
 
+const getPopularRoutines = async (userId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        const routines = await prisma.routine.findMany({
+            where: {
+                userId: {
+                    not: userId
+                },
+                views: {
+                    gt: 0
+                }
+            },
+            include: {
+                exercises: true,
+                user: true
+            },
+            orderBy: {
+                views: 'desc'
+            }
+        })
+        return routines
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 export default {
     getRoutines,
     getRoutine,
@@ -239,5 +289,7 @@ export default {
     deleteExercise,
     editExercise,
     getFavorites,
-    getAllExercises
+    getAllExercises,
+    addViewCount,
+    getPopularRoutines
 }

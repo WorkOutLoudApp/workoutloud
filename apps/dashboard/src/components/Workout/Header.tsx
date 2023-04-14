@@ -5,6 +5,7 @@ import {
   faImage,
   faPlay,
   faStop,
+  faShare
 } from '@fortawesome/free-solid-svg-icons'
 import { useSpeech } from '@src/context/SpeechProvider'
 import { usePlayStatus } from '@src/context/PlayStatus'
@@ -19,6 +20,8 @@ interface RoutineHeaderProps {
   currentTab: string
   setTab: (tab: string) => void
   onFavorite: () => void
+  userId: string
+  isOwner: boolean
 }
 
 export default function RoutineHeader({
@@ -30,6 +33,8 @@ export default function RoutineHeader({
   currentTab,
   setTab,
   onFavorite,
+                                        userId,
+    isOwner
 }: RoutineHeaderProps) {
   const { isPlaying } = usePlayStatus()
   const { handleStop, handlePlay } = useSpeechActions()
@@ -70,12 +75,20 @@ export default function RoutineHeader({
               />
             </button>
           )}
-          <button type="button" onClick={() => onFavorite()}>
+          {isOwner ? <button type="button" onClick={() => onFavorite()}>
             <FontAwesomeIcon
-              icon={faHeart}
-              className={`fa-lg ${isFavorite ? 'text-red-400' : null}`}
+                icon={faHeart}
+                className={`fa-lg ${isFavorite ? 'text-red-400' : null}`}
             />
-          </button>
+          </button> : null}
+          {isOwner ? <button type="button" onClick={() => {
+            navigator.clipboard.writeText(`${window.location.href}?owner=${userId}`)
+            // alert('Link copied to clipboard')
+          }}>
+            <FontAwesomeIcon
+                icon={faShare}
+            />
+          </button> : null}
         </div>
       </div>
       <div className="flex space-x-5">

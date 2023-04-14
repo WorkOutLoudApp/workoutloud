@@ -58,6 +58,11 @@ export default function AddExerciseModal({ open, setOpen, onAdd, title }: Props)
                     className="w-full rounded-md border border-gray-400 p-2"
                     placeholder="Reps"
                 />
+                <input
+                    {...register('rest', { required: true })}
+                    className="w-full rounded-md border border-gray-400 p-2"
+                    placeholder="Rest (seconds)"
+                />
               </div>
               <button
                 type="submit"
