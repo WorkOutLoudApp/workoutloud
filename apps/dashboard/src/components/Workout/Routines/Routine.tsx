@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage } from '@fortawesome/free-solid-svg-icons'
+import { faImage, faEye } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 import axios from "axios";
 
@@ -8,13 +8,14 @@ interface RoutineProps {
   id: number
   name: string
   description: string
+    views: number
     exercises?: any[],
   image?: string
     onDelete: () => void
     owner?: string
 }
 
-export default function Routine({ id, name, description, exercises, image, onDelete, owner }: RoutineProps) {
+export default function Routine({ id, name, description, views, exercises, image, onDelete, owner }: RoutineProps) {
   const router = useRouter()
 
   return (
@@ -31,10 +32,15 @@ export default function Routine({ id, name, description, exercises, image, onDel
               <FontAwesomeIcon icon={faImage} className="fa-xl" />
             </div>
         )}
-        <div className="text-left">
-          <p className="font-bold">{name}</p>
-          <p>{description}</p>
-            {exercises && exercises.length > 0 ? <p>{exercises.length} exercise{exercises.length > 1 ? 's': ''}</p> : null}
+        <div className="w-full">
+          <div className="flex justify-between">
+              <p className="font-bold">{name}</p>
+              <p className="font-bold">{views} <FontAwesomeIcon icon={faEye} /></p>
+          </div>
+          <div className="text-left">
+              <p>{description}</p>
+              {exercises && exercises.length > 0 ? <p>{exercises.length} exercise{exercises.length > 1 ? 's': ''}</p> : null}
+          </div>
         </div>
       </button>
       <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
