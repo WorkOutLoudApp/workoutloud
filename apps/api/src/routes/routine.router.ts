@@ -1,5 +1,18 @@
 import { Router } from 'express'
-import {getRoutines, getRoutine, addRoutine, favoriteRoutine, deleteRoutine, addExercise, deleteExercise, editExercise, getExercises, getFavorites, getAllExercises} from "@src/controllers/routine.controller"
+import {
+    getRoutines,
+    getRoutine,
+    addRoutine,
+    favoriteRoutine,
+    deleteRoutine,
+    addExercise,
+    deleteExercise,
+    editExercise,
+    getExercises,
+    getFavorites,
+    getAllExercises,
+    getPopularRoutines
+} from "@src/controllers/routine.controller"
 import { requireAuth } from '@src/middlewares/requireAuth'
 
 const router = Router({ mergeParams: true })
@@ -15,5 +28,7 @@ router.get('/:id/deleteExercise', deleteExercise)
 router.post('/:id/editExercise', editExercise)
 router.get('/getFavorites', getFavorites)
 router.get('/getAllExercises', getAllExercises)
+
+router.get('/getPopularRoutines', getPopularRoutines)
 
 export default router

@@ -250,6 +250,30 @@ const getAllExercises = async (userId: number) => {
     }
 }
 
+const getPopularRoutines = async () => {
+    const prisma = new PrismaClient()
+    try {
+        const routines = await prisma.routine.findMany({
+            where: {
+                views: {
+                    gt: 0
+                }
+            },
+            include: {
+                exercises: true
+            },
+            orderBy: {
+                views: 'desc'
+            }
+        })
+        return routines
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 export default {
     getRoutines,
     getRoutine,
@@ -262,5 +286,6 @@ export default {
     editExercise,
     getFavorites,
     getAllExercises,
-    addViewCount
+    addViewCount,
+    getPopularRoutines
 }

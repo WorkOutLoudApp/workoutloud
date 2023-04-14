@@ -36,6 +36,7 @@ export const getRoutines: RequestHandler = async (
             console.log('hi')
             await routineService.addViewCount(parseInt(id, 10))
         }
+        // eslint-disable-next-line consistent-return
         return
     } catch (err) {
         return next(err)
@@ -176,8 +177,21 @@ export const getRoutines: RequestHandler = async (
     } catch (err) {
         return next(err)
     }
+}, getPopularRoutines: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {userId} = res.locals
+        if (!userId) return res.status(400).json({message: 'No user id'})
+        const routines = await routineService.getPopularRoutines()
+        if (!routines) return res.status(400).json({message: 'Error getting popular routines'})
+        return res.json(routines)
+    } catch (err) {
+        return next(err)
+    }
 }
-
 
 
 
