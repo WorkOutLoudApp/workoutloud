@@ -17,9 +17,10 @@ interface ExerciseProps {
     equipment?: string
     onDelete: () => void
     onEdit: (exercise: IExercise) => void
+    isOwner: boolean
 }
 
-export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit }: ExerciseProps) {
+export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit, isOwner }: ExerciseProps) {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false)
   return (
       <div className="flex">
@@ -46,8 +47,10 @@ export default function Exercise({ id, name, description, reps, sets, rest, imag
           </div>
         </div>
           <button type="button" className="bg-green-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPlay} /></button>
-          <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button>
-        <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
+          {isOwner ? <div>
+              <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button>
+              <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
+          </div> : null }
       </div>
   )
 }

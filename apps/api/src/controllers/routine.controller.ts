@@ -22,11 +22,17 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
+        const {owner} = req.query
         const {userId} = res.locals
+        console.log('owner', owner)
+        console.log('userId', userId)
         if (!userId) return res.status(400).json({message: 'No user id'})
-        const routine = await routineService.getRoutine(userId, parseInt(id, 10))
+        const routine = await routineService.getRoutine(parseInt(owner || userId, 10), parseInt(id, 10))
         if (!routine) return res.status(400).json({message: 'Error getting routine'})
-        return res.json(routine)
+        return res.json({
+            routine,
+            userId
+        })
     } catch (err) {
         return next(err)
     }

@@ -18,8 +18,9 @@ import { useSpeechActions } from '@src/context/SpeechAction'
 const headerTabs = ['Exercises', 'History', 'Settings']
 interface RoutinePageProps {
   routine: string
+  owner: string
 }
-const RoutinePage = ({ routine }: RoutinePageProps) => {
+const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
   const { auth, token } = useAuth()
   const [currentTab, setCurrentTab] = useState(headerTabs[0])
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false)
@@ -50,6 +51,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
       ? exercises[currentExerciseIndex]
       : { image: null, name: '', routineName: '' }
 
+  const [userId, setUserId] = useState('')
+  const [isOwner, setIsOwner] = useState(false)
   if (typeof window !== 'undefined') {
     useEffect(() => {
       if (!token) return
@@ -59,11 +62,18 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            ...(owner && { owner }),
+          }
         })
         .then((res) => {
-          setData(res.data)
+          if (!owner) {
+            setIsOwner(true)
+          }
+          setUserId(res.data.userId)
+          setData(res.data.routine)
           getExercises()
-          currentRoutine = res.data
+          currentRoutine = res.data.routine
         })
         .catch((err) => {
           console.log(err)
@@ -191,6 +201,8 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
               currentTab={currentTab}
               setTab={setCurrentTab}
               onFavorite={onFavorite}
+              userId={userId}
+              isOwner={isOwner}
             />
           ) : null}
           {currentTab === 'Exercises' ? (
@@ -230,6 +242,7 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
                         ...updatedExercise,
                       })
                     }
+                    isOwner={isOwner}
                   />
                 ))}
               </div>
@@ -252,9 +265,11 @@ const RoutinePage = ({ routine }: RoutinePageProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { routine } = context.params
+  const { owner } = context.query
   return {
     props: {
       routine,
+      owner
     },
   }
 }
