@@ -11,9 +11,10 @@ interface RoutineProps {
     exercises?: any[],
   image?: string
     onDelete: () => void
+    owner?: string
 }
 
-export default function Routine({ id, name, description, exercises, image, onDelete }: RoutineProps) {
+export default function Routine({ id, name, description, exercises, image, onDelete, owner }: RoutineProps) {
   const router = useRouter()
 
   return (
@@ -21,7 +22,7 @@ export default function Routine({ id, name, description, exercises, image, onDel
       <button
           type="button"
           className="flex w-full space-x-3 border border-black bg-[#d9d9d9] dark:bg-background-dark p-3"
-          onClick={() => router.push(`/routines/${id}`)}
+          onClick={() => router.push(`/routines/${id}${owner ? `?owner=${owner}` : ''}`)}
       >
         {image ? (
             <img src={image} alt={name} />
@@ -42,5 +43,6 @@ export default function Routine({ id, name, description, exercises, image, onDel
 }
 Routine.defaultProps = {
   image: null,
-    exercises: []
+    exercises: [],
+    owner: null,
 }
