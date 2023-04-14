@@ -47,10 +47,8 @@ export default function Exercise({ id, name, description, reps, sets, rest, imag
           </div>
         </div>
           <button type="button" className="bg-green-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPlay} /></button>
-          {isOwner ? <div>
-              <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button>
-              <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button>
-          </div> : null }
+          {isOwner ? <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button> : null}
+          {isOwner ? <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button> : null}
       </div>
   )
 }

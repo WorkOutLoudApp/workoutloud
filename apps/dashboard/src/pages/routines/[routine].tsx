@@ -269,7 +269,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       routine,
-      owner
+      owner: owner || null,
     },
   }
 }

@@ -82,7 +82,10 @@ export default function RoutineHeader({
                   className={`fa-lg ${isFavorite ? 'text-red-400' : null}`}
               />
             </button>
-            <button type="button" onClick={() => navigator.clipboard.writeText(`${window.location.href}?owner=${owner || userId}`)}>
+            <button type="button" onClick={() => {
+              navigator.clipboard.writeText(`${window.location.href}?owner=${userId}`)
+              alert('Link copied to clipboard')
+            }}>
               <FontAwesomeIcon
                   icon={faShare}
               />
