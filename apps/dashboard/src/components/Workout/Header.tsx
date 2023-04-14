@@ -75,22 +75,20 @@ export default function RoutineHeader({
               />
             </button>
           )}
-          {isOwner ? <div>
-            <button type="button" onClick={() => onFavorite()}>
-              <FontAwesomeIcon
-                  icon={faHeart}
-                  className={`fa-lg ${isFavorite ? 'text-red-400' : null}`}
-              />
-            </button>
-            <button type="button" onClick={() => {
-              navigator.clipboard.writeText(`${window.location.href}?owner=${userId}`)
-              alert('Link copied to clipboard')
-            }}>
-              <FontAwesomeIcon
-                  icon={faShare}
-              />
-            </button>
-          </div> : null}
+          {isOwner ? <button type="button" onClick={() => onFavorite()}>
+            <FontAwesomeIcon
+                icon={faHeart}
+                className={`fa-lg ${isFavorite ? 'text-red-400' : null}`}
+            />
+          </button> : null}
+          {isOwner ? <button type="button" onClick={() => {
+            navigator.clipboard.writeText(`${window.location.href}?owner=${userId}`)
+            // alert('Link copied to clipboard')
+          }}>
+            <FontAwesomeIcon
+                icon={faShare}
+            />
+          </button> : null}
         </div>
       </div>
       <div className="flex space-x-5">

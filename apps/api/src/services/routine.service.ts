@@ -36,6 +36,26 @@ const getRoutine = async (userId: number, routineId: number) => {
     }
 }
 
+const addViewCount = async (routineId: number) => {
+    const prisma = new PrismaClient()
+    try {
+        await prisma.routine.update({
+            where: {
+                id: routineId
+            },
+            data: {
+                views: {
+                    increment: 1
+                }
+            }
+        })
+    } catch (error) {
+        return null
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
 const addRoutine = async (userId: number, name: string, description: string) => {
     const prisma = new PrismaClient()
     try {
@@ -241,5 +261,6 @@ export default {
     deleteExercise,
     editExercise,
     getFavorites,
-    getAllExercises
+    getAllExercises,
+    addViewCount
 }
