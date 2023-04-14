@@ -122,7 +122,7 @@ const getExercises = async (routineId: number) => {
     }
 }
 
-const addExercise = async (userId: number, routineId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
+const addExercise = async (userId: number, routineId: number, name: string, description: string, reps: number, sets: number, rest: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.create({
@@ -131,6 +131,7 @@ const addExercise = async (userId: number, routineId: number, name: string, desc
                 description,
                 reps: reps || 1,
                 sets: sets || 1,
+                rest: rest || 30,
                 image,
                 bodyPart,
                 equipment,
@@ -146,7 +147,7 @@ const addExercise = async (userId: number, routineId: number, name: string, desc
     }
 }
 
-const editExercise = async (userId: number, routineId: number, exerciseId: number, name: string, description: string, reps: number, sets: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
+const editExercise = async (userId: number, routineId: number, exerciseId: number, name: string, description: string, reps: number, sets: number, rest: number, image?: string, bodyPart?: string, equipment?: string, target?: string) => {
     const prisma = new PrismaClient()
     try {
         const exercise = await prisma.exercise.update({
@@ -158,6 +159,7 @@ const editExercise = async (userId: number, routineId: number, exerciseId: numbe
                 description,
                 reps: reps || 1,
                 sets: sets || 1,
+                rest: rest || 30,
                 image,
                 bodyPart,
                 equipment,

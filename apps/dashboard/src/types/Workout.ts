@@ -8,4 +8,5 @@ export interface IExercise {
   description: string
   sets: string
     reps: string
+  rest: string
 }

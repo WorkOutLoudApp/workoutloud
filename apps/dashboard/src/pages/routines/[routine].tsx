@@ -109,6 +109,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
       ...exercise,
       sets: parseInt(exercise.sets, 10),
       reps: parseInt(exercise.reps, 10),
+      rest: parseInt(exercise.rest, 10),
     }
     setExerciseModalOpen(false)
     axios
@@ -134,6 +135,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
       ...exercise,
       sets: parseInt(exercise.sets, 10),
       reps: parseInt(exercise.reps, 10),
+        rest: parseInt(exercise.rest, 10),
     }
     axios
       .post(

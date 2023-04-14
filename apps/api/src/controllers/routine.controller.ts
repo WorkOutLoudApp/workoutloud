@@ -103,11 +103,11 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
-        const {name, description, reps, sets, image, bodyPart, equipment, target} = req.body
+        const {name, description, reps, sets, rest, image, bodyPart, equipment, target} = req.body
         if (!name) return res.status(400).json({message: 'Missing "name"'})
         if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const exercise = await routineService.addExercise(1, parseInt(id, 10), name, description, reps, sets, image, bodyPart, equipment, target)
+        const exercise = await routineService.addExercise(1, parseInt(id, 10), name, description, reps, sets, rest, image, bodyPart, equipment, target)
         if (!exercise) return res.status(400).json({message: 'Error creating exercise'})
         return res.json(exercise)
     } catch (err) {
@@ -134,11 +134,11 @@ export const getRoutines: RequestHandler = async (
 ) => {
     try {
         const {id} = req.params
-        const {exerciseId, name, description, reps, sets, image, bodyPart, equipment, target} = req.body
+        const {exerciseId, name, description, reps, sets, rest, image, bodyPart, equipment, target} = req.body
         if (!name) return res.status(400).json({message: 'Missing "name"'})
         if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const exercise = await routineService.editExercise(1, parseInt(id, 10), exerciseId, name, description, reps, sets, image, bodyPart, equipment, target)
+        const exercise = await routineService.editExercise(1, parseInt(id, 10), exerciseId, name, description, reps, sets, rest, image, bodyPart, equipment, target)
         if (!exercise) return res.status(400).json({message: 'Error creating exercise'})
         return res.json(exercise)
     } catch (err) {
