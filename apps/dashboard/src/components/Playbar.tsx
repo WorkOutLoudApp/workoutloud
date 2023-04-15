@@ -87,7 +87,7 @@ const Playbar: React.FC<PlaybarProps> = ({
               <img src={imageUrl} alt="null" />
               {showPlusIcon && (
                 <div
-                  className="absolute top-0 left-0 flex h-full w-full cursor-pointer items-center justify-center rounded bg-black bg-opacity-0 p-1 hover:bg-opacity-50"
+                  className="absolute top-0 left-0 flex h-full w-full cursor-pointer items-center justify-center bg-black bg-opacity-0 p-1 hover:bg-opacity-50"
                   onClick={handlePlusIconClick}
                 >
                   <span className="text-2xl text-white">+</span>
