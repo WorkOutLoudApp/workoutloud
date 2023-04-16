@@ -57,12 +57,12 @@ const Playbar: React.FC<PlaybarProps> = ({
 
   let timeout: NodeJS.Timeout
 
-  const handleImageContainerMouseEnter = () => {
+  const handleMouseHover = () => {
     clearTimeout(timeout)
     setShowPlusIcon(true)
   }
 
-  const handleImageContainerMouseLeave = () => {
+  const handleMouseExit = () => {
     timeout = setTimeout(() => setShowPlusIcon(false), 100)
   }
 
@@ -74,6 +74,29 @@ const Playbar: React.FC<PlaybarProps> = ({
     setShowLargeImage(false)
   }
 
+  const [progress, setProgress] = useState(0)
+
+  const updateProgress = () => {
+    const progressPercentage =
+      (speech.currentExerciseIndex / exercises.length) * 100
+    setProgress(progressPercentage)
+  }
+
+  useEffect(() => {
+    updateProgress()
+  }, [speech.currentExerciseIndex])
+
+  const ProgressBar = () => {
+    return (
+      <div className="h-1 w-full rounded-full bg-gray-300">
+        <div
+          className="h-1 bg-green-500"
+          style={{ width: `${progress}%` }}
+        ></div>
+      </div>
+    )
+  }
+
   return (
     <>
       {user && (
@@ -81,8 +104,8 @@ const Playbar: React.FC<PlaybarProps> = ({
           <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
             <div
               className="relative h-10 w-10"
-              onMouseEnter={handleImageContainerMouseEnter}
-              onMouseLeave={handleImageContainerMouseLeave}
+              onMouseEnter={handleMouseHover}
+              onMouseLeave={handleMouseExit}
             >
               <img src={imageUrl} alt="null" />
               {showPlusIcon && (
@@ -111,26 +134,29 @@ const Playbar: React.FC<PlaybarProps> = ({
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <button className="invisible lg:visible" onClick={handleRewind}>
-              <RiRewindFill className={styleActive} size="1.5em" />
-            </button>
-            <button
-              className="invisible lg:visible"
-              onClick={isPlaying ? handlePause : handlePlay}
-            >
-              {isPlaying ? (
-                <IoPause className={styleActive} size="1.5em" />
-              ) : (
-                <IoPlay className={styleActive} size="1.5em" />
-              )}
-            </button>
-            <button
-              className="invisible lg:visible"
-              onClick={handleFastForward}
-            >
-              <AiOutlineForward className={styleActive} size="1.5em" />
-            </button>
+          <div className="flex flex-col items-center space-y-4">
+            <div className="flex items-center space-x-4">
+              <button className="invisible lg:visible" onClick={handleRewind}>
+                <RiRewindFill className={styleActive} size="1.5em" />
+              </button>
+              <button
+                className="invisible lg:visible"
+                onClick={isPlaying ? handlePause : handlePlay}
+              >
+                {isPlaying ? (
+                  <IoPause className={styleActive} size="1.5em" />
+                ) : (
+                  <IoPlay className={styleActive} size="1.5em" />
+                )}
+              </button>
+              <button
+                className="invisible lg:visible"
+                onClick={handleFastForward}
+              >
+                <AiOutlineForward className={styleActive} size="1.5em" />
+              </button>
+            </div>
+            <ProgressBar />
           </div>
 
           <div className="absolute right-4 flex items-center space-x-2">
