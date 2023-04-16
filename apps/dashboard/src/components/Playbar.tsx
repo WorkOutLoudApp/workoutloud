@@ -100,7 +100,7 @@ const Playbar: React.FC<PlaybarProps> = ({
   return (
     <>
       {user && (
-        <div className="dark:bg-background-dark fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-4 text-black">
+        <div className="dark:bg-background-dark fixed bottom-0 left-0 right-0 flex items-center justify-center bg-gray-200 p-3 text-black">
           <div className="absolute left-4 flex items-center space-x-2 dark:text-white">
             <div
               className="relative h-10 w-10"
