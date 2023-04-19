@@ -1,7 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { IExercise } from '@src/types/Workout'
+import formStyle from '@src/styles/formStyle'
 
+const { modalStyle, titleStyle, inputStyle, iconStyle, submitButtonStyle } = formStyle
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
@@ -19,12 +21,12 @@ export default function AddRoutineModal({ open, setOpen, onAdd }: Props) {
     <div>
       {open ? (
         <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center bg-black bg-opacity-60">
-          <div className="mx-auto max-w-lg rounded-md bg-white p-4 shadow-xl">
+          <div className={modalStyle}>
             <div className="flex justify-between">
-              <h3 className="text-xl font-medium">Add Routine</h3>
+              <h3 className={titleStyle}>Add Routine</h3>
               <button
                 type="button"
-                className="font-medium text-gray-800"
+                className={iconStyle}
                 onClick={() => {
                   setOpen(false)
                 }}
@@ -38,17 +40,17 @@ export default function AddRoutineModal({ open, setOpen, onAdd }: Props) {
             >
               <input
                 {...register('name', { required: true })}
-                className="w-full rounded-md border border-gray-400 p-2"
+                className={inputStyle}
                 placeholder="Name"
               />
               <input
                   {...register('description', { required: true })}
-                  className="w-full rounded-md border border-gray-400 p-2"
+                  className={inputStyle}
                   placeholder="Description"
               />
               <button
                 type="submit"
-                className="rounded bg-blue-400/20 py-2 px-2 font-semibold text-gray-800"
+                className={submitButtonStyle}
               >
                 Add
               </button>

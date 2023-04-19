@@ -32,6 +32,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     onSearch(searchTerm, updatedFilters)
   }
 
+  const inputStyle = "w-full rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 dark:focus:border-secondary-dark focus:outline-none focus:ring dark:focus:ring-2 dark:focus:ring-opacity-80 focus:ring-indigo-300 dark:focus:ring-secondary-dark focus:ring-opacity-40 dark:text-primary-variant-dark"
+
   return (
     <div className="flex items-center">
       {auth ? (
@@ -39,7 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           <div className="mr-2 flex items-center">
             <input
               type="text"
-              className="block w-full rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+              className={inputStyle}
               placeholder="Search for exercises"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -50,13 +52,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
               }}
             />
             <button
-              className="font['Poppins',San-serif] ml-2 cursor-pointer rounded bg-indigo-500 px-2 py-1 text-xl font-bold text-white hover:bg-indigo-600"
+              className="ml-2 cursor-pointer rounded bg-secondary px-2 py-1 text-xl font-bold text-white dark:text-primary-dark hover:bg-indigo-600 dark:bg-secondary-dark"
               onClick={handleSearch}
             >
               Search
             </button>
           </div>
-          <div className="relative">
+          <div className="">
             <button onClick={handleFilterToggle}>
               <Filters
                 filters={filters}

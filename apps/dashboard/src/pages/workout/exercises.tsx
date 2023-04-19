@@ -103,6 +103,8 @@ const Exercises: React.FC<Props> = ({ routine }) => {
     })
   }
 
+  const inputStyle = "rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 dark:focus:border-secondary-dark focus:outline-none focus:ring dark:focus:ring-2 dark:focus:ring-opacity-80 focus:ring-indigo-300 dark:focus:ring-secondary-dark focus:ring-opacity-40 dark:text-primary-variant-dark"
+
   return (
     <div className="container mx-auto">
       {auth ? (
@@ -112,18 +114,18 @@ const Exercises: React.FC<Props> = ({ routine }) => {
           </h1>
           <SearchBar onSearch={handleSearch} />
 <div className="flex space-x-2 mt-2">
-  <input               className="rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+  <input               className={inputStyle}
                        onChange={(e) => setSets(parseInt(e.target.value, 10))} placeholder="Sets" />
-  <input               className="rounded-md border bg-white px-4 py-2 text-indigo-500 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+  <input               className={inputStyle}
                        onChange={(e) => setReps(parseInt(e.target.value, 10))} placeholder="Reps" />
 </div>
           <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {currentResults.map((result) => (
               <li
                 key={result.name}
-                className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:shadow-lg"
+                className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:shadow-lg dark:hover:shadow-secondary-dark dark:border-secondary-dark"
               >
-                <h3 className="mb-2 text-lg font-bold">{result.name}</h3>
+                <h3 className="basis-1/5 mb-2 text-lg font-bold">{result.name}</h3>
                 <img
                   src={result.gifUrl}
                   alt={`GIF of ${result.name} exercise`}
@@ -132,11 +134,11 @@ const Exercises: React.FC<Props> = ({ routine }) => {
                 />
                 <p className="mb-2 text-center">{result.description}</p>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-600">Target:</span>
+                  <span className="font-semibold text-gray-600 dark:text-slate-500">Target:</span>
                   <p className="mb-2">{result.target}</p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-600">
+                  <span className="font-semibold text-gray-600 dark:text-slate-500">
                     Equipment:
                   </span>
                   <p className="mb-2">{result.equipment}</p>
@@ -149,7 +151,7 @@ const Exercises: React.FC<Props> = ({ routine }) => {
                 >
                   <button
                     type="submit"
-                    className="mt-4 rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
+                    className="mt-4 rounded border border-gray-400 dark:border-transparent bg-gray-100 py-2 px-4 font-semibold text-gray-700 dark:text-dark shadow dark:bg-background-dark"
                   >
                     Add to routine
                   </button>
@@ -158,21 +160,21 @@ const Exercises: React.FC<Props> = ({ routine }) => {
             ))}
           </ul>
           {searchResults.length > resultsPerPage && (
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex justify-center items-center">
               <button
                 onClick={handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
+                className="rounded border border-gray-400 dark:border-transparent bg-gray-100 dark:bg-background-dark py-2 px-4 font-semibold text-gray-700 dark:text-dark shadow"
               >
                 Prev
               </button>
-              <div className="mx-4 font-semibold text-gray-700">
+              <div className="mx-4 font-semibold text-gray-700 dark:text-dark">
                 {currentPage}
               </div>
               <button
                 onClick={handlePageChange(currentPage + 1)}
                 disabled={indexOfLastResult >= searchResults.length}
-                className="rounded border border-gray-400 bg-gray-100 py-2 px-4 font-semibold text-gray-700 shadow"
+                className="rounded border border-gray-400 dark:border-transparent bg-gray-100 dark:bg-background-dark py-2 px-4 font-semibold text-gray-700 dark:text-dark shadow"
               >
                 Next
               </button>

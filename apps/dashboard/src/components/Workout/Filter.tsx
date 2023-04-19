@@ -120,14 +120,14 @@ const Filters: React.FC<FiltersProps> = ({
     if (groupName === 'All') {
       return filterGroups.map((group) =>
         group.filters.map((filter) => (
-          <label key={filter} className="mt-3 inline-flex items-center">
+          <label key={filter} className="mt-3 inline-flex items-center cursor-pointer text-sm text-left">
             <input
               type="checkbox"
-              className="form-checkbox h-5 w-5 text-indigo-600"
+              className="form-checkbox h-4 aspect-square"
               checked={filters.includes(filter)}
               onChange={() => onFilterChange(filter)}
             />
-            <span className="ml-2 text-gray-700">{filter}</span>
+            <span className="ml-2 text-gray-700 dark:text-dark">{filter}</span>
           </label>
         ))
       )
@@ -135,14 +135,14 @@ const Filters: React.FC<FiltersProps> = ({
       const filterGroup = filterGroups.find((group) => group.name === groupName)
       if (filterGroup) {
         return filterGroup.filters.map((filter) => (
-          <label key={filter} className="mt-3 inline-flex items-center">
+          <label key={filter} className="mt-3 inline-flex items-center cursor-pointer text-sm text-left">
             <input
               type="checkbox"
-              className="form-checkbox h-5 w-5 text-indigo-600"
+              className="form-checkbox h-4 aspect-square"
               checked={filters.includes(filter)}
               onChange={() => onFilterChange(filter)}
             />
-            <span className="ml-2 text-gray-700">{filter}</span>
+            <span className="ml-2 text-gray-700 dark:text-dark">{filter}</span>
           </label>
         ))
       } else {
@@ -155,7 +155,7 @@ const Filters: React.FC<FiltersProps> = ({
     <div className="flex w-full flex-col">
       <div className="flex items-center justify-end">
         <button
-          className="font['Poppins',San-serif] cursor-pointer rounded bg-indigo-500 px-2 py-1 text-xl font-bold text-white hover:bg-indigo-600"
+          className="cursor-pointer rounded bg-indigo-500 dark:bg-secondary-dark px-2 py-1 text-xl font-bold text-white dark:text-primary-dark hover:bg-indigo-600"
           onClick={handleFilterToggle}
         >
           <BsFilter />
@@ -163,17 +163,17 @@ const Filters: React.FC<FiltersProps> = ({
         {showFilters && (
           <div
             ref={filterRef}
-            className="fixed right-0 top-0 z-20 h-full w-80 overflow-y-auto bg-white shadow-lg"
+            className="fixed right-0 top-0 z-20 h-full w-80 overflow-y-auto bg-white shadow-lg dark:bg-primary-variant-dark"
           >
             <div className="p-4">
-              <h3 className="mb-2 font-semibold text-gray-700 underline">
+              <h3 className="mb-2 font-semibold text-gray-700 dark:text-dark underline">
                 Type Selection
               </h3>
               <ul>
                 {typeSelection.map((group) => (
                   <li key={group}>
                     <button
-                      className="block w-full py-2 px-4 text-left hover:bg-gray-100"
+                      className="block w-full py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-background-dark rounded"
                       onClick={() => setSelectedGroup(group)}
                     >
                       {group}
@@ -183,7 +183,7 @@ const Filters: React.FC<FiltersProps> = ({
               </ul>
             </div>
             <div className="border-t p-4">
-              <h3 className="mb-2 font-semibold text-gray-700 underline">
+              <h3 className="mb-2 font-semibold text-gray-700 dark:text-dark underline">
                 {selectedGroup}
               </h3>
               <div className="grid grid-cols-3 gap-5">
@@ -192,7 +192,7 @@ const Filters: React.FC<FiltersProps> = ({
             </div>
             <div className="border-t p-4">
               <button
-                className="font['Poppins',San-serif] cursor-pointer rounded bg-indigo-500 px-2 py-1 text-xl font-bold text-white hover:bg-indigo-600"
+                className="font['Poppins',San-serif] cursor-pointer rounded bg-indigo-500 px-2 py-1 text-xl font-bold text-white hover:bg-indigo-600 dark:bg-background-dark"
                 onClick={onClearFilters}
               >
                 Clear Filters
