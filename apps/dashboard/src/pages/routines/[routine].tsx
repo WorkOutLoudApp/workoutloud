@@ -35,16 +35,14 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
 
   const currentExerciseIndex = speech.currentExerciseIndex
   const [currentSpokenText, setCurrentSpokenText] = useState('')
-  const [isFavorite, setIsFavorite] = useState(false);
-  
-  let currentRoutine : any = null
-  let currentExercises : any = null
+  const [isFavorite, setIsFavorite] = useState(false)
+
+  let currentRoutine: any = null
+  let currentExercises: any = null
 
   const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
-  
-
+    setIsFavorite(!isFavorite)
+  }
 
   const currentExercise =
     exercises.length > 0
@@ -64,7 +62,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
           },
           params: {
             ...(owner && { owner }),
-          }
+          },
         })
         .then((res) => {
           if (!owner) {
@@ -101,7 +99,12 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
   }
 
   const updateSpeech = (routine: any, exercises: any) => {
-    setSpeech({...speech, routineName: routine.name, exercises: exercises, currentExerciseIndex: 0})
+    setSpeech({
+      ...speech,
+      routineName: routine.name,
+      exercises: exercises,
+      currentExerciseIndex: 0,
+    })
   }
 
   const onAddExercise = async (exercise: IExercise) => {
@@ -135,7 +138,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
       ...exercise,
       sets: parseInt(exercise.sets, 10),
       reps: parseInt(exercise.reps, 10),
-        rest: parseInt(exercise.rest, 10),
+      rest: parseInt(exercise.rest, 10),
     }
     axios
       .post(
@@ -168,7 +171,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
       )
       .then((res) => {
         setData(res.data)
-        setIsFavorite(res.data.isFavorite);
+        setIsFavorite(res.data.isFavorite)
       })
       .catch((err) => {
         console.log(err)
@@ -231,7 +234,6 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search
                 Exercises
               </button>
-              <div>{JSON.stringify(exercises)}</div>
               <div className="grid grid-cols-2 gap-3">
                 {exercises.map((exercise: any) => (
                   <Exercise
