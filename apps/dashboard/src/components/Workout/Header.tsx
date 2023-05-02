@@ -38,6 +38,8 @@ export default function RoutineHeader({
 }: RoutineHeaderProps) {
   const { isPlaying } = usePlayStatus()
   const { handleStop, handlePlay } = useSpeechActions()
+  const { synthRef } = useSpeech()
+  const synth = synthRef.current
 
   return (
     <div className="dark:bg-background-dark flex w-full flex-col items-center space-y-2 border-b border-black bg-[#d9d9d9] p-3">
@@ -56,7 +58,7 @@ export default function RoutineHeader({
           </div>
         </div>
         <div className="space-x-5">
-          {isPlaying && (
+          {synth.speaking && (
             <button
               type="button"
               onClick={handleStop}
@@ -64,7 +66,7 @@ export default function RoutineHeader({
               <FontAwesomeIcon icon={faStop} className="fa-lg" />
             </button>
           )}
-          {!isPlaying && (
+          {!synth.speaking && (
             <button
               type="button"
               onClick={handlePlay}

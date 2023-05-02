@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { IoPlay, IoPause } from 'react-icons/io5'
-import { RiRewindFill } from 'react-icons/ri'
+import { RiRewindFill, RiSpeedFill } from 'react-icons/ri'
 import {
   AiOutlineForward,
   AiOutlineAudio,
@@ -34,8 +34,8 @@ const Playbar: React.FC<PlaybarProps> = ({
 
   const { hasRecognitionSupport } = useSpeechRecognition()
 
-  const { speech } = useSpeech()
-
+  const { synthRef, speech } = useSpeech()
+  const synth = synthRef.current
   let currentExerciseIndex = speech.currentExerciseIndex
   let exerciseName = exercises[currentExerciseIndex]?.name
 
@@ -49,6 +49,8 @@ const Playbar: React.FC<PlaybarProps> = ({
     handlePlay,
     handleRewind,
     handleMicrophoneClick,
+    count,
+    isResting
   } = useSpeechActions()
   const { isListening } = usePlayStatus()
 
@@ -140,8 +142,9 @@ const Playbar: React.FC<PlaybarProps> = ({
                 <RiRewindFill className={styleActive} size="1.5em" />
               </button>
               <button
-                className="invisible lg:visible"
+                className={`invisible lg:visible`}
                 onClick={isPlaying ? handlePause : handlePlay}
+                disabled={isResting}
               >
                 {isPlaying ? (
                   <IoPause className={styleActive} size="1.5em" />
@@ -153,13 +156,18 @@ const Playbar: React.FC<PlaybarProps> = ({
                 className="invisible lg:visible"
                 onClick={handleFastForward}
               >
-                <AiOutlineForward className={styleActive} size="1.5em" />
+                <RiSpeedFill className={styleActive} size="1.5em" />
               </button>
             </div>
             <ProgressBar />
           </div>
 
           <div className="absolute right-4 flex items-center space-x-2">
+            {synth.speaking && (
+              <div className='font-bold bg-primary dark:bg-secondary-dark dark:text-primary-dark rounded-full p-2'>
+                {isResting ? 'Rest ' : 'Rep '} : {count !== 0 ? count : '_'}
+              </div>
+            )}
             <button
               className="visible lg:invisible"
               onClick={isPlaying ? handlePause : handlePlay}
@@ -186,7 +194,7 @@ const Playbar: React.FC<PlaybarProps> = ({
             )}
             {showLargeImage && (
               <div
-                className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
+                className="fixed top-0 left-0 z-50 flex flex-col h-full w-full items-center justify-center bg-black bg-opacity-50"
                 onClick={handleCloseLargeImage}
               >
                 <img

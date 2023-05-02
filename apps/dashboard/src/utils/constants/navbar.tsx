@@ -47,6 +47,7 @@ export const navbarItems = [
         path: '/routines',
         icon: <IoBarbell className={styleDefault}/>,
         iconActive: <IoBarbell className={styleActive}/>,
+        subpath: '/exercises',
     },
     {
         name: 'friends',

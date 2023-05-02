@@ -123,7 +123,7 @@ const Exercises: React.FC<Props> = ({ routine }) => {
             {currentResults.map((result) => (
               <li
                 key={result.name}
-                className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:shadow-lg dark:hover:shadow-secondary-dark dark:border-secondary-dark"
+                className="flex flex-col items-center rounded-md border p-4 shadow-sm transition duration-200 hover:scale-105 hover:shadow-lg dark:hover:shadow-secondary-dark dark:border-secondary-dark bg-primary dark:bg-primary-dark"
               >
                 <h3 className="basis-1/5 mb-2 text-lg font-bold">{result.name}</h3>
                 <img

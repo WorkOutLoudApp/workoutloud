@@ -260,7 +260,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
         imageUrl={currentExercise?.image}
         routineName={data ? data.name : ''}
         exercises={exercises}
-        isFavorite={isFavorite}
+        isFavorite={data?.isFavorite}
         onFavorite={onFavorite}
       />
     </div>
