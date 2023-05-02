@@ -109,8 +109,7 @@ export const useSpeechActions = () => {
         const utteranceRestStart = getUtterance(`. Rest for ${rest} seconds`)
         utteranceRestStart.onend = (() => {
           setIsResting(true)
-          let r = 10//rest
-          countdown(r)
+          countdown(rest)
         })
         setCount(0)
         synth.speak(utteranceRestStart)
