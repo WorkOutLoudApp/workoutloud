@@ -109,7 +109,7 @@ export const WorkoutSidebar = (props: any) => {
                 {item.path === window.location.pathname ? item.iconActive : item.icon}
               </div>
               <span className={`font-poppins text-md ${item.path === window.location.pathname && 'text-secondary dark:text-secondary-dark'}`}>{item.name}</span>
-              {item.name !== 'Home' && (
+              {(item.name !== 'Home') && (item.name !== 'Exercises') && (
                 <span className='flex w-full justify-end'>
                   <RiArrowRightSLine className='fill-icon dark:fill-icon-dark'/>
                 </span>
@@ -137,13 +137,11 @@ const RoutinesSidebar = (props: any) => {
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
       <div className='flex items-center w-full space-x-2'>
-        {/* <Link href={'/routines'}> */}
         <button type='button' onClick={() => { setCurrentSidebar('Workout') }}>
           <div className='cursor-pointer rounded-full p-0.5 bg-background dark:bg-background-dark'>
             <BiArrowBack />
           </div>
         </button>
-        {/* </Link> */}
         <div className='flex flex-col'>
           <div className='text-sm'>Workouts</div>
           <div className='font-bold'>Routines</div>
@@ -188,13 +186,11 @@ const FavoritesSidebar = (props: any) => {
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
       <div className='flex items-center w-full space-x-2'>
-        {/* <Link href={'/routines'}> */}
         <button type='button' onClick={() => { setCurrentSidebar('Workout') }}>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer rounded-full p-0.5 bg-background dark:bg-background-dark'>
             <BiArrowBack />
           </div>
         </button>
-        {/* </Link> */}
         <div className='flex flex-col'>
           <div className='text-sm'>Workouts</div>
           <div className='font-bold'>Favorites</div>
@@ -233,13 +229,11 @@ const ExercisesSidebar = (props: any) => {
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
       <div className='flex items-center w-full space-x-2'>
-        {/* <Link href={'/routines'}> */}
         <button type='button' onClick={() => { setCurrentSidebar('Workout') }}>
           <div className='cursor-pointer'>
             <BiArrowBack />
           </div>
         </button>
-        {/* </Link> */}
         <div className='flex flex-col'>
           <div className='text-sm'>Workouts</div>
           <div className='font-bold'>Exercises</div>
@@ -269,13 +263,11 @@ const HistorySidebar = (props: any) => {
   return (
     <div className='flex flex-col items-center space-y-2 px-2 text-xl w-full'>
       <div className='flex items-center w-full space-x-2'>
-        {/* <Link href={'/routines'}> */}
         <button type='button' onClick={() => { setCurrentSidebar('Workout') }}>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer rounded-full p-0.5 bg-background dark:bg-background-dark'>
             <BiArrowBack />
           </div>
         </button>
-        {/* </Link> */}
         <div className='flex flex-col'>
           <div className='text-sm'>Workouts</div>
           <div className='font-bold'>History</div>
@@ -310,6 +302,19 @@ const Sidebar = () => {
   const style = 'flex flex-col'
   const { auth, user } = useAuth()
   const [currentSidebar, setCurrentSidebar] = useState('Homepage')
+  
+  //initialize
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname.startsWith('/routines') || window.location.pathname.startsWith('/exercises')) {
+        setCurrentSidebar('Workout')
+      } else if (window.location.pathname.startsWith('/homepage')) {
+        setCurrentSidebar('Homepage')
+      } else if (window.location.pathname.startsWith('/friends')) {
+        setCurrentSidebar('Friends')
+      }
+    }
+  },[])
 
   if (typeof window !== 'undefined') {
     useEffect(() => {

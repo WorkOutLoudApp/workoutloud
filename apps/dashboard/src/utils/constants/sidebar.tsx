@@ -15,25 +15,25 @@ const sidebarWorkoutItems = [
     },
     {
         name: 'Routines',
-        path: '/routines/routines',
+        path: '',
         icon: <RiFileList2Fill className={styleDefault}/>,
         iconActive: <RiFileList2Fill className={styleActive} />
     },
     {
         name: 'Favorites',
-        path: '/routines/favorites',
+        path: '',
         icon: <RiHeartFill className={styleDefault}/>,
         iconActive: <RiHeartFill className={styleActive} />
     },
     {
         name: 'Exercises',
-        path: '/routines/exercises',
+        path: '/exercises',
         icon: <FaWalking className={styleDefault}/>,
         iconActive: <FaWalking className={styleActive} />
     },
     {
         name: 'History',
-        path: '/routines/history',
+        path: '',
         icon: <RiHistoryFill className={styleDefault}/>,
         iconActive: <RiHistoryFill className={styleActive} />
     },

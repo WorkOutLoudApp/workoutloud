@@ -158,8 +158,8 @@ const Navbar = (props :any) => {
               <div className="grid basis-2/4 grid-cols-3 items-center">
                 {navbarItems.map((item) => (
                   <Link key={item.name} href={item.path}>
-                    <div className={`${((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? itemStyleActive : itemStyle}`}>
-                      {((window.location.pathname === item.path) || (window.location.pathname.match(item.name))) ? item.iconActive : item.icon}
+                    <div className={`${((window.location.pathname.startsWith(item.path)) || (window.location.pathname.startsWith(item.subpath)) || (window.location.pathname.match(item.name))) ? itemStyleActive : itemStyle}`}>
+                      {((window.location.pathname.startsWith(item.path)) || (window.location.pathname.startsWith(item.subpath)) || (window.location.pathname.match(item.name))) ? item.iconActive : item.icon}
                     </div>
                   </Link>
                 ))}
