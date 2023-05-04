@@ -53,3 +53,10 @@ model Exercise {
   routineId   Int
   routine     Routine @relation(fields: [routineId], references: [id])
 }
+
+model Post {
+      id          Int     @id @default(autoincrement())
+      userId      Int
+      description String
+      timestamp  DateTime @default(now())
+}

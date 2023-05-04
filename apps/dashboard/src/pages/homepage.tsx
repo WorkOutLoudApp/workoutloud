@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthProvider'
+import formStyle from "@src/styles/formStyle";
 
+const { modalStyle, titleStyle, inputStyle, iconStyle, submitButtonStyle } = formStyle
 const PostPopup = () => {
   const [showModal, setShowModal] = useState(false)
   const [postContent, setPostContent] = useState('')
@@ -43,11 +45,11 @@ const PostPopup = () => {
       </div>
       {showModal && (
         <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center bg-black bg-opacity-60">
-          <div className="mx-auto max-w-lg rounded-md bg-white p-4 shadow-xl">
+          <div className={modalStyle}>
             <div className="flex justify-between">
-              <h3 className="text-xl font-medium">Create Post</h3>
+              <h3 className={titleStyle}>Create Post</h3>
               <button
-                className="font-medium text-gray-800"
+                  className={iconStyle}
                 onClick={handleCloseModal}
               >
                 X
@@ -55,14 +57,14 @@ const PostPopup = () => {
             </div>
             <form onSubmit={handlePostSubmit} className="mt-6">
               <textarea
-                className="w-full rounded-md border border-gray-400 p-2"
+                  className={inputStyle}
                 placeholder="What's on your mind?"
                 value={postContent}
                 onChange={(event) => setPostContent(event.target.value)}
               />
               <button
                 type="submit"
-                className="rounded bg-blue-400/20 py-2 px-2 font-semibold text-gray-800"
+                className={submitButtonStyle}
               >
                 Post
               </button>

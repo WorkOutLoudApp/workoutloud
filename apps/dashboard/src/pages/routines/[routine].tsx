@@ -234,7 +234,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search
                 Exercises
               </button>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 mt-2">
                 {exercises.map((exercise: any) => (
                   <Exercise
                     key={exercise.id}
