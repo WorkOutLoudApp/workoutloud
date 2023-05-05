@@ -45,28 +45,30 @@ var client_1 = require("@prisma/client");
 require('dotenv').config();
 var requireAuth = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorization, token, prisma, id, account, user, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 authorization = req.headers.authorization;
                 if (!authorization) {
                     return [2 /*return*/, res.status(401).json({ error: 'Authorization token is required' })];
                 }
-                token = authorization.split(' ')[1];
+                token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+                if (!token) {
+                    return [2 /*return*/, res.status(401).send('Unauthorized')];
+                }
                 prisma = new client_1.PrismaClient();
-                prisma = new client_1.PrismaClient();
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 5, 6, 8]);
+                _b.trys.push([1, 5, 6, 8]);
                 id = jsonwebtoken_1["default"].verify(token, process.env.SECRET).id;
                 return [4 /*yield*/, prisma.account.findFirst({
                         where: {
                             id: id
-                            id: id
                         }
                     })];
             case 2:
-                account = _a.sent();
+                account = _b.sent();
                 if (!account) return [3 /*break*/, 4];
                 return [4 /*yield*/, prisma.user.findFirst({
                         where: {
@@ -74,21 +76,20 @@ var requireAuth = function (req, res, next) { return __awaiter(void 0, void 0, v
                         }
                     })];
             case 3:
-                user = _a.sent();
+                user = _b.sent();
                 if (user) {
                     res.locals.userId = user === null || user === void 0 ? void 0 : user.id;
                     next();
                 }
-                _a.label = 4;
+                _b.label = 4;
             case 4: return [3 /*break*/, 8];
             case 5:
-                error_1 = _a.sent();
-                console.log(error_1);
+                error_1 = _b.sent();
                 res.status(401).json({ error: 'Request is not authorized' });
                 return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, prisma.$disconnect()];
             case 7:
-                _a.sent();
+                _b.sent();
                 return [7 /*endfinally*/];
             case 8: return [2 /*return*/];
         }

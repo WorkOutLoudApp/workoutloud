@@ -34,7 +34,7 @@ export default function SearchExercisesModal({ open, setOpen, onAdd }: Props) {
               </div>
             </div>
             <div className="mt-4 max-h-96 overflow-y-auto">
-              <Exercises onAdd={handleAdd} />
+              <Exercises />
             </div>
           </div>
         </div>

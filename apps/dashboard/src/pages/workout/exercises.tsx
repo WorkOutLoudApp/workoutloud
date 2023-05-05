@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, PropsWithChildren } from 'react'
 import SearchBar from '@src/components/Searchbar'
 import { useAuth } from '@src/context/AuthProvider'
 import Login from '../login'
-import { searchExercises } from './exerciseAPI'
+import { searchExercises } from '../exercises'
 import { IExercise } from '@src/types/Workout'
 import { useForm } from 'react-hook-form'
 import SearchExercisesModal from '@src/components/Workout/Exercises/SearchExerciseModal'
@@ -22,7 +22,7 @@ interface Props {
   routine?: string
 }
 
-const Exercises: React.FC<Props> = ({ routine }) => {
+const Exercises: React.FC<PropsWithChildren<Props>> = ({ routine }) => {
   const [searchResults, setSearchResults] = useState<ExerciseSearch[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [resultsPerPage, setResultsPerPage] = useState<number>(15)
