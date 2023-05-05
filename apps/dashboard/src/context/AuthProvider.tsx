@@ -16,6 +16,7 @@ interface AuthInterface {
     firstName: string
     lastName: string
     avatar: string
+    userId: number
   }
   setUser: React.Dispatch<React.SetStateAction<any>>
   token: String

@@ -39,6 +39,7 @@ model Routine {
   views       Int        @default(0)
   user        User       @relation(fields: [userId], references: [id])
   exercises   Exercise[]
+  Post        Post[]
 }
 
 model Exercise {
@@ -57,12 +58,14 @@ model Exercise {
 }
 
 model Post {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  description String
-  timestamp   DateTime   @default(now())
-  PostLike    PostLike[]
+  id              Int        @id @default(autoincrement())
+  userId          Int
+  user            User       @relation(fields: [userId], references: [id])
+  description     String
+  linkedRoutineId Int?
+  linkedRoutine   Routine?   @relation(fields: [linkedRoutineId], references: [id])
+  timestamp       DateTime   @default(now())
+  PostLike        PostLike[]
 }
 
 model PostLike {

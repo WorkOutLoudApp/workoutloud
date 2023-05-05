@@ -25,13 +25,14 @@ const getPosts = async (userId: number) => {
     }
 }
 
-const addPost = async (userId: number, description: string) => {
+const addPost = async (userId: number, description: string, linkedRoutineId?: number) => {
     const prisma = new PrismaClient()
     try {
         const post = await prisma.post.create({
             data: {
                 description,
-                userId
+                userId,
+                ...(linkedRoutineId && { linkedRoutineId })
             },
             include: {
                 user: true
@@ -39,6 +40,7 @@ const addPost = async (userId: number, description: string) => {
         })
         return post
     } catch (error) {
+        console.log(error)
         return null
     } finally {
         await prisma.$disconnect()

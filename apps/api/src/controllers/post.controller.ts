@@ -26,11 +26,11 @@ export const addPost: RequestHandler = async (
         const {userId} = res.locals
         if (!userId) return res.status(400).json({message: 'No user id'})
 
-        const { description } = req.body
+        const { description, linkedRoutine } = req.body
         if (!description) return res.status(400).json({message: 'Missing "description"'})
 
-        const posts = await postService.addPost(userId, description)
-        if (!posts) return res.status(400).json({message: 'Error getting posts'})
+        const posts = await postService.addPost(userId, description, linkedRoutine)
+        if (!posts) return res.status(400).json({message: 'Error adding post'})
         return res.json(posts)
     } catch (err) {
         return next(err)
@@ -49,7 +49,7 @@ export const likePost: RequestHandler = async (
         const { id } = req.params
 
         const posts = await postService.likePost(userId, parseInt(id, 10))
-        if (!posts) return res.status(400).json({message: 'Error getting posts'})
+        if (!posts) return res.status(400).json({message: 'Error liking post'})
         return res.json(posts)
     } catch (err) {
         return next(err)
