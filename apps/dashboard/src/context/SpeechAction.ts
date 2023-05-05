@@ -21,14 +21,19 @@ export const useSpeechActions = () => {
 
   useEffect(() => {
     if (text === 'play') {
+      setText('')
       handlePlay()
     } else if (text === 'pause') {
+      setText('')
       handlePause()
     } else if (text === 'stop') {
+      setText('')
       handleStop()
     } else if (text === 'forward') {
+      setText('')
       handleFastForward()
     } else if (text === 'rewind') {
+      setText('')
       handleRewind()
     }
   }, [text])
