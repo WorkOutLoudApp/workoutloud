@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons/faHeart"
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons/faArrowRight";
 import {useRouter} from "next/router";
+import {faX} from "@fortawesome/free-solid-svg-icons/faX";
 
 const { modalStyle, titleStyle, inputStyle, iconStyle, submitButtonStyle } = formStyle
 const Homepage = () => {
@@ -49,6 +50,20 @@ const Homepage = () => {
           console.log(err)
         })
   }
+
+    const deletePost = (postId: number) => {
+        axios
+            .post(`http://localhost:4000/v1/post/${postId}/delete`, {},{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((res) => {
+            getPosts()
+        })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     const likePost = (postId: number) => {
         axios
@@ -179,7 +194,7 @@ const Homepage = () => {
                 <div className="w-full space-y-2">
                     {posts.map((post) => (
                         <div key={post.id}
-                             className="w-full border border-black bg-[#d9d9d9] dark:bg-background-dark px-3 py-2 rounded">
+                             className="w-full border border-black bg-[#d9d9d9] dark:bg-background-dark px-3 py-2 rounded relative">
                             <div className="flex items-center justify-between">
                                 <img className="rounded-full w-8 h-8" src={post.user.avatar} alt="Profile"/>
                                 <div className="flex items-center space-x-3">
@@ -193,6 +208,7 @@ const Homepage = () => {
                                   </button>
                                   <p className={post.isLikedByUser ? 'text-red-400' : null}>{post.likes}</p>
                               </span>
+                                    {user.userId === post.userId ? <button type="button" className="hover:cursor-pointer" onClick={() => deletePost(post.id)}><FontAwesomeIcon icon={faX} className="text-red-500" /></button> : null}
                                 </div>
                             </div>
                             <p className="break-words mt-2">{post.description}</p>

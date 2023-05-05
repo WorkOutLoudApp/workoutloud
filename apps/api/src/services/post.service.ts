@@ -47,6 +47,36 @@ const addPost = async (userId: number, description: string, linkedRoutineId?: nu
     }
 }
 
+const deletePost = async (userId: number, postId: number) => {
+    const prisma = new PrismaClient();
+    try {
+        const post = await prisma.post.findUnique({
+            where: { id: postId },
+            select: { userId: true },
+        });
+
+        if (!post) {
+            throw new Error('Post not found');
+        }
+
+        if (post.userId !== userId) {
+            throw new Error('You are not authorized to delete this post');
+        }
+
+        await prisma.postLike.deleteMany({
+            where: { postId }
+        })
+
+        const deletedPost = await prisma.post.delete({
+            where: { id: postId },
+        });
+
+        return deletedPost;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
 const likePost = async (userId: number, postId: number): Promise<any> => {
     const prisma = new PrismaClient()
     try {
@@ -80,7 +110,6 @@ const likePost = async (userId: number, postId: number): Promise<any> => {
             }
         }
     } catch (error) {
-        console.error(error)
         return {
             success: false,
             message: 'An error occurred while liking/unliking the post',
@@ -94,5 +123,6 @@ const likePost = async (userId: number, postId: number): Promise<any> => {
 export default {
     getPosts,
     addPost,
+    deletePost,
     likePost
 }
