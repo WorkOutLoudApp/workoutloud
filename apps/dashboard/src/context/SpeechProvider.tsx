@@ -11,6 +11,11 @@ interface SpeechInterface {
     synthRef: React.MutableRefObject<SpeechSynthesis>
     speech: any
     setSpeech: React.Dispatch<React.SetStateAction<any>>
+    count: number
+    setCount: React.Dispatch<React.SetStateAction<number>>
+    isResting: boolean
+    setIsResting: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
 const defaultSpeech : any = {
@@ -27,6 +32,8 @@ const SpeechContext = createContext({} as SpeechInterface)
 export const SpeechProvider = ({ children }: any) => {
     const synthRef : React.MutableRefObject<SpeechSynthesis> = useRef(null)
     const [speech, setSpeech] = useState(defaultSpeech)
+    const [count, setCount] = useState(0)
+    const [isResting, setIsResting] = useState(false)
 
     // initialize
     useEffect(() => {
@@ -48,8 +55,8 @@ export const SpeechProvider = ({ children }: any) => {
 
 
     const value = useMemo(
-        () => ({ synthRef, speech, setSpeech }),
-        [synthRef, speech, setSpeech]
+        () => ({ synthRef, speech, setSpeech, count, setCount, isResting, setIsResting}),
+        [synthRef, speech, setSpeech, count, isResting]
     )
 
     return (

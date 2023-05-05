@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faEdit, faImage, faPlay} from '@fortawesome/free-solid-svg-icons'
 import AddExerciseModal from "@src/components/Workout/Exercises/AddExerciseModal";
 import {IExercise} from "@src/types/Workout";
+import { useSpeechActions } from '@src/context/SpeechAction'
 
 interface ExerciseProps {
   id: number
@@ -18,10 +19,14 @@ interface ExerciseProps {
     onDelete: () => void
     onEdit: (exercise: IExercise) => void
     isOwner: boolean
+  exerciseIndex: number
 }
 
-export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit, isOwner }: ExerciseProps) {
+export default function Exercise({ id, name, description, reps, sets, rest, image, bodyPart, target, equipment, onDelete, onEdit, isOwner, exerciseIndex }: ExerciseProps) {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false)
+    const {
+      handlePlayOneExercise,
+    } = useSpeechActions()
   return (
       <div className="flex">
           <AddExerciseModal title="Edit Exercise" open={isEditModalOpen} setOpen={(open) => setIsEditModalOpen(open)} onAdd={(exercise) => onEdit(exercise)} />
@@ -46,7 +51,7 @@ export default function Exercise({ id, name, description, reps, sets, rest, imag
                 {equipment ? <p>Equipment: {equipment}</p> : null}
           </div>
         </div>
-          <button type="button" className="bg-green-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faPlay} /></button>
+          <button type="button" className="bg-green-500 px-2 border-t border-r border-b border-black" onClick={() => handlePlayOneExercise(exerciseIndex)}><FontAwesomeIcon icon={faPlay} /></button>
           {isOwner ? <button type="button" className="bg-violet-500 px-2 border-t border-r border-b border-black" onClick={() => setIsEditModalOpen(!isEditModalOpen)}><FontAwesomeIcon icon={faEdit} /></button> : null}
           {isOwner ? <button type="button" className="bg-red-500 px-2 border-t border-r border-b border-black" onClick={() => onDelete()}>X</button> : null}
       </div>
@@ -58,3 +63,4 @@ Exercise.defaultProps = {
     target: null,
     equipment: null,
 }
+

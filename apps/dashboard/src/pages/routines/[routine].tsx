@@ -44,6 +44,11 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
     setIsFavorite(!isFavorite)
   }
 
+  useEffect(() => {
+    setSpeech({...speech, exercises: exercises})
+  }
+  ,[exercises])
+
   const currentExercise =
     exercises.length > 0
       ? exercises[currentExerciseIndex]
@@ -234,8 +239,8 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                 <FontAwesomeIcon icon={faSearch} className="fa-md" /> Search
                 Exercises
               </button>
-              <div className="grid grid-cols-2 gap-3 mt-2">
-                {exercises.map((exercise: any) => (
+              <div className="grid grid-cols-2 gap-3">
+                {exercises.map((exercise: any, index) => (
                   <Exercise
                     key={exercise.id}
                     {...exercise}
@@ -247,6 +252,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                       })
                     }
                     isOwner={isOwner}
+                    exerciseIndex= {index}
                   />
                 ))}
               </div>

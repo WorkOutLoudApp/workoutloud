@@ -12,8 +12,7 @@ export const useSpeechActions = () => {
   const { synthRef, speech, setSpeech } = useSpeech()
   const { isPlaying, setIsPlaying, isListening } = usePlayStatus()
   const { text, setText, startListening, stopListening } = useSpeechRecognition()
-  const [count, setCount] = useState(0)
-  const [isResting, setIsResting] = useState(false)
+  const { count, setCount, isResting, setIsResting } = useSpeech()
 
   const synth = synthRef.current
   const routineName = speech.routineName
@@ -123,6 +122,79 @@ export const useSpeechActions = () => {
 
   }
 
+  const speakOneExercise = async (currentExerciseIndex: number) => {
+    synth.cancel()
+    const exercise = exercises[currentExerciseIndex]
+    const utteranceExerciseStart = exerciseUtterances[currentExerciseIndex]
+    const sets = exercise.sets
+    const reps = exercise.reps
+    const rest = exercise.rest
+
+    const utteranceExerciseFinished = getUtterance(`. Finished exercise`)
+    utteranceExerciseFinished.onend = () => {
+      handleStop()
+    }
+
+    const countdown = (r: number) => {
+      const utteranceRest = getUtterance(`. ${r}`)
+      utteranceRest.onstart = () => {
+        setCount(r)
+        console.log('Rest remaining: ', r)
+      }
+      if (r > 5) {
+        utteranceRest.volume = 0
+      }
+      if (r === 1) {
+        utteranceRest.onend = () => {
+          setCount(0)
+          setIsResting(false)
+          if (set < sets) {
+            set++
+            speakSet()
+          } else {
+            synth.speak(utteranceExerciseFinished)
+          }
+        }
+      }
+      synth.speak(utteranceRest)
+      if (r > 1) {
+        countdown(r - 1)
+      }
+    }
+
+    let set = 1
+    const speakSet = () => {
+      setCount(0)
+      synth.speak(getUtterance(`. Set ${set}. Start`))
+      // reps 
+      for (let j = 0; j < reps; j++) {
+        const rep = j + 1
+        const utteranceRep = getUtterance(`.. ${rep}`)
+        utteranceRep.onstart = (() => {
+          setCount(rep)
+          console.log('count: ', rep)
+        })
+        synth.speak(utteranceRep)
+      }
+      if (set !== sets) {
+        const utteranceRestStart = getUtterance(`. Rest for ${rest} seconds`)
+        utteranceRestStart.onend = (() => {
+          setIsResting(true)
+          countdown(rest)
+        })
+        setCount(0)
+        synth.speak(utteranceRestStart)
+      } else {
+        synth.speak(utteranceExerciseFinished)
+        
+      }
+    }
+
+    synth.speak(utteranceExerciseStart)
+    speakSet()
+
+  }
+
   const handlePlay = () => {
     if (exerciseUtterances.length > 0) {
       if (!synth.speaking) {
@@ -140,6 +212,14 @@ export const useSpeechActions = () => {
     }
   }
 
+  const handlePlayOneExercise = (exerciseIndex: number) => {
+    handleStop()
+    setSpeech({...speech, currentExerciseIndex:exerciseIndex})
+    speakOneExercise(exerciseIndex)
+    setIsPlaying(true)
+  }
+
+
   const handlePause = () => {
     if (synth.speaking && !synth.paused) {
       synth.pause()
@@ -149,10 +229,11 @@ export const useSpeechActions = () => {
 
   const handleStop = () => {
     // cancel speech
-    synth.cancel()
-    setSpeech({ ...speech, currentExerciseIndex: 0 })
+    setIsResting(false)
     setIsPlaying(false)
     setCount(0)
+    synth.cancel()
+    setSpeech({ ...speech, currentExerciseIndex: 0 })
   }
 
   const handleRewind = () => {
@@ -193,5 +274,7 @@ export const useSpeechActions = () => {
     }
   }
 
-  return { handlePlay, handlePause, handleStop, handleFastForward, handleRewind, handleMicrophoneClick, count, isResting }
+  // return { handlePlay, handlePause, handleStop, handleFastForward, handleRewind, handleMicrophoneClick, count, isResting, speakOneExercise, handlePlayOneExercise }
+  return { handlePlay, handlePause, handleStop, handleFastForward, handleRewind, handleMicrophoneClick, speakOneExercise, handlePlayOneExercise }
+
 }

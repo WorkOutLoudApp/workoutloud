@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { IoPlay, IoPause } from 'react-icons/io5'
-import { RiRewindFill, RiSpeedFill } from 'react-icons/ri'
+import { RiRewindFill, RiSpeedFill, RiStopFill } from 'react-icons/ri'
 import {
   AiOutlineForward,
   AiOutlineAudio,
@@ -39,6 +39,8 @@ const Playbar: React.FC<PlaybarProps> = ({
   let currentExerciseIndex = speech.currentExerciseIndex
   let exerciseName = exercises[currentExerciseIndex]?.name
 
+  const { count, setCount, isResting, setIsResting } = useSpeech()
+
   const styleDefault = ''
   const styleActive = 'fill-icon-active dark:fill-icon-active-dark'
 
@@ -49,8 +51,8 @@ const Playbar: React.FC<PlaybarProps> = ({
     handlePlay,
     handleRewind,
     handleMicrophoneClick,
-    count,
-    isResting
+    // count,
+    // isResting
   } = useSpeechActions()
   const { isListening } = usePlayStatus()
 
@@ -151,6 +153,12 @@ const Playbar: React.FC<PlaybarProps> = ({
                 ) : (
                   <IoPlay className={styleActive} size="1.5em" />
                 )}
+              </button>
+              <button
+                className="invisible lg:visible"
+                onClick={handleStop}
+              >
+                <RiStopFill className={styleActive} size="1.5em" />
               </button>
               <button
                 className="invisible lg:visible"
