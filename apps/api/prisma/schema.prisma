@@ -18,15 +18,16 @@ model Account {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   username  String
   firstName String
   lastName  String
   avatar    String
-  accountId Int       @unique
-  account   Account   @relation(fields: [accountId], references: [id])
+  accountId Int        @unique
+  account   Account    @relation(fields: [accountId], references: [id])
   Routine   Routine[]
   Post      Post[]
+  PostLike  PostLike[]
 }
 
 model Routine {
@@ -56,9 +57,18 @@ model Exercise {
 }
 
 model Post {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
   description String
-  timestamp   DateTime @default(now())
+  timestamp   DateTime   @default(now())
+  PostLike    PostLike[]
+}
+
+model PostLike {
+  id     Int  @id @default(autoincrement())
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }

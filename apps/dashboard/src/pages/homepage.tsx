@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthProvider'
 import formStyle from "@src/styles/formStyle";
 import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faHeart} from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons/faHeart"
 
 const { modalStyle, titleStyle, inputStyle, iconStyle, submitButtonStyle } = formStyle
 const Homepage = () => {
@@ -45,6 +45,20 @@ const Homepage = () => {
         })
   }
 
+    const likePost = (postId: number) => {
+        axios
+            .post(`http://localhost:4000/v1/post/${postId}/like`,{}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((res) => {
+            getPosts()
+        })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
   useEffect(() => {
     if (!token) return
     getPosts()
@@ -69,8 +83,7 @@ const Homepage = () => {
     return <div>Please log in to continue.</div>
   }
 
-  const isLiked = true
-    const likes = 2
+  const isLiked = false
 
   return (
     <div className="flex-grow items-center justify-center">
@@ -126,11 +139,13 @@ const Homepage = () => {
                           <div className="flex items-center space-x-3">
                               <p>{new Date(post.timestamp).toLocaleString()}</p>
                               <span className="flex items-center space-x-1">
-                                  <FontAwesomeIcon
-                                      icon={faHeart}
-                                      className={`fa-lg ${isLiked ? 'text-red-400' : null}`}
-                                  />
-                                  <p className="text-red-400">2</p>
+                                  <button type="button" onClick={() => likePost(post.id)}>
+                                      <FontAwesomeIcon
+                                          icon={faHeart}
+                                          className={`fa-lg fa-regular ${post.isLikedByUser ? 'text-red-400' : null}`}
+                                      />
+                                  </button>
+                                  <p className={post.isLikedByUser ? 'text-red-400' : null}>{post.likes}</p>
                               </span>
                           </div>
                       </div>
