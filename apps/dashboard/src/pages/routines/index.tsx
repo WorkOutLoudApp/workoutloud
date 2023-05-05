@@ -12,8 +12,6 @@ const Index = () => {
   const [routineModalOpen, setRoutineModalOpen] = useState(false)
   const { auth, token } = useAuth()
 
-  console.log(auth, token)
-
   const [routines, setRoutines] = useState([])
   const getRoutines = () => {
     axios

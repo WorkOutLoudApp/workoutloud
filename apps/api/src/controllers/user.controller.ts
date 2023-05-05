@@ -36,7 +36,8 @@ export const loginUser = async (req: Request, res: Response) => {
                         username: dbUser.username,
                         firstName: dbUser.firstName,
                         lastName: dbUser.lastName,
-                        avatar: dbUser.avatar
+                        avatar: dbUser.avatar,
+                        userId: dbUser.id,
                     }
                     message = 'Login successful'
                     authToken = createToken(account.id)
@@ -85,7 +86,8 @@ export const loginGoogle = async (req: Request, res: Response) => {
                         username: dbUser.username,
                         firstName: dbUser.firstName,
                         lastName: dbUser.lastName,
-                        avatar: dbUser.avatar
+                        avatar: dbUser.avatar,
+                        userId: dbUser.id,
                     }
                     message = 'Login successful'
                     authToken = createToken(account.id)
@@ -145,7 +147,8 @@ export const registerUser = async (req: Request, res: Response) => {
                         username,
                         firstName,
                         lastName,
-                        avatar: ''
+                        avatar: '',
+                        userId: newAccount.id,
                     }
                     message = 'Registration successful'
                     authToken = createToken(newAccount.id)
@@ -218,7 +221,8 @@ export const registerGoogle = async (req: Request, res: Response) => {
                         username,
                         firstName,
                         lastName,
-                        avatar
+                        avatar,
+                        userId: newAccount.id,
                     }
                     message = 'Registration successful'
                     authToken = createToken(newAccount.id)
