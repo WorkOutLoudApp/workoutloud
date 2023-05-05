@@ -8,6 +8,6 @@ import { requireAuth } from '@src/middlewares/requireAuth'
 const router = Router({ mergeParams: true })
 router.use(requireAuth)
 router.get('/getPosts', getPosts)
-router.get('/add', addPost)
+router.post ('/add', addPost)
 
 export default router

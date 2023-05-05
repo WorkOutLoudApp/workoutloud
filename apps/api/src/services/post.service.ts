@@ -3,7 +3,14 @@ import { PrismaClient } from '@prisma/client'
 const getPosts = async () => {
     const prisma = new PrismaClient()
     try {
-        const posts = await prisma.post.findMany()
+        const posts = await prisma.post.findMany({
+            include: {
+                user: true
+            },
+            orderBy: {
+                timestamp: 'desc'
+            }
+        })
         return posts
     } catch (error) {
         return null
@@ -19,6 +26,9 @@ const addPost = async (userId: number, description: string) => {
             data: {
                 description,
                 userId
+            },
+            include: {
+                user: true
             }
         })
         return post

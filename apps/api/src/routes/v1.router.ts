@@ -6,6 +6,7 @@ import { Router, Request, Response } from 'express'
 import userRouter from '@src/routes/user.router'
 import requireAuthRouter from '@src/routes/auth.router'
 import routineRouter from '@src/routes/routine.router'
+import postRouter from '@src/routes/post.router'
 
 require('dotenv').config()
 
@@ -26,6 +27,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 router.use('/web', webRouter)
 router.use('/user', userRouter)
 router.use('/routine', routineRouter)
+router.use('/post', postRouter)
 router.use('/auth', requireAuthRouter)
 
 router.get('/key/google', (req: Request, res: Response) => {

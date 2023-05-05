@@ -26,15 +26,16 @@ model User {
   accountId Int       @unique
   account   Account   @relation(fields: [accountId], references: [id])
   Routine   Routine[]
+  Post      Post[]
 }
 
 model Routine {
   id          Int        @id @default(autoincrement())
   name        String
   description String
-  isFavorite Boolean    @default(false)
+  isFavorite  Boolean    @default(false)
   userId      Int
-      views       Int     @default(0)
+  views       Int        @default(0)
   user        User       @relation(fields: [userId], references: [id])
   exercises   Exercise[]
 }
@@ -44,8 +45,8 @@ model Exercise {
   name        String
   description String
   reps        Int
-    sets        Int
-    rest    Int @default(30)
+  sets        Int
+  rest        Int     @default(30)
   image       String?
   bodyPart    String?
   equipment   String?
@@ -55,8 +56,9 @@ model Exercise {
 }
 
 model Post {
-      id          Int     @id @default(autoincrement())
-      userId      Int
-      description String
-      timestamp  DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  description String
+  timestamp   DateTime @default(now())
 }

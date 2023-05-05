@@ -1,17 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthProvider'
 import formStyle from "@src/styles/formStyle";
+import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye, faHeart} from "@fortawesome/free-solid-svg-icons";
 
 const { modalStyle, titleStyle, inputStyle, iconStyle, submitButtonStyle } = formStyle
-const PostPopup = () => {
+const Homepage = () => {
+
+  const { user, auth, token } = useAuth()
+
   const [showModal, setShowModal] = useState(false)
   const [postContent, setPostContent] = useState('')
-  const [posts, setPosts] = useState([])
-  const { user } = useAuth()
 
-  if (!user) {
-    return <div>Please log in to continue.</div>
+  const [posts, setPosts] = useState([])
+  const getPosts = () => {
+    axios
+        .get(`http://localhost:4000/v1/post/getPosts`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setPosts(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
   }
+
+  const addPost = (description: string) => {
+    axios
+        .post(`http://localhost:4000/v1/post/add`, {
+          description,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res) => {
+          setPosts((prev) => [res.data, ...prev])
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
+
+  useEffect(() => {
+    if (!token) return
+    getPosts()
+  }, [token])
 
   const handleOpenModal = () => {
     setShowModal(true)
@@ -23,14 +60,21 @@ const PostPopup = () => {
 
   const handlePostSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setPosts([...posts, postContent])
+    addPost(postContent)
     setPostContent('')
     handleCloseModal()
   }
 
+  if (!user) {
+    return <div>Please log in to continue.</div>
+  }
+
+  const isLiked = true
+    const likes = 2
+
   return (
     <div className="flex-grow items-center justify-center">
-      <div className="dark:bg-background-dark flex items-center justify-center rounded-md bg-gray-200 p-2">
+      <div className="dark:bg-background-dark flex items-center justify-center bg-gray-200 p-2">
         <img
           className="mr-4 h-10 w-10 rounded-full"
           src={user.avatar}
@@ -73,22 +117,30 @@ const PostPopup = () => {
         </div>
       )}
 
-      <div className="mt-2 max-w-md">
-        {posts.reverse().map((post) => (
-          <div key={post} className="mb-2 flex rounded-md bg-gray-200 p-2">
-            <img
-              className="mr-4 h-10 w-10 rounded-full"
-              src={user.avatar}
-              alt="Profile"
-            />
-            <div className="max-w-md">
-              <p className="break-words text-gray-800">{post}</p>
-            </div>
+      <div className="max-w-xl mx-auto pt-3">
+          <div className="w-full space-y-2">
+              {posts.map((post) => (
+                  <div key={post.id} className="w-full border border-black bg-[#d9d9d9] dark:bg-background-dark px-3 py-2 rounded">
+                      <div className="flex items-center justify-between">
+                          <img className="rounded-full w-8 h-8" src={post.user.avatar} alt="Profile" />
+                          <div className="flex items-center space-x-3">
+                              <p>{new Date(post.timestamp).toLocaleString()}</p>
+                              <span className="flex items-center space-x-1">
+                                  <FontAwesomeIcon
+                                      icon={faHeart}
+                                      className={`fa-lg ${isLiked ? 'text-red-400' : null}`}
+                                  />
+                                  <p className="text-red-400">2</p>
+                              </span>
+                          </div>
+                      </div>
+                      <p className="break-words">{post.description}</p>
+                  </div>
+              ))}
           </div>
-        ))}
       </div>
     </div>
   )
 }
 
-export default PostPopup
+export default Homepage
