@@ -55,6 +55,8 @@ const useSpeechRecognition = () => {
 
     const stopListening = () => {
         setIsListening(false)
+        recognition.onend = () => {
+        }
         recognition.stop()
     }
 
