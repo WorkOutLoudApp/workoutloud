@@ -235,7 +235,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                 Exercises
               </button>
               <div className="grid grid-cols-2 gap-3">
-                {exercises.map((exercise: any) => (
+                {exercises.map((exercise: any, index) => (
                   <Exercise
                     key={exercise.id}
                     {...exercise}
@@ -247,6 +247,7 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
                       })
                     }
                     isOwner={isOwner}
+                    exerciseIndex= {index}
                   />
                 ))}
               </div>
