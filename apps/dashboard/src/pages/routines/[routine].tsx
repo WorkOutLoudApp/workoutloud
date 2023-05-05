@@ -44,6 +44,11 @@ const RoutinePage = ({ routine, owner }: RoutinePageProps) => {
     setIsFavorite(!isFavorite)
   }
 
+  useEffect(() => {
+    setSpeech({...speech, exercises: exercises})
+  }
+  ,[exercises])
+
   const currentExercise =
     exercises.length > 0
       ? exercises[currentExerciseIndex]
